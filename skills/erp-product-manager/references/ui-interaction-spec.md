@@ -78,7 +78,7 @@
 
 当前主规范已先纳入你明确描述的交互偏好。参考站点中的高价值页面模式已进一步沉淀到补充文件：
 
-- `docs/ui-system/erp-reference-patterns.md`
+- `references/erp-reference-patterns.md`
 
 后续涉及列表页、抽屉详情、字段说明、操作日志、导入方案等场景时，除主规范外，也应同时参考该补充文件。
 
@@ -693,7 +693,7 @@ PRD 与原型中涉及权限差异时，必须明确：
 
 当前项目已存在以下补充规范：
 
-- `docs/ui-system/erp-reference-patterns.md`
+- `references/erp-reference-patterns.md`
   用于承载从参考站点抽取的 ERP 页面模式与公共控件模式
 
 ## 22. 当前项目默认结论

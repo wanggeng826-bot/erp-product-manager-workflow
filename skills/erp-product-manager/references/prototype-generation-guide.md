@@ -14,9 +14,9 @@
 
 生成原型前优先读取：
 
-- `docs/ui-system/ui-interaction-spec.md`
-- `docs/ui-system/erp-reference-patterns.md`
-- `docs/templates/prototype-template.md`
+- `references/ui-interaction-spec.md`
+- `references/erp-reference-patterns.md`
+- `references/prototype-template.md`
 
 默认输出到：
 
@@ -44,8 +44,8 @@
 
 ```text
 请先读取当前项目中的 UI 设计规范文件：
-1. docs/ui-system/ui-interaction-spec.md
-2. docs/ui-system/erp-reference-patterns.md
+1. references/ui-interaction-spec.md
+2. references/erp-reference-patterns.md
 
 再读取这份 PRD：
 /你的PRD文件路径
