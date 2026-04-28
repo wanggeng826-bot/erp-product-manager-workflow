@@ -14,6 +14,7 @@
 
 生成原型前优先读取：
 
+- `references/chinese-b-end-erp-visual-baseline.md`
 - `references/ui-interaction-spec.md`
 - `references/erp-reference-patterns.md`
 - `references/prototype-template.md`
@@ -44,15 +45,16 @@
 
 ```text
 请先读取当前项目中的 UI 设计规范文件：
-1. references/ui-interaction-spec.md
-2. references/erp-reference-patterns.md
+1. references/chinese-b-end-erp-visual-baseline.md
+2. references/ui-interaction-spec.md
+3. references/erp-reference-patterns.md
 
 再读取这份 PRD：
 /你的PRD文件路径
 
 然后基于这些规范，为我生成一套 HTML 可交互原型。
 要求：
-1. 使用 Ant Design 风格
+1. 使用 Ant Design + 中文 B 端 ERP 后台风格
 2. 严格遵循现有 UI 规范和操作日志规范
 3. 尽量少跳转，查看优先抽屉，字段少新建用弹窗，字段多用抽屉
 4. 原型需要可点击
@@ -78,6 +80,8 @@
 只要你没有额外说明，我生成原型时会默认遵循以下规则：
 
 - 使用 Ant Design 风格
+- 使用中文 B 端 ERP 后台风格，不使用欧美 SaaS、营销看板或演示型 dashboard 风格
+- 默认采用左侧导航、顶部栏、面包屑、紧凑标题区、浅灰背景、白色面板、中高信息密度
 - 列表页优先三段式结构：标题区、筛选区、表格区
 - 操作尽量少跳转
 - 查看优先抽屉
@@ -148,6 +152,7 @@
 - 是否把“状态覆盖”“权限差异”错误实现成页面内可切换控件
 - 是否存在重复标题区、重复概述区、重复操作区
 - 是否仍符合正式交付版，而不是演示版
+- 是否符合中文 B 端 ERP 后台风格，而不是欧美 SaaS 或营销看板风格
 
 如任一项不满足，应先修正再交付。
 

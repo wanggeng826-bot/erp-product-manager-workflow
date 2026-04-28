@@ -1,0 +1,5 @@
+interface:
+  display_name: "UI Optimization Master"
+  short_description: "Review and optimize Ant Design ERP UI prototypes"
+  default_prompt: "Use $ui-optimization-master to review this ERP UI or HTML prototype and make it production-ready."
+

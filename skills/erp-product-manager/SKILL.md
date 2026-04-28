@@ -23,7 +23,7 @@ If the user intent is unclear, ask which path they want. If the intent is clear,
 
 Load references only when needed:
 
-- For UI design rules, interaction behavior, Ant Design constraints, permissions, state handling, drawers, modals, forms, tables, operation logs: read `references/ui-interaction-spec.md` and `references/erp-reference-patterns.md`.
+- For UI design rules, interaction behavior, Ant Design constraints, Chinese B-end ERP visual style, permissions, state handling, drawers, modals, forms, tables, operation logs: read `references/chinese-b-end-erp-visual-baseline.md`, `references/ui-interaction-spec.md`, and `references/erp-reference-patterns.md`.
 - For new requirement discovery, solution design, and PRD writing: read `references/new-requirement-expert.md`, then `references/prd-template.md`, plus UI references if the output includes interaction or page design.
 - For competitor analysis: read `references/competitor-analysis-expert.md`, plus UI references if the analysis continues into product design, PRD, or prototype.
 - For existing PRD to prototype: read `references/prototype-generation-guide.md`, `references/prototype-template.md`, and the UI references before generating the prototype plan or HTML prototype.
@@ -46,6 +46,9 @@ Always follow these rules:
 Unless the user overrides them, use these defaults:
 
 - Use Ant Design as the UI and interaction baseline.
+- Use Chinese B-end ERP admin style as the visual baseline, not western SaaS dashboard or marketing-page style.
+- Prefer left sidebar, top header, breadcrumb, compact page title, light gray page background, white panels, restrained borders, and medium-high information density.
+- Keep tables, filters, task lists, status tags, forms, and drawers stronger than decorative cards and charts.
 - Favor fewer page jumps.
 - Use drawers for viewing details; default drawer width is about two thirds of the screen.
 - Use modals for simple creation or confirmation with few fields.
@@ -54,6 +57,16 @@ Unless the user overrides them, use these defaults:
 - Make important operations reversible, or explicitly state why they cannot be reversed.
 - Reflect permissions through button visibility, disabled states, read-only fields, and feedback.
 - Cover default, loading, empty, error, success, disabled, and no-permission states.
+
+## Visual Style Gate
+
+Before delivering PRDs, page specs, or prototypes, check:
+
+- Does it look like a Chinese ERP backend page?
+- Does it use a stable admin shell when applicable?
+- Is the information density suitable for repeated daily operations?
+- Are tables, filters, actions, drawers, and status tags stronger than decorative cards and charts?
+- Does every visible module map back to PRD or confirmed user requirements?
 
 ## Operation Log Constraint
 
