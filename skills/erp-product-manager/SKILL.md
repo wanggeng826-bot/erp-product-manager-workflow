@@ -35,6 +35,8 @@ Load references only when needed:
 
 Always follow these rules:
 
+- New requirement and solution tasks must start with discovery and confirmation. Do not create a solution document, PRD draft, prototype plan, or case artifact until the user has confirmed the background, goal, scope, constraints, open questions, and output strategy.
+- The first output for a new requirement must be a requirements alignment response: known facts, assumptions, missing information, decision points, and a confirmation checklist. Stop after that response and wait for the user.
 - Keep reusable standards separate from concrete cases.
 - Keep long-term knowledge in `knowledge/`; keep current-task memory in `task_plan.md`, `findings.md`, and `progress.md`.
 - For complex PM work, update planning files as active working memory: plan before execution, record findings after every 2 important research/read/browser operations, and log verification in progress.
@@ -52,6 +54,7 @@ Always follow these rules:
 - If no PRD exists, first align background, users, goal, scope, constraints, and decisions, then write the PRD.
 - After writing a PRD, ask whether to continue into prototype generation.
 - If information is missing or uncertain, collect it in a confirmation list before pushing the work forward.
+- Do not write files under `cases/<case-name>/`, `intake/`, or `prototype/` during discovery unless the user explicitly confirms the case boundary and asks to create a document.
 
 ## Operation Log Constraint
 
