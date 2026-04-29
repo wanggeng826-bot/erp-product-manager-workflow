@@ -1,5 +1,62 @@
 # 产品经理工作流
 
+这是一个面向跨境电商自研 ERP 的产品经理工作流项目。它的目标不是“记录聊天”，而是把新需求、竞品分析、方案设计、PRD、原型和 UI 优化串成一条可重复执行的工作链。
+
+## 你会怎么用
+
+1. 新建对话后，先说清楚这次要做什么。
+2. 如果是新需求，先做需求澄清与冻结事实，再进入 PRD。
+3. 如果你已经有 PRD，再进入原型规划或原型生成。
+4. 如果你要优化已有页面或原型，走 UI 优化流程。
+5. 如果涉及代码、HTML、CSS、JS 改动，额外遵守编程规范 Skill。
+
+## 实际工作流
+
+### 1. 任务分流
+
+默认先判断用户意图，再决定使用哪个主入口：
+
+- 新需求、竞品分析、产品方案、PRD、原型生成 -> `$erp-product-manager`
+- UI 评审、原型优化、Ant Design 合规检查 -> `$ui-optimization-master`
+- 代码生成、代码编辑、代码走查 -> `$karpathy-guidelines`
+
+### 2. 新需求流程
+
+新需求不能直接跳到方案或 PRD，必须先完成这些步骤：
+
+1. 需求澄清
+2. 冻结事实
+3. 信息缺口确认
+4. 方案设计
+5. 分阶段 PRD 输出
+6. 用户确认后再决定是否进入原型
+
+### 3. PRD / 原型流程
+
+- 如果已有 PRD：先读 PRD，再做页面来源映射，再生成原型。
+- 如果没有 PRD：先完成需求澄清和 PRD。
+- formal prototype 里的每个导航、页签、按钮、摘要卡都必须能回指到 PRD 或用户确认需求。
+
+### 4. UI 优化流程
+
+- 先判断是否符合中文 B 端 ERP 后台风格。
+- 优先检查结构、信息密度、组件选择、状态覆盖和风险操作。
+- 再看视觉 polish，不先做“好看”，先做“对路”。
+
+### 5. 长对话与记忆
+
+- `task_plan.md`：当前任务阶段、目标、状态
+- `findings.md`：当前任务中的发现、来源映射、临时判断
+- `progress.md`：当前任务的修改记录和验证结果
+- `knowledge/`：长期稳定的用户偏好、公司背景、自研 ERP 约束、设计口味和术语
+- `cases/<case-name>/`：独立案例资产，和主线隔离
+
+### 6. 案例边界
+
+- 新任务默认不读取历史 `cases/**`
+- 只有你明确说“继续某个案例”或“参考历史案例”时，才读对应案例
+- 退款管理这类具体项目只保存在 `cases/<case-name>/`，不回流到主线
+
 ## 目录说明
 
 - `AGENTS.md`
@@ -11,7 +68,7 @@
 - `skills/karpathy-guidelines/`
   编程规范 Skill 源文件。
 - `.codex/`
-  planning-with-files hooks 和 workspace Skill，用于自动恢复和提醒维护任务记忆。
+  planning-with-files hooks 和 workspace Skill，用于自动恢复和维护任务记忆。
 - `skills/shared/context-memory-workflow.md`
   长上下文工作记忆规则，把 planning-with-files 方法接入 PM / UI 工作流。
 - `knowledge/`
@@ -19,28 +76,23 @@
 - `START_HERE.md`
   新用户第一入口。
 - `intake/prd/`
-  主线 PRD 入口。
+  主线 PRD 临时入口。
 - `cases/<case-name>/`
   独立案例目录。
 - `prototype/`
-  主线原型输出目录。
+  主线原型临时输出目录。
 
-## 使用方式
-
-1. 打开 `START_HERE.md`
-2. 规则以各自 `SKILL.md` 为准
-3. 长对话由 `.codex/` hooks 维护 task_plan.md / findings.md / progress.md
-4. 复杂 PM / UI 任务按 `skills/shared/context-memory-workflow.md` 执行
-5. 长期背景和偏好由 `knowledge/` 维护
-6. 独立案例统一放到 `cases/<case-name>/` 内维护
-7. 新任务默认不读取历史 `cases/**`，除非明确继续或参考某个案例
-8. 做 PRD 或原型前先建立页面来源映射，确认每个可见元素都能回指到 PRD 或已确认需求
-
-## Skill 使用
+## Skill 安装位置
 
 本项目已安装 Skill 到：
 
 - `/Users/freddy/.codex/skills/erp-product-manager`
 - `/Users/freddy/.codex/skills/ui-optimization-master`
 - `/Users/freddy/.codex/skills/karpathy-guidelines`
+
 详细规则见各自 `SKILL.md`。
+
+## 最后一句
+
+如果你不知道从哪里开始，先看 `START_HERE.md`。  
+如果你要做具体任务，直接告诉我“这是新需求 / 竞品分析 / 现有 PRD 出原型 / UI 优化 / 代码修改”，我会按对应流程接。
