@@ -34,6 +34,7 @@ If the user asks for direct modification and files are available, inspect the fi
 
 When working inside this project, read references as needed:
 
+- For any direct code or prototype file edits, apply `skills/karpathy-guidelines/SKILL.md` first.
 - For Chinese B-end ERP visual style: read `references/chinese-b-end-erp-visual-baseline.md`.
 - For interaction behavior, permissions, states, drawers, forms, tables, operation logs: read `references/ui-interaction-spec.md`.
 - For ERP page patterns and shared component behavior: read `references/erp-reference-patterns.md`.
@@ -108,7 +109,6 @@ If files exist and the user asked for implementation, edit directly. If only scr
 ## Direct Editing Rules
 
 When editing HTML prototypes:
-
 - Inspect `index.html`, `styles.css`, and `script.js` before changing.
 - Keep changes aligned with the existing prototype architecture.
 - Remove demo controls from formal pages unless the user explicitly requests a demo version.
@@ -123,4 +123,3 @@ When editing HTML prototypes:
 Use `$erp-product-manager` for new requirement discovery, competitor analysis, solution design, PRD writing, and new prototype generation.
 
 Use `$ui-optimization-master` for UI review, prototype quality gates, Ant Design compliance checks, formal prototype cleanup, page structure optimization, and existing HTML prototype refinement.
-
