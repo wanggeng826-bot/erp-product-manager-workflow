@@ -12,6 +12,8 @@
   编程规范 Skill 源文件。
 - `.codex/`
   planning-with-files hooks 和 workspace Skill。
+- `knowledge/`
+  长期知识库，沉淀用户偏好、公司背景、自研 ERP 信息和设计口味。
 - `START_HERE.md`
   新用户第一入口。
 - `intake/prd/`
@@ -26,7 +28,8 @@
 1. 打开 `START_HERE.md`
 2. 规则以各自 `SKILL.md` 为准
 3. 长对话由 `.codex/` hooks 维护 task_plan.md / findings.md / progress.md
-4. 独立案例统一放到 `cases/<case-name>/` 内维护
+4. 长期背景和偏好由 `knowledge/` 维护
+5. 独立案例统一放到 `cases/<case-name>/` 内维护
 
 ## Skill 使用
 

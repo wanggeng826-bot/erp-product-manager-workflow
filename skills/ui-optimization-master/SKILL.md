@@ -34,6 +34,7 @@ If the user asks for direct modification and files are available, inspect the fi
 
 When working inside this project, read references as needed:
 
+- For long-term user taste, company context, ERP background, and UI preferences: read `knowledge/README.md`, then the relevant files under `knowledge/`.
 - For any direct code or prototype file edits, apply `skills/karpathy-guidelines/SKILL.md` first.
 - For Chinese B-end ERP visual style: read `references/chinese-b-end-erp-visual-baseline.md`.
 - For interaction behavior, permissions, states, drawers, forms, tables, operation logs: read `references/ui-interaction-spec.md`.
@@ -45,6 +46,7 @@ When working inside this project, read references as needed:
 
 Always review against these principles:
 
+- Respect confirmed long-term knowledge from `knowledge/` when it applies.
 - Easy to understand within 3 seconds.
 - Fewer page jumps.
 - Stable Chinese B-end ERP admin shell.
