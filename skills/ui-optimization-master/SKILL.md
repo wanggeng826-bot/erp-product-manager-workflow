@@ -34,7 +34,8 @@ If the user asks for direct modification and files are available, inspect the fi
 
 When working inside this project, read references as needed:
 
-- For long-term user taste, company context, ERP background, and UI preferences: read `knowledge/README.md`, then the relevant files under `knowledge/`.
+- For long-term user taste, company context, ERP background, case boundaries, and UI preferences: read `knowledge/README.md`, then the relevant files under `knowledge/`.
+- For long UI review or prototype optimization tasks: read `skills/shared/context-memory-workflow.md` and keep `task_plan.md`, `findings.md`, and `progress.md` current.
 - For any direct code or prototype file edits, apply `skills/karpathy-guidelines/SKILL.md` first.
 - For Chinese B-end ERP visual style: read `references/chinese-b-end-erp-visual-baseline.md`.
 - For interaction behavior, permissions, states, drawers, forms, tables, operation logs: read `references/ui-interaction-spec.md`.
@@ -47,6 +48,8 @@ When working inside this project, read references as needed:
 Always review against these principles:
 
 - Respect confirmed long-term knowledge from `knowledge/` when it applies.
+- Do not read historical `cases/**` prototype or PRD files unless the user asks to review that specific case.
+- Keep review findings, source mapping, file changes, and verification notes in planning files during long tasks.
 - Easy to understand within 3 seconds.
 - Fewer page jumps.
 - Stable Chinese B-end ERP admin shell.

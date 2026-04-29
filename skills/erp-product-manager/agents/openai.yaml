@@ -1,4 +1,4 @@
 interface:
   display_name: "ERP Product Manager"
   short_description: "UI spec, competitor analysis, PRD and prototype workflow"
-  default_prompt: "Use $erp-product-manager to turn a new ERP requirement or competitor analysis into a PRD and Ant Design prototype plan."
+  default_prompt: "Use $erp-product-manager to turn a new ERP requirement or competitor analysis into a PRD, page source map, and Ant Design prototype plan."

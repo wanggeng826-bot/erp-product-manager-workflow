@@ -5,6 +5,7 @@ Use this checklist before approving or editing a formal HTML prototype.
 ## Must Pass
 
 - A PRD or confirmed page scope exists.
+- A page source map exists for every visible navigation item, tab, card, summary, title, and button.
 - Page count, page relationship, and module structure come from PRD or user confirmation.
 - Navigation, tabs, cards, summaries, and buttons can map back to PRD or confirmed requirements.
 - No demo controls are present in the formal page.
@@ -30,4 +31,3 @@ Use this checklist before approving or editing a formal HTML prototype.
 - Clickable interactions still work after edits.
 - Formal and demo prototypes are separated if both exist.
 - Case files remain under `cases/<case-name>/`.
-

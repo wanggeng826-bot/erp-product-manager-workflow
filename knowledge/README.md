@@ -33,3 +33,5 @@
   常用术语和命名。
 - `knowledge-capture-rules.md`
   什么内容该进入知识库，如何更新。
+- `case-boundary-rules.md`
+  主线、历史案例、新案例之间的文件边界和检索规则。
