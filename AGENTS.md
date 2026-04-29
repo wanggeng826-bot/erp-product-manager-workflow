@@ -8,6 +8,7 @@
 - UI 评审、原型优化、Ant Design 合规检查优先使用 `$ui-optimization-master`
 - 代码生成、代码编辑、代码走查优先使用 `$karpathy-guidelines`
 - Skill 源文件在 `skills/erp-product-manager/SKILL.md`、`skills/ui-optimization-master/SKILL.md` 和 `skills/karpathy-guidelines/SKILL.md`
+- 本项目启用 `.codex/` 的 planning-with-files hooks，用于长对话的任务计划、发现和进度维护
 - 主线只承载通用工作流
 - 退款管理等具体案例放到 `cases/<case-name>/`
 
