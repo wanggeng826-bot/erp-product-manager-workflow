@@ -1,0 +1,195 @@
+{
+  "schemaVersion": "1.0",
+  "updatedAt": "2026-05-14",
+  "figmaLibrary": {
+    "name": "Ant Design ERP UI Library",
+    "fileKey": "KaI3eGyylfiwrPlU3OR08C",
+    "url": "https://www.figma.com/design/KaI3eGyylfiwrPlU3OR08C/Ant-Design-ERP-UI-Library",
+    "libraryVersion": "v0.2.1",
+    "antBaseline": "ant.design 6.3.7 + ant-design-pro v6"
+  },
+  "usagePolicy": {
+    "defaultSource": "local-registry",
+    "authoritySource": "figma-library",
+    "mcpReadPolicy": "Do not read the full Figma library by default. Use this registry, HTML mirrors, and skills first.",
+    "mcpAllowedWhen": [
+      "Writing or updating actual Figma canvas nodes",
+      "Figma library version changes",
+      "A stored nodeId is missing or invalid",
+      "User explicitly asks to inspect the current Figma file"
+    ],
+    "mcpNotRequiredFor": [
+      "HTML prototype generation",
+      "General UI review based on local mirror files",
+      "Component selection for common ERP pages",
+      "Visual screenshot acceptance checks"
+    ]
+  },
+  "themeModes": ["Default", "Dark", "Glass"],
+  "preferredAssets": {
+    "latestProStyle": ["Button v6", "ListPageTemplate v6", "ErpShell v6"],
+    "defaultListPageFlow": [
+      "ErpShell",
+      "PageHeaderBar",
+      "QueryFilterBar",
+      "DataTablePanel",
+      "DetailDrawer",
+      "FeedbackState"
+    ]
+  },
+  "components": [
+    {
+      "name": "PageHeaderBar",
+      "type": "erp-pattern",
+      "figmaNodeId": "11:2",
+      "htmlMirror": "ui-library/components/page-header-bar.html",
+      "doc": "ui-library/components/page-header-bar.md",
+      "useFor": ["page title", "primary page action"],
+      "rules": ["one primary action per screen", "actions container is transparent and hug-content"]
+    },
+    {
+      "name": "QueryFilterBar",
+      "type": "erp-pattern",
+      "figmaNodeId": null,
+      "htmlMirror": "ui-library/components/query-filter-bar.html",
+      "doc": "ui-library/components/query-filter-bar.md",
+      "useFor": ["list filtering", "search", "advanced filters"],
+      "rules": ["query action stays inside filter context", "do not mix query action with create action"]
+    },
+    {
+      "name": "DataTablePanel",
+      "type": "erp-pattern",
+      "figmaNodeId": null,
+      "htmlMirror": "ui-library/components/data-table-panel.html",
+      "doc": "ui-library/components/data-table-panel.md",
+      "useFor": ["result table", "status tags", "pagination", "batch actions"],
+      "rules": ["table is the primary work surface", "batch actions appear only after row selection"]
+    },
+    {
+      "name": "DetailDrawer",
+      "type": "erp-pattern",
+      "figmaNodeId": null,
+      "htmlMirror": "ui-library/components/detail-drawer.html",
+      "doc": "ui-library/components/detail-drawer.md",
+      "useFor": ["record detail", "lightweight view flow", "operation trace"],
+      "rules": ["view and light edits prefer drawer over new page"]
+    },
+    {
+      "name": "RiskConfirm",
+      "type": "erp-pattern",
+      "figmaNodeId": null,
+      "htmlMirror": "ui-library/components/risk-confirm.html",
+      "doc": "ui-library/components/risk-confirm.md",
+      "useFor": ["delete confirmation", "batch risk confirmation"],
+      "rules": ["risk copy must state object, consequence, and recoverability"]
+    },
+    {
+      "name": "StoreSelector",
+      "type": "erp-pattern",
+      "figmaNodeId": null,
+      "htmlMirror": "ui-library/components/store-selector.html",
+      "doc": "ui-library/components/store-selector.md",
+      "useFor": ["platform/BU/site/store selection"],
+      "rules": ["use platform -> BU -> site -> store hierarchy"]
+    },
+    {
+      "name": "EditDrawer",
+      "type": "erp-pattern",
+      "figmaNodeId": "48:45",
+      "htmlMirror": "ui-library/components/edit-drawer.html",
+      "doc": "ui-library/components/edit-drawer.md",
+      "useFor": ["lightweight edit", "record edit drawer"],
+      "rules": ["preserve list context", "footer actions remain cancel + save"]
+    },
+    {
+      "name": "CreateModal",
+      "type": "erp-pattern",
+      "figmaNodeId": "48:68",
+      "htmlMirror": "ui-library/components/create-modal.html",
+      "doc": "ui-library/components/create-modal.md",
+      "useFor": ["small create form", "quick create"],
+      "rules": ["use modal only for small forms; use drawer for complex create flows"]
+    },
+    {
+      "name": "DateComparisonControl",
+      "type": "erp-pattern",
+      "figmaNodeId": "48:87",
+      "htmlMirror": "ui-library/components/date-comparison.html",
+      "doc": "ui-library/components/date-comparison.md",
+      "useFor": ["report date comparison", "period comparison"],
+      "rules": ["comparison mode must be visibly selected"]
+    },
+    {
+      "name": "MetricComparisonCard",
+      "type": "erp-pattern",
+      "figmaNodeId": "48:99",
+      "htmlMirror": "ui-library/components/metric-comparison-card.html",
+      "doc": "ui-library/components/metric-comparison-card.md",
+      "useFor": ["report metric", "comparison summary"],
+      "rules": ["metric cards support table work; they do not replace the table"]
+    },
+    {
+      "name": "FeedbackState",
+      "type": "erp-pattern",
+      "figmaNodeId": "48:107",
+      "htmlMirror": "ui-library/components/feedback-state.html",
+      "doc": "ui-library/components/feedback-state.md",
+      "useFor": ["message", "notification", "result state"],
+      "rules": ["feedback weight must match operation weight"]
+    },
+    {
+      "name": "OperationLog",
+      "type": "erp-pattern",
+      "figmaNodeId": "48:117",
+      "htmlMirror": "ui-library/components/operation-log.html",
+      "doc": "ui-library/components/operation-log.md",
+      "useFor": ["audit trail", "operation log"],
+      "rules": ["use fixed log fields only"]
+    },
+    {
+      "name": "FieldHelp",
+      "type": "erp-pattern",
+      "figmaNodeId": "48:140",
+      "htmlMirror": "ui-library/components/field-help.html",
+      "doc": "ui-library/components/field-help.md",
+      "useFor": ["field explanation", "tooltip", "help popover"],
+      "rules": ["explain confusing fields near the field, not in page title copy"]
+    },
+    {
+      "name": "ImportFlow",
+      "type": "erp-pattern",
+      "figmaNodeId": "48:147",
+      "htmlMirror": "ui-library/components/import-flow.html",
+      "doc": "ui-library/components/import-flow.md",
+      "useFor": ["file import", "mapping", "import result"],
+      "rules": ["long-running import needs progress and result feedback"]
+    },
+    {
+      "name": "Button v6",
+      "type": "base-component-set",
+      "figmaNodeId": null,
+      "htmlMirror": null,
+      "doc": "ui-library/tokens.md",
+      "useFor": ["primary action", "secondary action", "danger action", "text action"],
+      "rules": ["use color + variant semantics"]
+    },
+    {
+      "name": "ErpShell v6",
+      "type": "template",
+      "figmaNodeId": null,
+      "htmlMirror": "ui-library/components/erp-shell.html",
+      "doc": "ui-library/components/erp-shell.md",
+      "useFor": ["ERP application shell"],
+      "rules": ["default theme is Default; use Dark or Glass only when requested"]
+    },
+    {
+      "name": "ListPageTemplate v6",
+      "type": "template",
+      "figmaNodeId": null,
+      "htmlMirror": null,
+      "doc": "ui-library/components-index.md",
+      "useFor": ["standard ERP list page"],
+      "rules": ["compose shell, page header, filters, table, drawer, and feedback states"]
+    }
+  ]
+}
