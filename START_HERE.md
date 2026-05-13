@@ -10,11 +10,12 @@
 1. 新需求、竞品分析、PRD、原型生成走 `$erp-product-manager`。
 2. UI 评审、原型优化、Ant Design 合规检查走 `$ui-optimization-master`。
 3. 代码生成、代码修改、代码走查走 `$karpathy-guidelines`。
-4. 稳定背景和偏好进入 `knowledge/`，当前任务进度进入 `task_plan.md / findings.md / progress.md`。
-5. 独立案例只放到 `cases/<case-name>/`。
-6. 新任务默认不读取历史 `cases/**`，除非明确继续或参考某个案例。
-7. 在开始 PRD 或原型前，先确认页面来源映射，避免把无来源的导航、页签、摘要或测试控件带进正式产出。
-8. 每完成 2 次重要读取、搜索、浏览、截图或评审，就把关键发现写入 `findings.md`。
+4. 分支溯源、checkpoint、上下文过长、任务交接、Codex 使用风险提醒走 `$codex-workflow-guardian`。
+5. 稳定背景和偏好进入 `knowledge/`，当前任务进度进入 `task_plan.md / findings.md / progress.md`。
+6. 独立案例只放到 `cases/<case-name>/`。
+7. 新任务默认不读取历史 `cases/**`，除非明确继续或参考某个案例。
+8. 在开始 PRD 或原型前，先确认页面来源映射，避免把无来源的导航、页签、摘要或测试控件带进正式产出。
+9. 每完成 2 次重要读取、搜索、浏览、截图或评审，就把关键发现写入 `findings.md`。
 
 ## 推荐的第一句话
 

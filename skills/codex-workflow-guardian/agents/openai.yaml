@@ -1,0 +1,6 @@
+interface:
+  display_name: "Codex Workflow Guardian"
+  short_description: "Branch, context and checkpoint guardrails"
+  default_prompt: "Use $codex-workflow-guardian to check branch status, traceability risks, and create a safe checkpoint plan before continuing."
+policy:
+  allow_implicit_invocation: true

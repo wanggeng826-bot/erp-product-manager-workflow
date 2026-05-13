@@ -19,6 +19,7 @@
 - 新需求、竞品分析、产品方案、PRD、原型生成 -> `$erp-product-manager`
 - UI 评审、原型优化、Ant Design 合规检查 -> `$ui-optimization-master`
 - 代码生成、代码编辑、代码走查 -> `$karpathy-guidelines`
+- 分支溯源、checkpoint、上下文治理、任务交接、Codex 使用风险提醒 -> `$codex-workflow-guardian`
 
 ### 2. 新需求流程
 
@@ -67,6 +68,8 @@
   UI 优化大师 Skill 源文件。
 - `skills/karpathy-guidelines/`
   编程规范 Skill 源文件。
+- `skills/codex-workflow-guardian/`
+  Codex 分支溯源、checkpoint、上下文治理和使用提醒 Skill 源文件。
 - `.codex/`
   planning-with-files hooks 和 workspace Skill，用于自动恢复和维护任务记忆。
 - `skills/shared/context-memory-workflow.md`

@@ -29,6 +29,8 @@
   自研 ERP 的产品背景、用户、业务约束。
 - `product-design-preferences.md`
   UI、交互、PRD、原型输出偏好。
+- `codex-usage-preferences.md`
+  Codex 重度使用时的分支溯源、checkpoint、上下文治理和提醒偏好。
 - `glossary.md`
   常用术语和命名。
 - `knowledge-capture-rules.md`
