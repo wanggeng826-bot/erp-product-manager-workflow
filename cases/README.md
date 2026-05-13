@@ -9,7 +9,12 @@
 - 每个案例必须独立成目录：`cases/<case-name>/`。
 - 案例内的 PRD、原型、评审材料、截图和版本记录不得写回主线 `intake/prd/`、`prototype/`、`knowledge/` 或 `skills/`。
 
-## 当前案例
+## 开源仓库说明
 
-- `refund-management/`
-  退款管理历史案例，包含历史 PRD 和多版原型。
+本开源版本不包含真实业务历史案例。
+
+如需新增案例，请使用脱敏后的示例，并放入：
+
+```text
+cases/<case-name>/
+```
