@@ -47,9 +47,10 @@ When working inside this project, read references as needed:
 - For Chinese B-end ERP visual style: read `references/chinese-b-end-erp-visual-baseline.md`.
 - For interaction behavior, permissions, states, drawers, forms, tables, operation logs: read `references/ui-interaction-spec.md`.
 - For ERP page patterns and shared component behavior: read `references/erp-reference-patterns.md`.
-- **For ANY UI design / review / prototype task in this project (READ FIRST):** read `../../knowledge/figma-ant-design-ui-library.md`. 该文件记录了 Figma 文件 `Ant Design ERP UI Library` 的 fileKey (`KaI3eGyylfiwrPlU3OR08C`)、组件清单、MCP 调用流程。**这是单一权威组件源**，所有 base 组件、ERP Pattern、Template 必须从该库取；HTML 镜像与文字规范文件均为衍生物。
+- **For ANY UI design / review / prototype task in this project (READ FIRST):** read `../../knowledge/figma-ant-design-ui-library.md` and `../../knowledge/figma-component-registry.json`. The markdown file records the authority source and version policy; the JSON registry is the low-token component index. Default to the registry + HTML mirror before calling Figma MCP. **Figma remains the authority source**, but common component selection should not read the full Figma file every time.
 - For Pro v6-aligned tasks, prioritize v6 assets in the same library: `Button v6`, `ListPageTemplate v6`, `ErpShell v6`, and explicit theme mode (`Default`, `Dark`, `Glass`).
 - For HTML prototype review / edit, also load the HTML mirror: `../../ui-library/README.md`, with foundation tokens in `../../ui-library/tokens.css` and reusable HTML snippets in `../../ui-library/components/`. 评审 HTML 原型时优先比对它是否用了镜像里的变量与片段。
+- Only call Figma MCP when writing/updating Figma canvas nodes, the Figma library version changes, a registry nodeId is missing/invalid for a Figma operation, or the user explicitly asks to inspect the current Figma file. Visual screenshot acceptance does not require Figma MCP; use local HTML/browser checks where possible.
 - For AI-assisted UI production and revision workflow: read `references/ai-ui-production-workflow.md`.
 - For user-referenced video workflow, 90% completion, Figma/MCP/component-library method, or TD Design to Ant Design transfer: read `references/ant-design-video-workflow.md`.
 - For reusable ERP components and page patterns: read `references/erp-ui-pattern-library.md`.
