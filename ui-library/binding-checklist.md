@@ -77,9 +77,12 @@
 ## I · Figma 镜像一致性（新增）
 
 - [ ] 当前任务引用了 Figma 库版本号（如 `v0.2.1`）
+- [ ] 已优先读取 `knowledge/figma-component-registry.json`，没有默认全量读取 Figma 库
 - [ ] Figma 有新增组件/约束修复时，`components-index.md` 已同步
 - [ ] Figma 有 token 或主题变更时，`tokens.css` 与 `tokens.md` 已同步
 - [ ] 本文件中的约束项与 Figma 最新修复一致（如动作区容器、Auto Layout 宽度约束）
+- [ ] 仅在写入 Figma、版本变化、nodeId 失效、或用户明确要求检查 Figma 时调用 MCP
+- [ ] 视觉截图验收未作为 Figma MCP 触发条件
 
 ## 一句话验收语
 

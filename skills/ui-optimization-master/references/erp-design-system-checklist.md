@@ -100,6 +100,9 @@ If a page uses a component not listed here, record why it is needed.
 ## 6. Prototype Implementation Checks
 
 - Figma source library version is explicitly recorded in the delivery note (for example: `v0.2.1`).
+- Component selection starts from `knowledge/figma-component-registry.json`; avoid full Figma library reads unless a Figma operation requires it.
+- Figma MCP is limited to canvas writes/updates, library version changes, invalid registry nodeIds, or explicit user inspection requests.
+- Visual screenshot acceptance does not trigger Figma MCP by itself.
 - HTML class names reflect component roles.
 - CSS tokens or variables are used for recurring colors, spacing, radius, and shadows.
 - JS interactions are limited to the expected prototype behaviors.
