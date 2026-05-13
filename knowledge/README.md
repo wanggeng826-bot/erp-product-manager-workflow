@@ -31,9 +31,23 @@
   UI、交互、PRD、原型输出偏好。
 - `codex-usage-preferences.md`
   Codex 重度使用时的分支溯源、checkpoint、上下文治理和提醒偏好。
+- `prd-style-anchor.md`
+  **写 PRD 时的口味锚点** —— 句法 / 表达 / 长度偏好 + 反例。任何写 PRD 的任务都先读它。
+- `prd-example-order-batch-cancel.md`
+  **范例 PRD** —— 完整示范一份 PRD 的写法 + 第 8 节"原型生成输入包"长什么样。新需求开场 Claude 应"按这个口味写"。
 - `glossary.md`
   常用术语和命名。
 - `knowledge-capture-rules.md`
   什么内容该进入知识库，如何更新。
 - `case-boundary-rules.md`
   主线、历史案例、新案例之间的文件边界和检索规则。
+- `order-package-flow.md`
+  订单列表、待审订单、包裹列表、包裹拦截的流程调研知识库（早期合并文档，未来拆迁到 `modules/order.md` + `modules/package.md`）。
+- `modules/`
+  按业务模块拆分的稳定业务规则。每个模块一个 .md，含字段表、状态机、业务规则、与其他模块关系。详见 `modules/README.md`。
+- `figma-mcp-setup.md`
+  Figma MCP 安装状态、默认使用方式和对 UI 工作流的影响。
+- `figma-ant-design-ui-library.md`
+  Figma Ant Design ERP 组件库文件链接、组件清单和后续原型使用规则。
+- `ant-design-pro-v6-baseline.md`
+  Ant Design Pro v6 最新迭代基线、来源链接、Figma 对齐策略和后续原型输出规则。
