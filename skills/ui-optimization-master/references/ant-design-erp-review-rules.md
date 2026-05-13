@@ -37,6 +37,9 @@ Use Ant Design as the default component and interaction baseline.
 - Avoid decorative gradients and dramatic shadows.
 - Prefer subtle borders and light background contrast.
 - Keep spacing consistent through `Space`, grid rhythm, and stable panel padding.
+- Apply Ant Design proximity: related fields/actions stay close as one visual unit; unrelated areas separate with `16-24px` spacing or a divider. Use the 8px rhythm (`8/16/24`) for vertical hierarchy.
+- Use Ant-style custom Select / Dropdown surfaces in HTML prototypes; do not rely on native `<select>` because browser dropdown screenshots break Ant Design visual consistency.
+- ERP top headers must not be bare title bars. Include the standard shell affordances: collapse/menu trigger, optional global search, help, notification, and user identity.
 
 ## Report Control Review
 

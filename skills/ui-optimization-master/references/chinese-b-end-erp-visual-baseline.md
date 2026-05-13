@@ -17,6 +17,28 @@ All generated PRDs, page specs, UI reviews, and HTML prototypes must default to 
 - Card radius should stay restrained, usually `4-8px`.
 - Icons must be functional and quiet, not decorative.
 
+## Domestic ERP Taste Guardrails
+
+When the user asks for a Chinese/domestic B-end feel, bias toward the visual language common in Ant Design Pro / Chinese admin systems:
+
+- Stronger list-operation structure: filter row, status tabs, table toolbar, table, pagination, drawer.
+- Compact header rhythm: top shell, breadcrumb, page title, then business content; avoid western SaaS hero composition.
+- Higher useful density: more visible table/content per screen, less showcase whitespace.
+- Straightforward Chinese labels and action names; avoid English marketing copy except platform names or actual data.
+- Business panels should look like work surfaces, not presentation cards.
+- Process demos should be hidden, collapsed, or visually subordinate unless the confirmed page itself is a workflow page.
+
+## AI UI Style Translation
+
+The user's preferred AI UI workflow points to high-completion design-system output, not decorative novelty. Apply it in this ERP project as follows:
+
+- Start from foundation tokens before page polish: color, typography, spacing, radius, border, shadow, and status semantics.
+- Build pages from reusable ERP components instead of isolated visual blocks.
+- Make spacing, alignment, table rhythm, drawer rhythm, button hierarchy, and state tags feel intentionally systemized.
+- Use clean professional surfaces: light gray canvas, white panels, crisp borders, restrained blue highlights, readable contrast.
+- Keep the page visually complete enough for review, but never sacrifice ERP density and operational clarity for showcase composition.
+- If a page looks "pretty" but cannot explain its component map, source map, states, and permissions, treat it as unfinished.
+
 ## Preferred Page Skeleton
 
 For most ERP pages, prefer this structure:
@@ -59,5 +81,5 @@ Before delivery, verify:
 - It has a stable admin shell structure when applicable.
 - Information density supports long-term daily work.
 - Tables, filters, actions, drawers, and status tags are stronger than decorative cards and charts.
+- Foundation tokens and reusable component patterns are applied consistently.
 - Every visible module maps back to the PRD or confirmed user requirement.
-

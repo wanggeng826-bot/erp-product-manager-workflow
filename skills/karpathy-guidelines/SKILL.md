@@ -10,6 +10,13 @@ Behavioral guidelines to reduce common LLM coding mistakes, derived from [Andrej
 
 **Tradeoff:** These guidelines bias toward caution over speed. For trivial tasks, use judgment.
 
+## Trigger Conditions
+
+Load this skill explicitly when:
+- Upstream PM or UI skills require modifying files (e.g., HTML, CSS, JS).
+- The user asks to write, refactor, or review code.
+- You are writing automation scripts or tests.
+
 ## 1. Think Before Coding
 
 **Don't assume. Don't hide confusion. Surface tradeoffs.**
@@ -65,3 +72,28 @@ For multi-step tasks, state a brief plan:
 ```
 
 Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
+
+## Examples
+
+**Example 1: The user asks to add a new button to an existing HTML file**
+*User:* "在这个页面的表格上方加一个导出按钮。"
+*Agent Action:* Read the file. Add ONLY the button and its immediate CSS class. Do NOT reformat the rest of the HTML file or fix unrelated CSS issues you happen to notice.
+
+**Example 2: The user asks to refactor a complex function**
+*User:* "优化一下这个退款计算逻辑。"
+*Agent Action:* First, define success criteria (e.g., "Ensure all existing test cases pass"). Second, identify if the logic can be simplified without adding speculative flexibility. Do not add generic plugin interfaces if only a single calculation fix is needed.
+
+---
+
+## 上游来源 & 跨项目升级
+
+本 Skill 内容衍生自 [forrestchang/andrej-karpathy-skills](https://github.com/forrestchang/andrej-karpathy-skills)（91k+ stars）。当前文件是项目内的本地镜像。
+
+如果想在 Claude Code 里**跨项目永久启用**这套规则，可以在任意一个 Claude Code 会话里执行：
+
+```
+/plugin marketplace add forrestchang/andrej-karpathy-skills
+/plugin install andrej-karpathy-skills@karpathy-skills
+```
+
+装完后所有 Claude Code 项目都会自动启用这套规则，且能随上游更新。本项目内的镜像与插件并行存在不冲突；如果未来上游有更新但本镜像没跟，**以插件版本为准**。
