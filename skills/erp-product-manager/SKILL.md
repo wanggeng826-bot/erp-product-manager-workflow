@@ -1,11 +1,11 @@
 ---
 name: erp-product-manager
-description: Cross-border ecommerce ERP product management workflow for requirement discovery, solution design, competitor analysis, PRD writing, and Ant Design prototype planning. Use when the user asks for 跨境电商 ERP 新需求、需求方案、PRD、竞品分析、交互原型、基于 PRD 生成原型、B 端产品设计或业务流程设计。
+description: Product Manager AI workflow for cross-border ecommerce ERP requirement discovery, solution design, competitor analysis, PRD writing, and Ant Design prototype planning. Use when the user asks for 产品经理 AI 工作流、跨境电商 ERP 新需求、需求方案、PRD、竞品分析、交互原型、基于 PRD 生成原型、B 端产品设计或业务流程设计。
 ---
 
-# ERP Product Manager
+# Product Manager AI Workflow
 
-Use this skill for cross-border ecommerce internal ERP product work.
+Use this skill for product manager AI workflow work, especially cross-border ecommerce internal ERP product work.
 
 It is the main workflow entry for:
 - 新需求澄清

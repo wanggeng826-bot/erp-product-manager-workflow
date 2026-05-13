@@ -1,6 +1,6 @@
 # Knowledge Base
 
-这个目录是产品经理工作流的长期知识库，用来沉淀用户偏好、公司背景、自研 ERP 规则、设计判断和术语。
+这个目录是产品经理 AI 工作流的长期知识库，用来沉淀用户偏好、公司背景、自研 ERP 规则、设计判断和术语。
 
 它和 `task_plan.md`、`findings.md`、`progress.md` 的职责不同：
 
@@ -31,6 +31,8 @@
   UI、交互、PRD、原型输出偏好。
 - `codex-usage-preferences.md`
   Codex 重度使用时的分支溯源、checkpoint、上下文治理和提醒偏好。
+- `codex-checkpoints.md`
+  通过 `$codex-checkpoint-guardian` 生成的重要存档记录、验证结果和回滚方式。
 - `prd-style-anchor.md`
   **写 PRD 时的口味锚点** —— 句法 / 表达 / 长度偏好 + 反例。任何写 PRD 的任务都先读它。
 - `prd-example-order-batch-cancel.md`

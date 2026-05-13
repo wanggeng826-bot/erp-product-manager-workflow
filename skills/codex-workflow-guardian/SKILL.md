@@ -5,7 +5,9 @@ description: Use when the user worries about Git branches, traceability, rollbac
 
 # Codex Workflow Guardian
 
-This skill keeps Codex work traceable, recoverable, and teachable for a user who heavily relies on Codex but does not want to manage Git and context hygiene manually.
+This skill keeps Product Manager AI Workflow work traceable, recoverable, and teachable for a user who heavily relies on Codex but does not want to manage Git and context hygiene manually.
+
+For universal local/Git/GitHub checkpointing, use `$codex-checkpoint-guardian`. This skill adds project-specific workflow, context, branch, PRD, prototype, and handoff guardrails.
 
 ## Core Promise
 
@@ -35,6 +37,8 @@ Trigger it when the request includes or implies:
 If any trigger appears, briefly announce guardian mode and run the Start Gate before implementation. Do not wait for the user to ask for this skill.
 
 For detailed risk rules and checklists, read `references/risk-rules-and-checklists.md`.
+
+If the user's immediate intent is simply `守护一下` or `存档`, route to `$codex-checkpoint-guardian` first.
 
 ## Start Gate
 

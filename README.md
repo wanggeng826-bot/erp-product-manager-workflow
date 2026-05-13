@@ -1,11 +1,30 @@
-# ERP Product Manager Workflow
+# Product Manager AI Workflow
 
-这是一个面向中文 B 端 ERP / 跨境电商 ERP 的产品经理工作流项目。它的目标不是“记录聊天”，而是把需求沟通、方案设计、PRD、UI 设计、原型输出、知识库、操作手册和 Codex 使用守护串成一条可重复执行的工作链。
+这是一个面向中文 B 端 ERP / 跨境电商 ERP 的产品经理 AI 工作流项目。它的目标不是“记录聊天”，而是把需求沟通、方案设计、PRD、UI 设计、原型输出、知识库、操作手册和 Codex 使用守护串成一条可重复执行的工作链。
 
 这个仓库适合两类人：
 
 - 产品经理：用它把需求从想法推进到 PRD、原型和知识库沉淀。
-- 刚上手 Codex / GitHub 的同学：用 `$codex-workflow-guardian` 学会分支、checkpoint、上下文治理和可追溯协作。
+- 刚上手 vibe coding / Codex / GitHub 的同学：用 `$codex-checkpoint-guardian` 和 `$codex-workflow-guardian` 学会存档、回滚、分支、上下文治理和可追溯协作。
+
+## 新手先记两个词
+
+在开始让 AI 改文件前，先说：
+
+```text
+守护一下
+```
+
+当你觉得当前成果还不错，或者准备大改前，马上说：
+
+```text
+存档
+```
+
+`守护一下` 会检查当前分支、未提交改动和污染风险。`存档` 会把当前可用成果保存成 checkpoint。
+
+即使你没有 GitHub，也可以用本地 Git commit 或本地快照保存。
+如果你有 GitHub，checkpoint 还可以 push 到云端，方便找回、共享和 PR 审查。
 
 ## 你会怎么用
 
@@ -14,7 +33,7 @@
 3. 如果你已经有 PRD，再进入原型规划或原型生成。
 4. 如果你要优化已有页面或原型，走 UI 优化流程。
 5. 如果涉及代码、HTML、CSS、JS 改动，额外遵守编程规范 Skill。
-6. 如果涉及 Git、分支、checkpoint、长对话或发布，先走 guardian 预检。
+6. 如果涉及文件修改、Git、分支、checkpoint、长对话或发布，先走 checkpoint / workflow guardian 预检。
 
 ## 给新同学的协作规则
 
@@ -37,7 +56,8 @@
 - 新需求、竞品分析、产品方案、PRD、原型生成 -> `$erp-product-manager`
 - UI 评审、原型优化、Ant Design 合规检查 -> `$ui-optimization-master`
 - 代码生成、代码编辑、代码走查 -> `$karpathy-guidelines`
-- 分支溯源、checkpoint、上下文治理、任务交接、Codex 使用风险提醒 -> `$codex-workflow-guardian`
+- 本地存档、Git checkpoint、GitHub 云端备份、回滚记录 -> `$codex-checkpoint-guardian`
+- 分支溯源、上下文治理、任务交接、产品经理工作流风险提醒 -> `$codex-workflow-guardian`
 
 ### 2. 新需求流程
 
@@ -81,13 +101,15 @@
 - `AGENTS.md`
   项目级最小路由说明。
 - `skills/erp-product-manager/`
-  产品经理工作流 Skill 源文件。
+  产品经理 AI 工作流 Skill 源文件。
 - `skills/ui-optimization-master/`
   UI 优化大师 Skill 源文件。
 - `skills/karpathy-guidelines/`
   编程规范 Skill 源文件。
 - `skills/codex-workflow-guardian/`
   Codex 分支溯源、checkpoint、上下文治理、Stop Gate 和使用提醒 Skill 源文件。
+- `skills/codex-checkpoint-guardian/`
+  通用 vibe coding 存档、Git checkpoint、本地快照、GitHub 云端备份和回滚记录 Skill 源文件。
 - `.codex/`
   planning-with-files hooks 和 workspace Skill，用于自动恢复和维护任务记忆。
 - `skills/shared/context-memory-workflow.md`
@@ -110,6 +132,8 @@
 - `/Users/freddy/.codex/skills/erp-product-manager`
 - `/Users/freddy/.codex/skills/ui-optimization-master`
 - `/Users/freddy/.codex/skills/karpathy-guidelines`
+- `/Users/freddy/.codex/skills/codex-checkpoint-guardian`
+- `/Users/freddy/.codex/skills/codex-workflow-guardian`
 
 详细规则见各自 `SKILL.md`。
 
