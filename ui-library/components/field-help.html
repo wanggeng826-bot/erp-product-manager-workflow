@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>FieldHelp · ERP UI Library</title>
+  <link rel="stylesheet" href="../tokens.css" />
+  <style>
+    .c-help {
+      margin: var(--space-6); width: 560px; border: 1px solid var(--color-border-secondary);
+      border-radius: var(--radius-lg); background: var(--color-bg-container); padding: var(--space-4);
+      display: grid; gap: var(--space-3);
+    }
+    .c-help__title { margin: 0; font-size: var(--font-size); font-weight: var(--font-weight-medium); }
+    .c-help__item { font-size: var(--font-size-sm); color: var(--color-text-secondary); line-height: var(--line-height-base); }
+    .c-help__item strong { color: var(--color-text); }
+  </style>
+</head>
+<body>
+  <section class="c-help">
+    <h3 class="c-help__title">字段说明</h3>
+    <div class="c-help__item"><strong>订单利润率：</strong> (销售收入 - 成本 - 运费 - 佣金) / 销售收入。</div>
+    <div class="c-help__item"><strong>平台单号：</strong>平台原始订单号，不可手工修改。</div>
+    <div class="c-help__item"><strong>匹配规则：</strong>按 SKU + 店铺 + 站点优先级命中。</div>
+  </section>
+</body>
+</html>

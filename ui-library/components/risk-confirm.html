@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>RiskConfirm · ERP UI Library</title>
+  <link rel="stylesheet" href="../tokens.css" />
+  <style>
+    .c-risk {
+      width: 480px; margin: var(--space-8) auto; padding: var(--space-5);
+      border-radius: var(--radius-lg); background: var(--color-bg-elevated);
+      box-shadow: var(--shadow-modal); border: 1px solid var(--color-border-secondary);
+    }
+    .c-risk__title { margin: 0 0 var(--space-2); font-size: var(--font-size-lg); font-weight: var(--font-weight-semibold); }
+    .c-risk__desc { margin: 0 0 var(--space-4); color: var(--color-text-secondary); font-size: var(--font-size); line-height: var(--line-height-base); }
+    .c-risk__warn {
+      margin-bottom: var(--space-4); padding: var(--space-3);
+      background: var(--color-warning-bg); border: 1px solid var(--color-warning-border); border-radius: var(--radius);
+      color: #ad6800; font-size: var(--font-size-sm);
+    }
+    .c-risk__actions { display: flex; justify-content: flex-end; gap: var(--space-2); }
+  </style>
+</head>
+<body>
+  <section class="c-risk">
+    <h3 class="c-risk__title">确认执行批量取消？</h3>
+    <p class="c-risk__desc">将取消 36 条订单，系统会记录操作日志并触发通知。部分渠道不可撤回。</p>
+    <div class="c-risk__warn">不可恢复动作：Amazon 与 TikTok 渠道一旦提交取消，不支持自动回滚。</div>
+    <div class="c-risk__actions">
+      <button class="btn">返回检查</button>
+      <button class="btn btn--danger">确认取消</button>
+    </div>
+  </section>
+</body>
+</html>

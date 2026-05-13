@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>DetailDrawer · ERP UI Library</title>
+  <link rel="stylesheet" href="../tokens.css" />
+  <style>
+    /* ============================================================
+       Component: DetailDrawer
+       Ant Design 映射：Drawer + Descriptions + Tabs + Timeline
+       规则：默认占屏幕 2/3；底部操作区固定；关闭后保持列表上下文
+       ============================================================ */
+
+    /* 遮罩 */
+    .c-drawer-mask {
+      position: fixed; inset: 0;
+      background: var(--color-bg-mask);
+      z-index: var(--z-drawer);
+      display: none;
+      opacity: 0; transition: opacity var(--motion);
+    }
+    .c-drawer-mask[data-open="true"] { display: block; opacity: 1; }
+
+    /* 抽屉容器 */
+    .c-drawer {
+      position: fixed; top: 0; right: 0; height: 100vh;
+      width: var(--layout-drawer-width);
+      background: var(--color-bg-elevated);
+      box-shadow: var(--shadow-drawer);
+      z-index: calc(var(--z-drawer) + 1);
+      display: flex; flex-direction: column;
+      transform: translateX(100%);
+      transition: transform var(--motion);
+    }
+    .c-drawer[data-open="true"] { transform: translateX(0); }
+
+    /* 抽屉头 */
+    .c-drawer__head {
+      flex-shrink: 0;
+      display: flex; align-items: center; gap: var(--space-3);
+      padding: var(--space-4) var(--space-5);
+      border-bottom: 1px solid var(--color-border-secondary);
+    }
+    .c-drawer__title {
+      margin: 0;
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-semibold);
+      line-height: 1.2;
+    }
+    .c-drawer__close {
+      margin-left: auto;
+      width: 32px; height: 32px;
+      display: inline-flex; align-items: center; justify-content: center;
+      border-radius: var(--radius-sm);
+      cursor: pointer; color: var(--color-text-secondary);
+    }
+    .c-drawer__close:hover { background: var(--color-bg-spotlight); color: var(--color-text); }
+
+    /* 头部状态行 */
+    .c-drawer__meta {
+      display: flex; align-items: center; gap: var(--space-3);
+      padding: var(--space-3) var(--space-5);
+      background: var(--color-bg-spotlight);
+      font-size: var(--font-size-sm);
+      color: var(--color-text-secondary);
+    }
+    .c-drawer__meta strong { color: var(--color-text); font-weight: var(--font-weight-medium); }
+
+    /* Tabs */
+    .c-drawer__tabs {
+      flex-shrink: 0;
+      display: flex; gap: var(--space-5);
+      padding: 0 var(--space-5);
+      border-bottom: 1px solid var(--color-border-secondary);
+    }
+    .c-drawer__tab {
+      padding: var(--space-3) 0;
+      cursor: pointer;
+      color: var(--color-text-secondary);
+      border-bottom: 2px solid transparent;
+      font-size: var(--font-size);
+    }
+    .c-drawer__tab[aria-selected="true"] {
+      color: var(--color-primary-6);
+      border-bottom-color: var(--color-primary-6);
+    }
+
+    /* 内容区 */
+    .c-drawer__body {
+      flex: 1;
+      overflow-y: auto;
+      padding: var(--space-5);
+    }
+
+    /* Descriptions 风格的字段列表 */
+    .c-desc {
+      display: grid;
+      grid-template-columns: 120px 1fr 120px 1fr;
+      gap: var(--space-3) var(--space-4);
+      font-size: var(--font-size);
+      margin-bottom: var(--space-6);
+    }
+    .c-desc dt {
+      color: var(--color-text-secondary);
+      font-weight: var(--font-weight-regular);
+    }
+    .c-desc dd { margin: 0; color: var(--color-text); }
+
+    /* 分组小标题 */
+    .c-section-title {
+      font-size: var(--font-size);
+      font-weight: var(--font-weight-medium);
+      margin: 0 0 var(--space-3);
+      padding-bottom: var(--space-2);
+      border-bottom: 1px solid var(--color-border-secondary);
+    }
+
+    /* Timeline（操作日志） */
+    .c-timeline {
+      list-style: none; padding: 0; margin: 0;
+    }
+    .c-timeline__item {
+      position: relative;
+      padding: 0 0 var(--space-4) var(--space-5);
+      border-left: 2px solid var(--color-border-secondary);
+    }
+    .c-timeline__item::before {
+      content: '';
+      position: absolute; left: -5px; top: 2px;
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--color-primary-6);
+    }
+    .c-timeline__item:last-child { border-left-color: transparent; }
+    .c-timeline__time {
+      font-size: var(--font-size-sm);
+      color: var(--color-text-tertiary);
+    }
+    .c-timeline__title {
+      font-size: var(--font-size);
+      color: var(--color-text);
+      margin: var(--space-1) 0;
+    }
+    .c-timeline__detail {
+      font-size: var(--font-size-sm);
+      color: var(--color-text-secondary);
+    }
+
+    /* 底部操作区（固定） */
+    .c-drawer__foot {
+      flex-shrink: 0;
+      padding: var(--space-3) var(--space-5);
+      border-top: 1px solid var(--color-border-secondary);
+      background: var(--color-bg-container);
+      display: flex; justify-content: flex-end; gap: var(--space-2);
+    }
+
+    .demo-wrap { padding: var(--space-6); }
+  </style>
+</head>
+<body>
+  <div class="demo-wrap">
+    <button class="btn btn--primary" data-action="open-drawer">点击查看订单详情（打开抽屉）</button>
+    <p style="margin-top: var(--space-3); color: var(--color-text-secondary); font-size: var(--font-size-sm);">
+      抽屉默认从右侧滑入，宽度 67vw（屏幕 2/3）。关闭时返回原列表，保持滚动位置与勾选。
+    </p>
+
+    <!-- ============================================================
+         BEGIN COMPONENT: DetailDrawer · 默认（带状态/Tabs/底部操作）
+         ============================================================ -->
+    <div class="c-drawer-mask" data-action="close-drawer"></div>
+
+    <aside class="c-drawer" data-open="false" role="dialog" aria-labelledby="drawer-title">
+
+      <!-- 头：标题 + 关闭 -->
+      <div class="c-drawer__head">
+        <h2 class="c-drawer__title" id="drawer-title">订单详情 · O-20260512-000001</h2>
+        <span class="c-drawer__close" data-action="close-drawer" title="关闭">×</span>
+      </div>
+
+      <!-- 头部摘要 -->
+      <div class="c-drawer__meta">
+        <span class="tag tag--processing">已支付</span>
+        <span>金额 <strong>¥1,280.00</strong></span>
+        <span>下单 2026-05-12 10:23</span>
+        <span>渠道 <strong>Amazon US</strong></span>
+      </div>
+
+      <!-- Tabs -->
+      <nav class="c-drawer__tabs">
+        <span class="c-drawer__tab" aria-selected="true" data-tab="basic">基础信息</span>
+        <span class="c-drawer__tab" data-tab="items">商品明细</span>
+        <span class="c-drawer__tab" data-tab="logistics">物流</span>
+        <span class="c-drawer__tab" data-tab="log">操作日志</span>
+      </nav>
+
+      <!-- 内容 -->
+      <div class="c-drawer__body">
+
+        <!-- Tab: 基础信息 -->
+        <div data-tab-pane="basic">
+          <h3 class="c-section-title">买家信息</h3>
+          <dl class="c-desc">
+            <dt>买家</dt><dd>张三（uid: 10086）</dd>
+            <dt>会员等级</dt><dd>金牌（V3）</dd>
+            <dt>联系方式</dt><dd>+1-555-0123-4567</dd>
+            <dt>邮箱</dt><dd>zhang.san@example.com</dd>
+            <dt>收件人</dt><dd>San Zhang</dd>
+            <dt>收件电话</dt><dd>+1-555-0123-4567</dd>
+            <dt>收件地址</dt><dd style="grid-column: 2 / -1;">123 Main St, Apt 4B, New York, NY 10001, US</dd>
+          </dl>
+
+          <h3 class="c-section-title">订单信息</h3>
+          <dl class="c-desc">
+            <dt>订单号</dt><dd>O-20260512-000001</dd>
+            <dt>外部单号</dt><dd>AMZ-112-3456789-0001234</dd>
+            <dt>下单时间</dt><dd>2026-05-12 10:23:11</dd>
+            <dt>支付时间</dt><dd>2026-05-12 10:23:58</dd>
+            <dt>支付方式</dt><dd>信用卡（Visa **** 1234）</dd>
+            <dt>币种</dt><dd>USD</dd>
+            <dt>订单备注</dt><dd style="grid-column: 2 / -1;">—</dd>
+          </dl>
+        </div>
+
+        <!-- Tab: 商品明细 (默认隐藏) -->
+        <div data-tab-pane="items" style="display:none;">
+          <table class="c-table" style="border: 1px solid var(--color-border-secondary); border-radius: var(--radius);">
+            <thead>
+              <tr><th>SKU</th><th>商品</th><th class="c-table__cell--num">数量</th><th class="c-table__cell--num">单价</th><th class="c-table__cell--num">小计</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>SKU-A001</td><td>有线鼠标·黑</td><td class="c-table__cell--num">2</td><td class="c-table__cell--num">¥99</td><td class="c-table__cell--num">¥198</td></tr>
+              <tr><td>SKU-B027</td><td>USB-C 集线器 4 口</td><td class="c-table__cell--num">1</td><td class="c-table__cell--num">¥1,082</td><td class="c-table__cell--num">¥1,082</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Tab: 物流 (默认隐藏) -->
+        <div data-tab-pane="logistics" style="display:none;">
+          <p class="text-secondary">商品已发货，物流单号 1Z999AA10123456784，预计 2026-05-18 送达。</p>
+        </div>
+
+        <!-- Tab: 操作日志 (默认隐藏) -->
+        <div data-tab-pane="log" style="display:none;">
+          <ul class="c-timeline">
+            <li class="c-timeline__item">
+              <div class="c-timeline__time">2026-05-12 10:23:58</div>
+              <div class="c-timeline__title">支付成功 · 系统</div>
+              <div class="c-timeline__detail">订单状态：将[待支付]修改为[已支付]</div>
+            </li>
+            <li class="c-timeline__item">
+              <div class="c-timeline__time">2026-05-12 10:23:11</div>
+              <div class="c-timeline__title">创建订单 · 用户 zhang.san</div>
+              <div class="c-timeline__detail">订单从 Amazon US 同步创建</div>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- 底部操作区 -->
+      <footer class="c-drawer__foot">
+        <button class="btn">关闭</button>
+        <button class="btn">复制订单号</button>
+        <button class="btn">打印面单</button>
+        <button class="btn btn--primary">发货</button>
+      </footer>
+    </aside>
+    <!-- END COMPONENT: DetailDrawer -->
+
+  </div>
+
+  <script>
+    // 打开 / 关闭
+    const drawer = document.querySelector('.c-drawer');
+    const mask   = document.querySelector('.c-drawer-mask');
+    document.querySelector('[data-action="open-drawer"]')?.addEventListener('click', () => {
+      drawer.dataset.open = 'true';
+      mask.dataset.open   = 'true';
+    });
+    document.querySelectorAll('[data-action="close-drawer"]').forEach(el => {
+      el.addEventListener('click', () => {
+        drawer.dataset.open = 'false';
+        mask.dataset.open   = 'false';
+      });
+    });
+    // ESC 关闭
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && drawer.dataset.open === 'true') {
+        drawer.dataset.open = 'false';
+        mask.dataset.open   = 'false';
+      }
+    });
+
+    // Tab 切换
+    document.querySelectorAll('[data-tab]').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('[data-tab]').forEach(t => t.setAttribute('aria-selected', 'false'));
+        tab.setAttribute('aria-selected', 'true');
+        document.querySelectorAll('[data-tab-pane]').forEach(p => {
+          p.style.display = p.dataset.tabPane === tab.dataset.tab ? '' : 'none';
+        });
+      });
+    });
+  </script>
+</body>
+</html>

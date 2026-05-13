@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>MetricComparisonCard · ERP UI Library</title>
+  <link rel="stylesheet" href="../tokens.css" />
+  <style>
+    .c-metric {
+      width: 320px; margin: var(--space-6); padding: var(--space-4);
+      border: 1px solid var(--color-border-secondary); border-radius: var(--radius-lg);
+      background: var(--color-bg-container); box-shadow: var(--shadow-1);
+      display: grid; gap: var(--space-2);
+    }
+    .c-metric__name { color: var(--color-text-secondary); font-size: var(--font-size-sm); }
+    .c-metric__value { font-size: 32px; font-weight: var(--font-weight-semibold); line-height: 1.2; }
+    .c-metric__trend.up { color: var(--color-success); font-size: var(--font-size-sm); }
+    .c-metric__trend.down { color: var(--color-error); font-size: var(--font-size-sm); }
+    .c-metric__meta { color: var(--color-text-tertiary); font-size: var(--font-size-xs); }
+  </style>
+</head>
+<body>
+  <section class="c-metric">
+    <span class="c-metric__name">支付转化率</span>
+    <strong class="c-metric__value">38.42%</strong>
+    <span class="c-metric__trend up">↑ 3.2% vs 上周期</span>
+    <span class="c-metric__meta">样本：12,486 订单（最近 30 天）</span>
+  </section>
+</body>
+</html>

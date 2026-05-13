@@ -2,3 +2,8 @@
 **/.DS_Store
 *.swp
 *.tmp
+node_modules/
+backups/
+task_plan.md
+findings.md
+progress.md

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>ErpShell · ERP UI Library</title>
+  <link rel="stylesheet" href="../tokens.css" />
+  <style>
+    /* ============================================================
+       Component: ErpShell
+       Ant Design 映射：Layout / Sider / Header / Menu / Breadcrumb
+       视觉：左固定侧边栏 + 顶栏 + 面包屑 + 滚动内容区
+       ============================================================ */
+    .c-shell {
+      display: grid;
+      grid-template-columns: var(--layout-sider-width) 1fr;
+      grid-template-rows: var(--layout-header-height) var(--layout-breadcrumb-height) 1fr;
+      grid-template-areas:
+        "sider header"
+        "sider crumb"
+        "sider content";
+      min-height: 100vh;
+    }
+    .c-shell[data-collapsed="true"] {
+      grid-template-columns: var(--layout-sider-collapsed-width) 1fr;
+    }
+
+    /* ---- 侧边栏 ---- */
+    .c-shell__sider {
+      grid-area: sider;
+      background: #001529; /* Ant Design 默认深色侧栏 */
+      color: rgba(255,255,255,0.85);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .c-shell__brand {
+      height: var(--layout-header-height);
+      display: flex; align-items: center; gap: var(--space-3);
+      padding: 0 var(--space-4);
+      color: #fff;
+      font-weight: var(--font-weight-semibold);
+      font-size: var(--font-size-lg);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    .c-shell__brand-logo {
+      width: 28px; height: 28px; border-radius: var(--radius-sm);
+      background: var(--color-primary-6);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-weight: var(--font-weight-semibold);
+      flex-shrink: 0;
+    }
+    .c-shell__menu {
+      list-style: none; margin: 0; padding: var(--space-2) 0;
+      overflow-y: auto;
+    }
+    .c-shell__menu-group {
+      padding: var(--space-3) var(--space-4) var(--space-1);
+      font-size: var(--font-size-xs);
+      color: rgba(255,255,255,0.45);
+      letter-spacing: 0.5px;
+    }
+    .c-shell__menu-item {
+      display: flex; align-items: center; gap: var(--space-3);
+      height: var(--control-height-lg);
+      padding: 0 var(--space-4);
+      color: rgba(255,255,255,0.75);
+      cursor: pointer;
+      transition: background var(--motion), color var(--motion);
+      font-size: var(--font-size);
+      white-space: nowrap;
+    }
+    .c-shell__menu-item:hover   { color: #fff; background: rgba(255,255,255,0.06); }
+    .c-shell__menu-item--active {
+      color: #fff;
+      background: var(--color-primary-6);
+    }
+    .c-shell__menu-icon {
+      width: 18px; flex-shrink: 0; opacity: 0.85;
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+
+    /* ---- 顶栏 ---- */
+    .c-shell__header {
+      grid-area: header;
+      background: var(--color-bg-container);
+      border-bottom: 1px solid var(--color-border-secondary);
+      display: flex; align-items: center;
+      padding: 0 var(--space-6);
+      gap: var(--space-3);
+      position: sticky; top: 0; z-index: var(--z-sticky);
+    }
+    .c-shell__collapse-btn {
+      width: 32px; height: 32px;
+      display: inline-flex; align-items: center; justify-content: center;
+      border-radius: var(--radius-sm);
+      cursor: pointer; color: var(--color-text-secondary);
+      transition: background var(--motion);
+    }
+    .c-shell__collapse-btn:hover { background: var(--color-bg-spotlight); }
+    .c-shell__header-search {
+      flex: 1; max-width: 360px; position: relative;
+    }
+    .c-shell__header-search .input {
+      width: 100%; padding-left: 32px;
+      background: var(--color-bg-layout);
+      border-color: transparent;
+    }
+    .c-shell__header-search-icon {
+      position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+      color: var(--color-text-tertiary);
+    }
+    .c-shell__header-actions {
+      margin-left: auto;
+      display: flex; align-items: center; gap: var(--space-2);
+    }
+    .c-shell__icon-btn {
+      width: 32px; height: 32px;
+      display: inline-flex; align-items: center; justify-content: center;
+      border-radius: var(--radius-sm); cursor: pointer;
+      color: var(--color-text-secondary);
+    }
+    .c-shell__icon-btn:hover { background: var(--color-bg-spotlight); color: var(--color-text); }
+    .c-shell__avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--color-primary-1); color: var(--color-primary-7);
+      display: flex; align-items: center; justify-content: center;
+      font-size: var(--font-size-sm); font-weight: var(--font-weight-medium);
+      cursor: pointer;
+    }
+
+    /* ---- 面包屑 ---- */
+    .c-shell__crumb {
+      grid-area: crumb;
+      background: var(--color-bg-container);
+      padding: 0 var(--space-6);
+      display: flex; align-items: center;
+      font-size: var(--font-size-sm);
+      color: var(--color-text-secondary);
+      border-bottom: 1px solid var(--color-border-secondary);
+    }
+    .c-shell__crumb a { color: var(--color-text-secondary); text-decoration: none; }
+    .c-shell__crumb a:hover { color: var(--color-primary-6); }
+    .c-shell__crumb-sep { padding: 0 var(--space-2); color: var(--color-text-tertiary); }
+    .c-shell__crumb-current { color: var(--color-text); }
+
+    /* ---- 内容区 ---- */
+    .c-shell__content {
+      grid-area: content;
+      padding: var(--layout-page-padding);
+      overflow: auto;
+    }
+
+    /* ---- 演示页面用的内容占位 ---- */
+    .demo-placeholder {
+      background: var(--color-bg-container);
+      border: 1px dashed var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-10);
+      text-align: center;
+      color: var(--color-text-tertiary);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =============================================================
+       BEGIN COMPONENT: ErpShell
+       复制时从这里开始，到 END COMPONENT 结束
+       记得同时把 <style> 里 .c-shell__* 相关规则带走（或拷到自己页面）
+       =============================================================  -->
+  <div class="c-shell" data-collapsed="false">
+
+    <!-- 侧边栏 -->
+    <aside class="c-shell__sider" aria-label="主导航">
+      <div class="c-shell__brand">
+        <span class="c-shell__brand-logo">E</span>
+        <span class="c-shell__brand-text">ERP 后台</span>
+      </div>
+      <ul class="c-shell__menu" role="menu">
+        <li class="c-shell__menu-group">订单</li>
+        <li class="c-shell__menu-item c-shell__menu-item--active" role="menuitem">
+          <span class="c-shell__menu-icon">📋</span>订单列表
+        </li>
+        <li class="c-shell__menu-item" role="menuitem">
+          <span class="c-shell__menu-icon">🔍</span>待审订单
+        </li>
+        <li class="c-shell__menu-item" role="menuitem">
+          <span class="c-shell__menu-icon">📦</span>包裹列表
+        </li>
+        <li class="c-shell__menu-group">商品</li>
+        <li class="c-shell__menu-item" role="menuitem">
+          <span class="c-shell__menu-icon">🏷️</span>商品库
+        </li>
+        <li class="c-shell__menu-item" role="menuitem">
+          <span class="c-shell__menu-icon">📥</span>采购单
+        </li>
+        <li class="c-shell__menu-group">报表</li>
+        <li class="c-shell__menu-item" role="menuitem">
+          <span class="c-shell__menu-icon">📈</span>销售分析
+        </li>
+        <li class="c-shell__menu-item" role="menuitem">
+          <span class="c-shell__menu-icon">💰</span>财务报表
+        </li>
+      </ul>
+    </aside>
+
+    <!-- 顶栏 -->
+    <header class="c-shell__header">
+      <span class="c-shell__collapse-btn" title="折叠侧边栏" data-action="collapse">≡</span>
+      <div class="c-shell__header-search">
+        <span class="c-shell__header-search-icon">🔎</span>
+        <input class="input" placeholder="搜索菜单、订单号、SKU…" />
+      </div>
+      <div class="c-shell__header-actions">
+        <span class="c-shell__icon-btn" title="帮助">？</span>
+        <span class="c-shell__icon-btn" title="通知">🔔</span>
+        <div class="c-shell__avatar" title="freddy">F</div>
+      </div>
+    </header>
+
+    <!-- 面包屑 -->
+    <nav class="c-shell__crumb" aria-label="面包屑">
+      <a href="#">工作台</a>
+      <span class="c-shell__crumb-sep">/</span>
+      <a href="#">订单</a>
+      <span class="c-shell__crumb-sep">/</span>
+      <span class="c-shell__crumb-current">订单列表</span>
+    </nav>
+
+    <!-- 内容区：把后续组件粘贴到这个 main 里 -->
+    <main class="c-shell__content">
+      <div class="demo-placeholder">
+        在这里粘贴 page-header-bar.html / query-filter-bar.html / data-table-panel.html 等组件内容
+      </div>
+    </main>
+  </div>
+  <!-- END COMPONENT: ErpShell -->
+
+  <script>
+    // 折叠侧边栏（演示用）
+    document.querySelector('[data-action="collapse"]')?.addEventListener('click', (e) => {
+      const shell = e.target.closest('.c-shell');
+      shell.dataset.collapsed = shell.dataset.collapsed === 'true' ? 'false' : 'true';
+      // 折叠时隐藏文字
+      shell.querySelectorAll('.c-shell__brand-text, .c-shell__menu-group, .c-shell__menu-item > :not(.c-shell__menu-icon)').forEach(el => {
+        el.style.display = shell.dataset.collapsed === 'true' ? 'none' : '';
+      });
+    });
+  </script>
+</body>
+</html>

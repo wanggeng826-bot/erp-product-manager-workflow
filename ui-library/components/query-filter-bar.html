@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>QueryFilterBar · ERP UI Library</title>
+  <link rel="stylesheet" href="../tokens.css" />
+  <style>
+    /* ============================================================
+       Component: QueryFilterBar
+       Ant Design 映射：Form + Input + Select + DatePicker + Button
+       规则：高频筛选直接展示；低频折叠到「更多筛选」
+            搜索按钮放筛选区末尾，不与标题区主操作混放
+       ============================================================ */
+    .c-filter {
+      background: var(--color-bg-container);
+      border: 1px solid var(--color-border-secondary);
+      border-radius: var(--radius-lg);
+      padding: var(--space-4) var(--space-5);
+      margin-bottom: var(--space-4);
+    }
+    .c-filter__row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-4) var(--space-5);
+      align-items: end;
+    }
+    .c-filter__field { display: flex; flex-direction: column; gap: var(--space-1); min-width: 0; }
+    .c-filter__label  {
+      font-size: var(--font-size-sm);
+      color: var(--color-text-secondary);
+      line-height: 1;
+    }
+    .c-filter .input,
+    .c-filter .select { width: 100%; }
+    .c-filter__actions {
+      display: flex; gap: var(--space-2); justify-content: flex-end;
+      grid-column: -2 / -1;  /* 占最后一列 */
+    }
+    .c-filter__more {
+      margin-top: var(--space-3);
+      padding-top: var(--space-3);
+      border-top: 1px dashed var(--color-border-secondary);
+      display: none;
+    }
+    .c-filter[data-expanded="true"] .c-filter__more { display: block; }
+    .c-filter__toggle {
+      margin-top: var(--space-3);
+      display: inline-flex; align-items: center; gap: var(--space-1);
+      cursor: pointer;
+      color: var(--color-primary-6);
+      font-size: var(--font-size-sm);
+    }
+    .c-filter__toggle::after {
+      content: '▾';
+      transition: transform var(--motion);
+    }
+    .c-filter[data-expanded="true"] .c-filter__toggle::after {
+      transform: rotate(180deg);
+    }
+
+    /* 已选筛选标签 */
+    .c-filter__chips {
+      display: flex; flex-wrap: wrap; gap: var(--space-2);
+      margin-top: var(--space-3);
+    }
+    .c-chip {
+      display: inline-flex; align-items: center; gap: var(--space-2);
+      height: 26px; padding: 0 var(--space-2);
+      background: var(--color-bg-spotlight);
+      border: 1px solid var(--color-border-secondary);
+      border-radius: var(--radius-sm);
+      font-size: var(--font-size-sm);
+    }
+    .c-chip__close { color: var(--color-text-tertiary); cursor: pointer; line-height: 1; }
+    .c-chip__close:hover { color: var(--color-text); }
+    .c-filter__chip-clear {
+      color: var(--color-text-tertiary);
+      font-size: var(--font-size-sm);
+      cursor: pointer;
+    }
+
+    .demo-wrap { padding: var(--space-6); }
+  </style>
+</head>
+<body>
+  <div class="demo-wrap">
+
+    <!-- ============================================================
+         BEGIN COMPONENT: QueryFilterBar · 默认（4 高频字段 + 折叠更多）
+         ============================================================ -->
+    <section class="c-filter" data-expanded="false">
+
+      <!-- 高频筛选行 -->
+      <div class="c-filter__row">
+        <div class="c-filter__field">
+          <span class="c-filter__label">订单号 / 用户名</span>
+          <input class="input" placeholder="支持订单号、用户ID、收件人姓名" />
+        </div>
+        <div class="c-filter__field">
+          <span class="c-filter__label">订单状态</span>
+          <select class="select">
+            <option>全部</option>
+            <option>待支付</option>
+            <option>已支付</option>
+            <option>已发货</option>
+            <option>已完成</option>
+          </select>
+        </div>
+        <div class="c-filter__field">
+          <span class="c-filter__label">渠道</span>
+          <select class="select">
+            <option>全部渠道</option>
+            <option>Amazon</option>
+            <option>eBay</option>
+            <option>Shopify</option>
+            <option>独立站</option>
+          </select>
+        </div>
+        <div class="c-filter__field">
+          <span class="c-filter__label">下单时间</span>
+          <input class="input" type="date" />
+        </div>
+
+        <!-- 操作（占最后一格） -->
+        <!-- 实际生产中按钮可独立 row，这里压缩为同一 row 第 5 单元格 -->
+      </div>
+
+      <!-- 低频筛选（折叠） -->
+      <div class="c-filter__more">
+        <div class="c-filter__row">
+          <div class="c-filter__field">
+            <span class="c-filter__label">SKU</span>
+            <input class="input" placeholder="多个用逗号分隔" />
+          </div>
+          <div class="c-filter__field">
+            <span class="c-filter__label">支付方式</span>
+            <select class="select">
+              <option>全部</option>
+              <option>PayPal</option>
+              <option>信用卡</option>
+              <option>银联</option>
+            </select>
+          </div>
+          <div class="c-filter__field">
+            <span class="c-filter__label">是否退款</span>
+            <select class="select">
+              <option>全部</option><option>未退款</option><option>部分退款</option><option>全额退款</option>
+            </select>
+          </div>
+          <div class="c-filter__field">
+            <span class="c-filter__label">订单金额范围</span>
+            <input class="input" placeholder="0 - 1000" />
+          </div>
+        </div>
+      </div>
+
+      <!-- 底部：更多 / 重置 / 查询 -->
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-top: var(--space-3);">
+        <span class="c-filter__toggle" data-action="toggle-more">更多筛选</span>
+        <div style="display: flex; gap: var(--space-2);">
+          <button class="btn" data-action="reset">重置</button>
+          <button class="btn btn--primary" data-action="search">查询</button>
+        </div>
+      </div>
+
+      <!-- 已选筛选标签（用户提交查询后回显） -->
+      <div class="c-filter__chips">
+        <span class="c-chip">订单状态：已支付 <span class="c-chip__close">×</span></span>
+        <span class="c-chip">渠道：Amazon <span class="c-chip__close">×</span></span>
+        <span class="c-chip">下单时间：2026-05-01 至 2026-05-12 <span class="c-chip__close">×</span></span>
+        <span class="c-filter__chip-clear">全部清空</span>
+      </div>
+
+    </section>
+    <!-- END COMPONENT -->
+
+  </div>
+
+  <script>
+    document.querySelectorAll('[data-action="toggle-more"]').forEach(el => {
+      el.addEventListener('click', () => {
+        const f = el.closest('.c-filter');
+        f.dataset.expanded = f.dataset.expanded === 'true' ? 'false' : 'true';
+        el.textContent = f.dataset.expanded === 'true' ? '收起筛选' : '更多筛选';
+      });
+    });
+  </script>
+</body>
+</html>

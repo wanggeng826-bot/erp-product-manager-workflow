@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>DataTablePanel · ERP UI Library</title>
+  <link rel="stylesheet" href="../tokens.css" />
+  <style>
+    /* ============================================================
+       Component: DataTablePanel
+       Ant Design 映射：Table + Pagination + Tag + Dropdown + Tooltip + Empty
+       内含：BatchActionBar（勾选后才显示）
+       规则：行级操作 ≤ 3；多余收 More；状态用稳定 tag；空状态分两类
+       ============================================================ */
+    .c-table-panel {
+      background: var(--color-bg-container);
+      border: 1px solid var(--color-border-secondary);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    .c-table-panel__toolbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: var(--space-3) var(--space-4);
+      border-bottom: 1px solid var(--color-border-secondary);
+      font-size: var(--font-size-sm);
+      color: var(--color-text-secondary);
+      gap: var(--space-3);
+    }
+    .c-table-panel__summary { color: var(--color-text-secondary); }
+    .c-table-panel__tools { display: flex; gap: var(--space-2); align-items: center; }
+
+    /* 批量操作条（勾选后才出现） */
+    .c-batch-bar {
+      display: none;
+      align-items: center; justify-content: space-between;
+      padding: var(--space-2) var(--space-4);
+      background: var(--color-primary-1);
+      border-bottom: 1px solid var(--color-primary-3);
+      font-size: var(--font-size-sm);
+      color: var(--color-primary-7);
+    }
+    .c-table-panel[data-has-selection="true"] .c-batch-bar { display: flex; }
+    .c-batch-bar__actions { display: flex; gap: var(--space-2); }
+
+    /* 表格 */
+    .c-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: var(--font-size);
+    }
+    .c-table thead th {
+      background: #fafafa;
+      color: var(--color-text-secondary);
+      font-weight: var(--font-weight-medium);
+      font-size: var(--font-size-sm);
+      text-align: left;
+      padding: 0 var(--space-4);
+      height: var(--table-row-height-compact);
+      border-bottom: 1px solid var(--color-border-secondary);
+      white-space: nowrap;
+    }
+    .c-table tbody td {
+      padding: 0 var(--space-4);
+      height: var(--table-row-height);
+      border-bottom: 1px solid var(--color-border-secondary);
+      color: var(--color-text);
+      vertical-align: middle;
+    }
+    .c-table tbody tr:hover { background: var(--color-bg-spotlight); }
+    .c-table tbody tr[data-selected="true"] { background: var(--color-primary-1); }
+    .c-table__cell--num { text-align: right; font-variant-numeric: tabular-nums; }
+    .c-table__cell--actions { text-align: right; white-space: nowrap; }
+    .c-table__cell--actions .link { margin-left: var(--space-3); }
+    .c-table__cell--actions .link:first-child { margin-left: 0; }
+
+    /* 行选框 */
+    .c-table__checkbox { width: 32px; text-align: center; }
+
+    /* 分页 */
+    .c-pagination {
+      display: flex; justify-content: flex-end; align-items: center; gap: var(--space-2);
+      padding: var(--space-3) var(--space-4);
+      font-size: var(--font-size-sm);
+      color: var(--color-text-secondary);
+    }
+    .c-pagination button {
+      width: 32px; height: 32px;
+      display: inline-flex; align-items: center; justify-content: center;
+      border: 1px solid var(--color-border); background: var(--color-bg-container);
+      border-radius: var(--radius-sm); cursor: pointer;
+    }
+    .c-pagination button[aria-current="page"] {
+      background: var(--color-primary-6); color: #fff; border-color: var(--color-primary-6);
+    }
+
+    /* 空状态 */
+    .c-empty {
+      padding: var(--space-10) var(--space-6);
+      text-align: center;
+      color: var(--color-text-tertiary);
+    }
+    .c-empty__icon { font-size: 48px; margin-bottom: var(--space-3); opacity: 0.6; }
+    .c-empty__title { color: var(--color-text); margin-bottom: var(--space-1); }
+    .c-empty__hint { font-size: var(--font-size-sm); margin-bottom: var(--space-4); }
+
+    /* 骨架屏 */
+    .c-skeleton-row td {
+      padding: var(--space-3) var(--space-4);
+    }
+    .c-skeleton-bar {
+      height: 16px; border-radius: var(--radius-sm);
+      background: linear-gradient(90deg, #f5f5f5 25%, #ececec 37%, #f5f5f5 63%);
+      background-size: 400% 100%;
+      animation: c-skeleton 1.4s ease infinite;
+    }
+    @keyframes c-skeleton {
+      0%   { background-position: 100% 50%; }
+      100% { background-position: 0 50%; }
+    }
+
+    /* 错误状态 */
+    .c-error {
+      padding: var(--space-10) var(--space-6);
+      text-align: center;
+      color: var(--color-error);
+    }
+    .c-error__icon { font-size: 36px; margin-bottom: var(--space-3); }
+
+    .demo-wrap { padding: var(--space-6); }
+    .demo-state-switcher {
+      margin-bottom: var(--space-4);
+      display: flex; gap: var(--space-2);
+      padding: var(--space-2) var(--space-3);
+      background: var(--color-bg-container);
+      border: 1px dashed var(--color-border);
+      border-radius: var(--radius);
+      font-size: var(--font-size-sm);
+      color: var(--color-text-secondary);
+    }
+    .demo-state-switcher button {
+      background: var(--color-bg-spotlight);
+      border: 1px solid var(--color-border-secondary);
+      padding: var(--space-1) var(--space-3);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: var(--font-size-sm);
+    }
+  </style>
+</head>
+<body>
+  <div class="demo-wrap">
+
+    <!-- demo only：用于演示 4 种状态切换。生产原型中不允许 -->
+    <div class="demo-state-switcher">
+      <span>🧪 演示用切换（生产原型中不能出现）：</span>
+      <button data-state-switch="default">默认</button>
+      <button data-state-switch="loading">加载</button>
+      <button data-state-switch="empty">空数据</button>
+      <button data-state-switch="filtered-empty">筛选无结果</button>
+      <button data-state-switch="error">错误</button>
+    </div>
+
+    <!-- ============================================================
+         BEGIN COMPONENT: DataTablePanel · 默认（含 BatchActionBar）
+         ============================================================ -->
+    <section class="c-table-panel" data-state="default" data-has-selection="false">
+
+      <!-- 工具栏 -->
+      <div class="c-table-panel__toolbar">
+        <div class="c-table-panel__summary">共 <strong>1,286</strong> 条；当前已筛选 156 条</div>
+        <div class="c-table-panel__tools">
+          <button class="btn btn--sm">列设置</button>
+          <button class="btn btn--sm">导出当前结果</button>
+        </div>
+      </div>
+
+      <!-- 批量操作条（勾选行后才会显示） -->
+      <div class="c-batch-bar">
+        <span>已选 <strong data-bind="selectedCount">3</strong> 项</span>
+        <div class="c-batch-bar__actions">
+          <button class="btn btn--sm">批量发货</button>
+          <button class="btn btn--sm">批量打印</button>
+          <button class="btn btn--sm btn--danger">批量取消</button>
+          <button class="btn btn--sm btn--text" data-action="clear-selection">取消选择</button>
+        </div>
+      </div>
+
+      <!-- 表格 -->
+      <table class="c-table" data-show-when="default">
+        <thead>
+          <tr>
+            <th class="c-table__checkbox"><input type="checkbox" data-action="select-all" /></th>
+            <th>订单号</th>
+            <th>用户</th>
+            <th>渠道</th>
+            <th>状态</th>
+            <th class="c-table__cell--num">金额</th>
+            <th>下单时间</th>
+            <th class="c-table__cell--actions">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-row-id="O-20260512-000001">
+            <td class="c-table__checkbox"><input type="checkbox" data-action="select-row" /></td>
+            <td><a class="link">O-20260512-000001</a></td>
+            <td>张三</td>
+            <td>Amazon US</td>
+            <td><span class="tag tag--processing">已支付</span></td>
+            <td class="c-table__cell--num">¥1,280.00</td>
+            <td>2026-05-12 10:23</td>
+            <td class="c-table__cell--actions">
+              <a class="link">查看</a>
+              <a class="link">发货</a>
+              <a class="link">更多 ▾</a>
+            </td>
+          </tr>
+          <tr data-row-id="O-20260512-000002">
+            <td class="c-table__checkbox"><input type="checkbox" data-action="select-row" /></td>
+            <td><a class="link">O-20260512-000002</a></td>
+            <td>李四</td>
+            <td>eBay UK</td>
+            <td><span class="tag tag--warning">待支付</span></td>
+            <td class="c-table__cell--num">¥580.00</td>
+            <td>2026-05-12 11:02</td>
+            <td class="c-table__cell--actions">
+              <a class="link">查看</a>
+              <a class="link">取消</a>
+              <a class="link">更多 ▾</a>
+            </td>
+          </tr>
+          <tr data-row-id="O-20260511-000098">
+            <td class="c-table__checkbox"><input type="checkbox" data-action="select-row" /></td>
+            <td><a class="link">O-20260511-000098</a></td>
+            <td>王五</td>
+            <td>Shopify</td>
+            <td><span class="tag tag--processing">已发货</span></td>
+            <td class="c-table__cell--num">¥3,200.00</td>
+            <td>2026-05-11 17:48</td>
+            <td class="c-table__cell--actions">
+              <a class="link">查看</a>
+              <a class="link">物流</a>
+              <a class="link">更多 ▾</a>
+            </td>
+          </tr>
+          <tr data-row-id="O-20260511-000097">
+            <td class="c-table__checkbox"><input type="checkbox" data-action="select-row" /></td>
+            <td><a class="link">O-20260511-000097</a></td>
+            <td>赵六</td>
+            <td>Amazon DE</td>
+            <td><span class="tag tag--success">已完成</span></td>
+            <td class="c-table__cell--num">¥199.00</td>
+            <td>2026-05-11 09:11</td>
+            <td class="c-table__cell--actions">
+              <a class="link">查看</a>
+              <a class="link">复购</a>
+              <a class="link">更多 ▾</a>
+            </td>
+          </tr>
+          <tr data-row-id="O-20260510-000044">
+            <td class="c-table__checkbox"><input type="checkbox" data-action="select-row" /></td>
+            <td><a class="link">O-20260510-000044</a></td>
+            <td>钱七</td>
+            <td>独立站</td>
+            <td><span class="tag tag--error">已取消</span></td>
+            <td class="c-table__cell--num">¥860.00</td>
+            <td>2026-05-10 14:30</td>
+            <td class="c-table__cell--actions">
+              <a class="link">查看</a>
+              <span style="color: var(--color-text-disabled);">发货</span>
+              <a class="link">更多 ▾</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- 加载态（骨架屏） -->
+      <table class="c-table" data-show-when="loading" style="display:none;">
+        <thead>
+          <tr>
+            <th class="c-table__checkbox"><input type="checkbox" disabled /></th>
+            <th>订单号</th><th>用户</th><th>渠道</th><th>状态</th>
+            <th class="c-table__cell--num">金额</th><th>下单时间</th>
+            <th class="c-table__cell--actions">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="c-skeleton-row"><td colspan="8"><div class="c-skeleton-bar" style="width:100%"></div></td></tr>
+          <tr class="c-skeleton-row"><td colspan="8"><div class="c-skeleton-bar" style="width:90%"></div></td></tr>
+          <tr class="c-skeleton-row"><td colspan="8"><div class="c-skeleton-bar" style="width:95%"></div></td></tr>
+          <tr class="c-skeleton-row"><td colspan="8"><div class="c-skeleton-bar" style="width:80%"></div></td></tr>
+          <tr class="c-skeleton-row"><td colspan="8"><div class="c-skeleton-bar" style="width:92%"></div></td></tr>
+        </tbody>
+      </table>
+
+      <!-- 空状态：暂无数据（业务从未产生过） -->
+      <div class="c-empty" data-show-when="empty" style="display:none;">
+        <div class="c-empty__icon">📦</div>
+        <div class="c-empty__title">还没有订单</div>
+        <div class="c-empty__hint">第一笔订单产生后会自动同步到这里。</div>
+        <button class="btn btn--primary">+ 手动新建订单</button>
+      </div>
+
+      <!-- 空状态：筛选无结果（区别于真正"无数据"） -->
+      <div class="c-empty" data-show-when="filtered-empty" style="display:none;">
+        <div class="c-empty__icon">🔎</div>
+        <div class="c-empty__title">没有符合条件的订单</div>
+        <div class="c-empty__hint">已生效筛选：状态=已支付、渠道=Amazon、近 7 天</div>
+        <button class="btn">清空筛选</button>
+      </div>
+
+      <!-- 错误状态 -->
+      <div class="c-error" data-show-when="error" style="display:none;">
+        <div class="c-error__icon">⚠</div>
+        <div style="color: var(--color-text); margin-bottom: var(--space-1);">加载失败</div>
+        <div style="font-size: var(--font-size-sm); color: var(--color-text-secondary); margin-bottom: var(--space-4);">
+          后端响应超时（5000ms）。可重试，或缩小时间范围后再查询。
+        </div>
+        <button class="btn">重试</button>
+      </div>
+
+      <!-- 分页（仅 default 时显示） -->
+      <div class="c-pagination" data-show-when="default">
+        <span>共 1,286 条</span>
+        <select class="select" style="width: 100px; height: 32px;">
+          <option>20 条/页</option><option>50 条/页</option><option>100 条/页</option>
+        </select>
+        <button>‹</button>
+        <button aria-current="page">1</button>
+        <button>2</button>
+        <button>3</button>
+        <button>…</button>
+        <button>65</button>
+        <button>›</button>
+      </div>
+
+    </section>
+    <!-- END COMPONENT: DataTablePanel -->
+
+  </div>
+
+  <script>
+    // demo 状态切换
+    document.querySelectorAll('[data-state-switch]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = btn.dataset.stateSwitch;
+        const panel = document.querySelector('.c-table-panel');
+        panel.dataset.state = target;
+        panel.querySelectorAll('[data-show-when]').forEach(el => {
+          el.style.display = el.dataset.showWhen === target ? '' : 'none';
+        });
+        // 加载/错/空时隐藏批量条
+        panel.dataset.hasSelection = 'false';
+      });
+    });
+
+    // 行勾选
+    document.addEventListener('change', (e) => {
+      if (e.target.matches('[data-action="select-row"]')) {
+        const row = e.target.closest('tr');
+        row.dataset.selected = e.target.checked ? 'true' : 'false';
+        const panel = e.target.closest('.c-table-panel');
+        const cnt = panel.querySelectorAll('[data-action="select-row"]:checked').length;
+        panel.dataset.hasSelection = cnt > 0 ? 'true' : 'false';
+        panel.querySelector('[data-bind="selectedCount"]').textContent = cnt;
+      }
+      if (e.target.matches('[data-action="select-all"]')) {
+        const panel = e.target.closest('.c-table-panel');
+        panel.querySelectorAll('[data-action="select-row"]').forEach(c => {
+          c.checked = e.target.checked;
+          c.closest('tr').dataset.selected = e.target.checked ? 'true' : 'false';
+        });
+        const cnt = panel.querySelectorAll('[data-action="select-row"]:checked').length;
+        panel.dataset.hasSelection = cnt > 0 ? 'true' : 'false';
+        panel.querySelector('[data-bind="selectedCount"]').textContent = cnt;
+      }
+    });
+
+    // 清除选择
+    document.querySelector('[data-action="clear-selection"]')?.addEventListener('click', () => {
+      const panel = document.querySelector('.c-table-panel');
+      panel.querySelectorAll('[data-action="select-row"], [data-action="select-all"]').forEach(c => c.checked = false);
+      panel.querySelectorAll('tr[data-selected]').forEach(r => r.dataset.selected = 'false');
+      panel.dataset.hasSelection = 'false';
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>CreateModal · ERP UI Library</title>
+  <link rel="stylesheet" href="../tokens.css" />
+  <style>
+    .c-modal-mask { position: fixed; inset: 0; background: var(--color-bg-mask); display: none; z-index: var(--z-modal); }
+    .c-modal-mask[data-open="true"] { display: block; }
+    .c-modal {
+      position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%);
+      width: 520px; border-radius: var(--radius-lg); background: var(--color-bg-elevated);
+      box-shadow: var(--shadow-modal); z-index: calc(var(--z-modal) + 1);
+      display: none; overflow: hidden;
+    }
+    .c-modal[data-open="true"] { display: block; }
+    .c-modal__head, .c-modal__foot { padding: var(--space-4) var(--space-5); border-bottom: 1px solid var(--color-border-secondary); display: flex; align-items: center; justify-content: space-between; }
+    .c-modal__foot { border-bottom: none; border-top: 1px solid var(--color-border-secondary); justify-content: flex-end; gap: var(--space-2); }
+    .c-modal__body { padding: var(--space-5); display: grid; gap: var(--space-4); }
+    .c-field { display: flex; flex-direction: column; gap: var(--space-1); }
+    .c-field label { font-size: var(--font-size-sm); color: var(--color-text-secondary); }
+    .demo-wrap { padding: var(--space-6); }
+  </style>
+</head>
+<body>
+  <div class="demo-wrap"><button class="btn btn--primary" data-action="open">打开新建弹窗</button></div>
+  <div class="c-modal-mask" data-open="false" data-action="close"></div>
+  <section class="c-modal" data-open="false" role="dialog">
+    <header class="c-modal__head">
+      <h3 style="margin:0;font-size:var(--font-size-lg);font-weight:var(--font-weight-semibold);">新建策略</h3>
+      <span style="cursor:pointer;color:var(--color-text-secondary);" data-action="close">×</span>
+    </header>
+    <div class="c-modal__body">
+      <div class="c-field"><label>策略名称</label><input class="input" placeholder="请输入策略名称" /></div>
+      <div class="c-field"><label>适用店铺</label><select class="select"><option>Amazon-US-01</option><option>TikTok-SEA-01</option></select></div>
+      <div class="c-field"><label>生效状态</label><select class="select"><option>启用</option><option>停用</option></select></div>
+    </div>
+    <footer class="c-modal__foot">
+      <button class="btn" data-action="close">取消</button>
+      <button class="btn btn--primary">创建</button>
+    </footer>
+  </section>
+  <script>
+    const modal = document.querySelector(".c-modal");
+    const mask = document.querySelector(".c-modal-mask");
+    document.querySelectorAll("[data-action='open']").forEach((el) => el.onclick = () => {
+      modal.dataset.open = "true"; mask.dataset.open = "true";
+    });
+    document.querySelectorAll("[data-action='close']").forEach((el) => el.onclick = () => {
+      modal.dataset.open = "false"; mask.dataset.open = "false";
+    });
+  </script>
+</body>
+</html>

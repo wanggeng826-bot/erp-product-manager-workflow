@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>ImportFlow · ERP UI Library</title>
+  <link rel="stylesheet" href="../tokens.css" />
+  <style>
+    .c-import {
+      margin: var(--space-6); display: grid; grid-template-columns: repeat(3, minmax(220px, 1fr)); gap: var(--space-3);
+    }
+    .c-step {
+      border: 1px solid var(--color-border-secondary); border-radius: var(--radius-lg);
+      background: var(--color-bg-container); padding: var(--space-4); display: grid; gap: var(--space-2);
+    }
+    .c-step.done { border-color: var(--color-success-border); background: var(--color-success-bg); }
+    .c-step.doing { border-color: var(--color-primary-3); background: var(--color-primary-bg); }
+    .c-step__title { font-size: var(--font-size); font-weight: var(--font-weight-medium); }
+    .c-step__desc { color: var(--color-text-secondary); font-size: var(--font-size-sm); }
+  </style>
+</head>
+<body>
+  <section class="c-import">
+    <article class="c-step done">
+      <span class="c-step__title">1. 上传文件</span>
+      <span class="c-step__desc">支持 xlsx/csv，模板字段结构校验通过。</span>
+    </article>
+    <article class="c-step doing">
+      <span class="c-step__title">2. 字段映射</span>
+      <span class="c-step__desc">自动匹配字段，可人工修正后确认。</span>
+    </article>
+    <article class="c-step">
+      <span class="c-step__title">3. 预检并提交</span>
+      <span class="c-step__desc">展示错误行与修复建议，确认后提交。</span>
+    </article>
+  </section>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>FeedbackState · ERP UI Library</title>
+  <link rel="stylesheet" href="../tokens.css" />
+  <style>
+    .c-feedback { margin: var(--space-6); display: grid; gap: var(--space-3); max-width: 720px; }
+    .c-feedback__item { padding: var(--space-3) var(--space-4); border-radius: var(--radius); border: 1px solid; font-size: var(--font-size-sm); }
+    .c-feedback__item.info { background: var(--color-primary-bg); color: var(--color-primary-7); border-color: var(--color-primary-3); }
+    .c-feedback__item.success { background: var(--color-success-bg); color: var(--color-success); border-color: var(--color-success-border); }
+    .c-feedback__item.warning { background: var(--color-warning-bg); color: #ad6800; border-color: var(--color-warning-border); }
+    .c-feedback__item.error { background: var(--color-error-bg); color: var(--color-error); border-color: var(--color-error-border); }
+  </style>
+</head>
+<body>
+  <section class="c-feedback">
+    <div class="c-feedback__item info">信息：正在同步渠道订单数据。</div>
+    <div class="c-feedback__item success">成功：批量发货任务已提交，预计 2 分钟完成。</div>
+    <div class="c-feedback__item warning">警告：12 条订单库存不足，建议先分仓调拨。</div>
+    <div class="c-feedback__item error">错误：渠道接口超时，建议 30 秒后重试。</div>
+  </section>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>StoreSelector · ERP UI Library</title>
+  <link rel="stylesheet" href="../tokens.css" />
+  <style>
+    .c-store {
+      width: 520px; margin: var(--space-6);
+      border: 1px solid var(--color-border-secondary); border-radius: var(--radius-lg);
+      background: var(--color-bg-container); overflow: hidden;
+    }
+    .c-store__trigger { padding: var(--space-3) var(--space-4); border-bottom: 1px solid var(--color-border-secondary); display: flex; justify-content: space-between; align-items: center; }
+    .c-store__value { color: var(--color-text-secondary); font-size: var(--font-size-sm); }
+    .c-store__tree { padding: var(--space-3) var(--space-4); display: grid; gap: var(--space-2); max-height: 320px; overflow-y: auto; }
+    .c-node { display: flex; align-items: center; gap: var(--space-2); font-size: var(--font-size-sm); color: var(--color-text); }
+    .c-node.level-1 { padding-left: 16px; }
+    .c-node.level-2 { padding-left: 32px; }
+    .c-node.level-3 { padding-left: 48px; }
+    .c-node input { margin: 0; }
+    .c-node.active { color: var(--color-primary-6); }
+  </style>
+</head>
+<body>
+  <section class="c-store">
+    <header class="c-store__trigger">
+      <strong>平台 / 事业部 / 站点 / 店铺</strong>
+      <span class="c-store__value">Amazon / 北美事业部 / US / 北美优选-US</span>
+    </header>
+    <div class="c-store__tree">
+      <label class="c-node level-0"><input type="checkbox" checked /> Amazon</label>
+      <label class="c-node level-1"><input type="checkbox" checked /> 北美事业部</label>
+      <label class="c-node level-2"><input type="checkbox" checked /> US</label>
+      <label class="c-node level-3 active"><input type="checkbox" checked /> 北美优选-US</label>
+      <label class="c-node level-3"><input type="checkbox" /> 北美数码-US</label>
+      <label class="c-node level-2"><input type="checkbox" /> CA</label>
+      <label class="c-node level-0"><input type="checkbox" /> TikTok Shop</label>
+      <label class="c-node level-1"><input type="checkbox" /> SEA 事业部</label>
+      <label class="c-node level-0"><input type="checkbox" /> Walmart</label>
+    </div>
+  </section>
+</body>
+</html>

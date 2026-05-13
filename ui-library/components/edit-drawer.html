@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>EditDrawer · ERP UI Library</title>
+  <link rel="stylesheet" href="../tokens.css" />
+  <style>
+    .c-edit-mask {
+      position: fixed; inset: 0; background: var(--color-bg-mask);
+      display: none; z-index: var(--z-drawer); opacity: 0; transition: opacity var(--motion);
+    }
+    .c-edit-mask[data-open="true"] { display: block; opacity: 1; }
+    .c-edit-drawer {
+      position: fixed; right: 0; top: 0; height: 100vh; width: var(--layout-drawer-width);
+      background: var(--color-bg-elevated); transform: translateX(100%); transition: transform var(--motion);
+      box-shadow: var(--shadow-drawer); z-index: calc(var(--z-drawer) + 1);
+      display: flex; flex-direction: column;
+    }
+    .c-edit-drawer[data-open="true"] { transform: translateX(0); }
+    .c-edit-head, .c-edit-foot {
+      padding: var(--space-4) var(--space-5); border-bottom: 1px solid var(--color-border-secondary);
+      display: flex; align-items: center; justify-content: space-between; background: var(--color-bg-container);
+    }
+    .c-edit-foot { border-bottom: none; border-top: 1px solid var(--color-border-secondary); justify-content: flex-end; gap: var(--space-2); }
+    .c-edit-title { margin: 0; font-size: var(--font-size-lg); font-weight: var(--font-weight-semibold); }
+    .c-edit-close { cursor: pointer; color: var(--color-text-secondary); }
+    .c-edit-body { flex: 1; overflow-y: auto; padding: var(--space-5); display: grid; gap: var(--space-4); }
+    .c-field { display: flex; flex-direction: column; gap: var(--space-1); }
+    .c-field label { font-size: var(--font-size-sm); color: var(--color-text-secondary); }
+    .demo-wrap { padding: var(--space-6); }
+  </style>
+</head>
+<body>
+  <div class="demo-wrap">
+    <button class="btn btn--primary" data-action="open">打开编辑抽屉</button>
+  </div>
+
+  <div class="c-edit-mask" data-open="false" data-action="close"></div>
+  <aside class="c-edit-drawer" data-open="false">
+    <header class="c-edit-head">
+      <h2 class="c-edit-title">编辑订单信息</h2>
+      <span class="c-edit-close" data-action="close">×</span>
+    </header>
+    <section class="c-edit-body">
+      <div class="c-field"><label>联系人</label><input class="input" value="张三" /></div>
+      <div class="c-field"><label>联系电话</label><input class="input" value="+86 13800138000" /></div>
+      <div class="c-field"><label>发货仓</label><select class="select"><option>深圳一仓</option><option>义乌二仓</option></select></div>
+      <div class="c-field"><label>配送方式</label><select class="select"><option>标准快递</option><option>加急配送</option></select></div>
+    </section>
+    <footer class="c-edit-foot">
+      <button class="btn" data-action="close">取消</button>
+      <button class="btn btn--primary">保存</button>
+    </footer>
+  </aside>
+
+  <script>
+    const drawer = document.querySelector(".c-edit-drawer");
+    const mask = document.querySelector(".c-edit-mask");
+    document.querySelectorAll("[data-action='open']").forEach((el) => el.onclick = () => {
+      drawer.dataset.open = "true"; mask.dataset.open = "true";
+    });
+    document.querySelectorAll("[data-action='close']").forEach((el) => el.onclick = () => {
+      drawer.dataset.open = "false"; mask.dataset.open = "false";
+    });
+  </script>
+</body>
+</html>

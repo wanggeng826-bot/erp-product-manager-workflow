@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OMS 订单履约系统</title>
+    <link rel="stylesheet" href="../../ui-library/tokens.css" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="erp-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">OMS</div>
+          <div>
+            <div class="brand-title">订单履约</div>
+            <div class="brand-subtitle">Order Management</div>
+          </div>
+        </div>
+
+        <nav class="side-menu" aria-label="OMS 菜单">
+          <div class="menu-group">订单管理</div>
+          <button class="side-item active" data-page="orders">
+            <span class="side-icon">订</span>
+            <span>订单列表</span>
+          </button>
+          <button class="side-item" data-page="review">
+            <span class="side-icon">审</span>
+            <span>待审订单</span>
+          </button>
+          <div class="menu-group">包裹管理</div>
+          <button class="side-item" data-page="packages">
+            <span class="side-icon">包</span>
+            <span>包裹列表</span>
+          </button>
+        </nav>
+      </aside>
+
+      <main class="main">
+        <header class="page-header">
+          <div class="header-left">
+            <button class="header-icon-btn" type="button" aria-label="折叠侧边栏">☰</button>
+            <strong>订单管理</strong>
+            <div class="header-search">
+              <span>⌕</span>
+              <input value="" placeholder="搜索菜单、订单号、SKU" aria-label="全局搜索" />
+            </div>
+          </div>
+          <div class="header-meta">
+            <span>付款时间倒序</span>
+            <button class="header-icon-btn" type="button">帮助</button>
+            <button class="header-icon-btn" type="button">通知</button>
+            <span class="avatar">F</span>
+            <span>Freddy · 管理员</span>
+          </div>
+        </header>
+
+        <div class="breadcrumb-bar">首页 / OMS 订单管理 / <span id="breadcrumbCurrent">订单列表</span></div>
+
+        <section class="page-title-panel" aria-label="页面标题">
+          <div>
+            <h1 id="pageTitle">订单列表</h1>
+            <p>管理多平台订单、审核状态、包裹信息和异常处理。</p>
+          </div>
+          <div class="page-title-actions">
+            <button class="btn" type="button">导出</button>
+            <button class="btn primary" type="button">手工订单</button>
+          </div>
+        </section>
+
+        <section class="content-panel query-panel" aria-label="订单筛选">
+          <div class="query-grid">
+            <div class="field field-batch-search">
+              <span>单号搜索</span>
+              <div class="batch-search-combo" id="batchSearchTrigger" aria-expanded="false">
+                <button class="batch-type-trigger" type="button">
+                  <span id="batchSearchType">平台单号</span>
+                  <span class="chevron">⌄</span>
+                </button>
+                <input id="batchSearchInlineInput" value="AMZ-2026" placeholder="请输入" aria-label="单号搜索" />
+              </div>
+              <div class="batch-type-menu" id="batchTypeMenu" hidden>
+                <button class="select-option selected" type="button">平台单号</button>
+                <button class="select-option" type="button">系统订单号</button>
+                <button class="select-option" type="button">包裹号</button>
+              </div>
+              <div class="batch-search-panel" id="batchSearchPanel" hidden>
+                <textarea id="batchSearchInput" rows="6" placeholder="多项输入请用逗号或换行分割" aria-label="批量搜索内容">AMZ-2026</textarea>
+                <span class="batch-search-count" id="batchSearchCount">1个</span>
+              </div>
+            </div>
+
+            <div class="field field-store">
+              <span>店铺</span>
+              <button class="store-trigger" id="storeTrigger" type="button" aria-expanded="false">
+                <span class="platform-dot amazon">A</span>
+                <span id="storeSummary">Amazon / 北美事业部 / US / 北美优选-US</span>
+                <span class="chevron">⌄</span>
+              </button>
+              <div class="store-popover" id="storePopover" hidden>
+                <input class="store-search" id="storeSearch" value="" placeholder="搜索平台 / 站点 / 店铺" aria-label="搜索店铺" />
+                <div class="store-tree" id="storeTree" aria-label="店铺选择树">
+                  <div class="tree-node level-0 expanded" data-node="amazon">
+                    <button class="tree-toggle" type="button" aria-label="展开 Amazon">⌄</button>
+                    <label class="tree-label">
+                      <input type="checkbox" class="tree-check" data-node="amazon" checked />
+                      <span class="platform-dot amazon">A</span>
+                      <span class="node-title">Amazon</span>
+                      <span class="node-count">3</span>
+                    </label>
+                  </div>
+                  <div class="tree-node level-1 expanded" data-node="amazon-na" data-parent="amazon">
+                    <button class="tree-toggle" type="button" aria-label="展开北美事业部">⌄</button>
+                    <label class="tree-label">
+                      <input type="checkbox" class="tree-check" data-node="amazon-na" data-parent="amazon" checked />
+                      <span class="node-title">北美事业部</span>
+                    </label>
+                  </div>
+                  <div class="tree-node level-2 expanded" data-node="amazon-na-us" data-parent="amazon-na">
+                    <button class="tree-toggle" type="button" aria-label="展开 US">⌄</button>
+                    <label class="tree-label">
+                      <input type="checkbox" class="tree-check" data-node="amazon-na-us" data-parent="amazon-na" checked />
+                      <span class="node-title">US</span>
+                    </label>
+                  </div>
+                  <div class="tree-node level-3 leaf" data-node="store-amz-us-prime" data-parent="amazon-na-us" data-path="Amazon / 北美事业部 / US / 北美优选-US">
+                    <span class="tree-spacer"></span>
+                    <label class="tree-label">
+                      <input type="checkbox" class="tree-check store-check" data-node="store-amz-us-prime" data-parent="amazon-na-us" checked />
+                      <span class="node-title">北美优选-US</span>
+                    </label>
+                  </div>
+                  <div class="tree-node level-3 leaf" data-node="store-amz-us-digital" data-parent="amazon-na-us" data-path="Amazon / 北美事业部 / US / 北美数码-US">
+                    <span class="tree-spacer"></span>
+                    <label class="tree-label">
+                      <input type="checkbox" class="tree-check store-check" data-node="store-amz-us-digital" data-parent="amazon-na-us" />
+                      <span class="node-title">北美数码-US</span>
+                    </label>
+                  </div>
+                  <div class="tree-node level-3 leaf" data-node="store-amz-us-home" data-parent="amazon-na-us" data-path="Amazon / 北美事业部 / US / 家居补货-US">
+                    <span class="tree-spacer"></span>
+                    <label class="tree-label">
+                      <input type="checkbox" class="tree-check store-check" data-node="store-amz-us-home" data-parent="amazon-na-us" />
+                      <span class="node-title">家居补货-US</span>
+                    </label>
+                  </div>
+                  <div class="tree-node level-0" data-node="tiktok">
+                    <button class="tree-toggle" type="button" aria-label="展开 TikTok Shop">›</button>
+                    <label class="tree-label">
+                      <input type="checkbox" class="tree-check" data-node="tiktok" />
+                      <span class="platform-dot tiktok">T</span>
+                      <span class="node-title">TikTok Shop</span>
+                      <span class="node-count">2</span>
+                    </label>
+                  </div>
+                  <div class="tree-node level-1 tree-hidden" data-node="tiktok-sea" data-parent="tiktok">
+                    <button class="tree-toggle" type="button" aria-label="展开东南亚事业部">›</button>
+                    <label class="tree-label">
+                      <input type="checkbox" class="tree-check" data-node="tiktok-sea" data-parent="tiktok" />
+                      <span class="node-title">东南亚事业部</span>
+                    </label>
+                  </div>
+                  <div class="tree-node level-0" data-node="shopee">
+                    <button class="tree-toggle" type="button" aria-label="展开 Shopee">›</button>
+                    <label class="tree-label">
+                      <input type="checkbox" class="tree-check" data-node="shopee" />
+                      <span class="platform-dot shopee">S</span>
+                      <span class="node-title">Shopee</span>
+                      <span class="node-count">1</span>
+                    </label>
+                  </div>
+                  <div class="tree-node level-0" data-node="walmart">
+                    <button class="tree-toggle" type="button" aria-label="展开 Walmart">›</button>
+                    <label class="tree-label">
+                      <input type="checkbox" class="tree-check" data-node="walmart" />
+                      <span class="platform-dot walmart">W</span>
+                      <span class="node-title">Walmart</span>
+                      <span class="node-count">1</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="store-footer">
+                  <span id="storeFooterText">已选 1 个店铺</span>
+                  <button class="mini-btn" id="storeDone" type="button">确定</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="field field-site select-field" data-select>
+              <span>站点</span>
+              <button class="select-trigger" type="button" aria-expanded="false">
+                <span class="select-value">全部站点</span>
+                <span class="chevron">⌄</span>
+              </button>
+              <div class="select-menu" hidden>
+                <button class="select-option selected" type="button">全部站点</button>
+                <button class="select-option" type="button">US</button>
+                <button class="select-option" type="button">MY</button>
+                <button class="select-option" type="button">PH</button>
+              </div>
+            </div>
+
+            <label class="field field-time">
+              <span>付款时间</span>
+              <input value="2026/05/01 - 2026/05/09" aria-label="付款时间" />
+            </label>
+
+            <div class="query-actions">
+              <button class="btn primary" id="searchBtn" type="button">搜索</button>
+              <button class="btn" type="button">重置</button>
+              <button class="btn text" id="toggleAdvanced" type="button">高级筛选</button>
+            </div>
+          </div>
+
+          <div class="filter-chips" id="filterChips" aria-label="已生效筛选"></div>
+
+          <div class="advanced-row" id="advancedRow" hidden>
+            <div class="field select-field" data-select>
+              <span>仓库</span>
+              <button class="select-trigger" type="button" aria-expanded="false">
+                <span class="select-value">全部仓库</span>
+                <span class="chevron">⌄</span>
+              </button>
+              <div class="select-menu" hidden>
+                <button class="select-option selected" type="button">全部仓库</button>
+                <button class="select-option" type="button">华东仓</button>
+                <button class="select-option" type="button">华南仓</button>
+                <button class="select-option" type="button">美西仓</button>
+              </div>
+            </div>
+            <div class="field select-field" data-select>
+              <span>物流渠道</span>
+              <button class="select-trigger" type="button" aria-expanded="false">
+                <span class="select-value">全部渠道</span>
+                <span class="chevron">⌄</span>
+              </button>
+              <div class="select-menu" hidden>
+                <button class="select-option selected" type="button">全部渠道</button>
+                <button class="select-option" type="button">USPS Ground</button>
+                <button class="select-option" type="button">J&amp;T Express</button>
+                <button class="select-option" type="button">FedEx</button>
+              </div>
+            </div>
+            <div class="field select-field" data-select>
+              <span>异常类型</span>
+              <button class="select-trigger" type="button" aria-expanded="false">
+                <span class="select-value">全部异常</span>
+                <span class="chevron">⌄</span>
+              </button>
+              <div class="select-menu" hidden>
+                <button class="select-option selected" type="button">全部异常</button>
+                <button class="select-option" type="button">地址缺失</button>
+                <button class="select-option" type="button">库存不足</button>
+                <button class="select-option" type="button">物流不可达</button>
+              </div>
+            </div>
+            <div class="field select-field" data-select>
+              <span>系统标签</span>
+              <button class="select-trigger" type="button" aria-expanded="false">
+                <span class="select-value">全部标签</span>
+                <span class="chevron">⌄</span>
+              </button>
+              <div class="select-menu" hidden>
+                <button class="select-option selected" type="button">全部标签</button>
+                <button class="select-option" type="button">可合并</button>
+                <button class="select-option" type="button">缺货</button>
+                <button class="select-option" type="button">作废风险</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="content-panel flow-panel" aria-label="订单履约链路">
+          <div class="flow-head">
+            <div>
+              <div class="section-kicker">履约处理</div>
+              <h2>当前订单履约进度</h2>
+              <p>SO202605090016 · 同步、检测、审核、生成包裹、仓库交接、发货。</p>
+            </div>
+            <div class="flow-actions">
+              <button class="btn primary" id="runFlowBtn" type="button">推进下一状态</button>
+            </div>
+          </div>
+
+          <div class="flow-grid">
+            <div class="flow-card flow-order-card">
+              <div class="flow-card-title">
+                <span>当前订单</span>
+                <button class="text-action" id="openFlowDetail" type="button">打开详情</button>
+              </div>
+              <div class="flow-order-no" id="flowOrderNo">SO202605090016</div>
+              <div class="flow-meta-grid">
+                <span>状态</span>
+                <strong id="flowOrderStatus">待检测</strong>
+                <span>包裹号</span>
+                <strong id="flowPackageNo">待生成</strong>
+                <span>仓库</span>
+                <strong id="flowWarehouse">华东仓</strong>
+                <span>物流渠道</span>
+                <strong id="flowLogistics">待匹配</strong>
+              </div>
+              <div class="flow-stage-hint" id="flowStageHint">等待平台订单进入检测队列。</div>
+            </div>
+
+            <div class="flow-card flow-steps-card">
+              <div class="flow-card-title">
+                <span>处理步骤</span>
+                <span id="flowStepCount">1 / 6</span>
+              </div>
+              <div class="flow-steps" id="flowSteps"></div>
+            </div>
+
+            <div class="flow-card flow-result-card">
+              <div class="flow-result-head">
+                <span>流程结果</span>
+                <span class="tag blue" id="flowResultTag">等待同步</span>
+              </div>
+              <p id="flowResultText">订单已进入 OMS，下一步将执行风控、库存、利润检测。</p>
+              <div class="flow-next-checks" id="flowNextChecks">
+                <span>下一步需确认：平台单号、SKU 映射、库存可用数。</span>
+              </div>
+              <div class="flow-risk-actions">
+                <button class="btn small" id="openInterceptBtn" type="button" disabled>申请包裹拦截</button>
+                <span id="interceptHint">包裹生成后可演练拦截确认</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="content-panel table-panel">
+          <div class="status-tabs" id="statusTabs" aria-label="订单状态">
+            <button class="tab active" data-status="all">全部 <span>4</span></button>
+            <button class="tab" data-status="pay">待付款 <span>0</span></button>
+            <button class="tab" data-status="detect">待检测 <span>0</span></button>
+            <button class="tab" data-status="profit">待盈亏 <span>0</span></button>
+            <button class="tab" data-status="review">待审核 <span>1</span></button>
+            <button class="tab" data-status="ship">待发货 <span>1</span></button>
+            <button class="tab" data-status="partial">部分发货 <span>0</span></button>
+            <button class="tab" data-status="shipped">已发货 <span>1</span></button>
+            <button class="tab" data-status="cancel">已取消 <span>0</span></button>
+            <button class="tab" data-status="exception">异常 <span>1</span></button>
+            <button class="tab" data-status="merge">可合并 <span>0</span></button>
+            <button class="tab" data-status="out">缺货 <span>0</span></button>
+            <button class="tab" data-status="void">作废 <span>0</span></button>
+          </div>
+
+          <div class="panel-head">
+            <div>
+              <h2 id="tableTitle">订单结果</h2>
+              <p id="tableSub">共 4 条记录，已按付款时间倒序排列</p>
+            </div>
+          </div>
+
+            <div class="table-action-row">
+            <div class="action-left">
+              <button class="btn" type="button">批量处理</button>
+              <button class="btn" type="button">批量操作包裹</button>
+              <button class="btn" type="button">下载订单</button>
+              <button class="btn" type="button">数据导出</button>
+              <button class="btn" type="button">更多</button>
+            </div>
+            <div class="table-hints">
+              <span>平台单号、包裹号可进入详情</span>
+              <span>详情抽屉保留列表上下文</span>
+            </div>
+          </div>
+
+          <div class="batch-action-bar" id="batchActionBar" hidden>
+            <span>已选择 <strong id="selectedCount">0</strong> 项</span>
+            <button class="btn small" type="button">提交审核</button>
+            <button class="btn small" type="button">标记异常</button>
+            <button class="btn small" type="button">取消选择</button>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th class="check-col"><input type="checkbox" id="selectAll" aria-label="全选订单" /></th>
+                  <th>订单信息</th>
+                  <th>产品信息</th>
+                  <th>费用信息</th>
+                  <th>包裹信息</th>
+                  <th>状态</th>
+                  <th>时间</th>
+                  <th>详情</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody"></tbody>
+            </table>
+          </div>
+
+          <div class="pagination">
+            <span>第 1 - 4 条，共 4 条</span>
+            <div>
+              <button class="page-btn" disabled>上一页</button>
+              <button class="page-btn active">1</button>
+              <button class="page-btn" disabled>下一页</button>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div class="drawer-mask" id="drawerMask" hidden></div>
+    <aside class="detail-drawer" id="detailDrawer" aria-hidden="true">
+      <div class="drawer-head">
+        <div>
+          <div class="drawer-kicker">订单详情</div>
+          <h3 id="drawerTitle">订单详情</h3>
+        </div>
+        <button class="icon-btn" id="closeDrawer" aria-label="关闭">×</button>
+      </div>
+      <div class="drawer-body" id="drawerBody"></div>
+    </aside>
+
+    <div class="modal-mask" id="riskModalMask" hidden>
+      <section class="risk-modal" role="dialog" aria-modal="true" aria-labelledby="riskModalTitle">
+        <div class="modal-head">
+          <div>
+            <div class="drawer-kicker">高风险确认</div>
+            <h3 id="riskModalTitle">申请包裹拦截</h3>
+          </div>
+          <button class="icon-btn" id="closeRiskModal" type="button" aria-label="关闭">×</button>
+        </div>
+        <div class="modal-body">
+          <p class="risk-copy" id="riskModalCopy">该操作会暂停当前包裹履约，并同步影响订单、仓库作业与后续售后处理。</p>
+          <dl class="description-grid modal-desc">
+            <dt>操作对象</dt>
+            <dd id="riskObject">SO202605090016 / 待生成</dd>
+            <dt>影响范围</dt>
+            <dd>订单状态、包裹流转、仓库作业</dd>
+            <dt>可恢复性</dt>
+            <dd>需要人工复核后恢复</dd>
+            <dt>操作结果</dt>
+            <dd>生成拦截申请并写入操作日志</dd>
+          </dl>
+        </div>
+        <div class="modal-foot">
+          <button class="btn" id="cancelRiskModal" type="button">取消</button>
+          <button class="btn primary" id="confirmIntercept" type="button">确认申请拦截</button>
+        </div>
+      </section>
+    </div>
+
+    <div class="toast" id="toast" hidden></div>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
