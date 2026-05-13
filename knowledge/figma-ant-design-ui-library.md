@@ -25,7 +25,7 @@
 | Effect Styles | Card、Popover、Drawer |
 | Base Component Sets | Button、Input、Select、Checkbox、Radio、Switch、Tag、Alert |
 | Base Components | Pagination、Tabs、Empty、Spin、Skeleton |
-| ERP Patterns | PageHeaderBar、QueryFilterBar、DataTablePanel、DetailDrawer、RiskConfirm、StoreSelector |
+| ERP Patterns | PageHeaderBar、QueryFilterBar、DataTablePanel、DetailDrawer、RiskConfirm、StoreSelector、EditDrawer、CreateModal、DateComparisonControl、MetricComparisonCard、FeedbackState、OperationLog、FieldHelp、ImportFlow |
 | Templates | ErpShell、ListPageTemplate |
 
 ## 2026-05-13 · Pro v6 对齐增量
@@ -105,6 +105,8 @@
 |---|---|---|
 | 2026-05-12 | `whoami` | `wanggeng826@gmail.com` / Freddy / `汪耕's team` |
 | 2026-05-12 | `get_metadata(fileKey=KaI3eGyylfiwrPlU3OR08C, nodeId=0:1)` | 返回 Cover 页，含全部基础组件实例（Button × 15 状态、Input × 5、Select × 4、Checkbox × 4、Radio × 3、Switch × 3、Tag × 5、Alert × 4、Pagination、Tabs、Empty、Spin、Skeleton）。✅ 库与上文清单完全一致 |
+| 2026-05-13 | `use_figma`（动作区约束修正） | `PageHeaderBar / Actions` 已统一为透明布局容器（无 fill/stroke/effect，padding/radius=0，hug 内容）。✅ |
+| 2026-05-13 | `use_figma`（v0.2 组件补齐） | 已新增 `EditDrawer / CreateModal / DateComparisonControl / MetricComparisonCard / FeedbackState / OperationLog / FieldHelp / ImportFlow` 组件。✅ |
 
 ## 后续维护
 
