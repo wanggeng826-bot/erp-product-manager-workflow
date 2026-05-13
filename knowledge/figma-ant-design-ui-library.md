@@ -38,6 +38,13 @@
   - `ErpShell v6`（`Theme=Default|Dark|Glass`）
 - 新增文档页：`05 Pro v6 Update`
 
+## 2026-05-13 · PageHeader 动作区约束补丁
+
+- 问题类型：历史迭代中出现“标题右上动作区被包成白色小卡片”的布局偏差。
+- 根因：动作区容器被当成视觉层使用（填充/阴影/固定空白）而非纯布局层。
+- 已执行修正：`PageHeaderBar / Actions` 统一约束为 `fill=none`、`stroke=none`、`effect=none`、`padding=0`、`radius=0`、`hug contents`。
+- 后续校验：所有列表模板页新增动作区检查，不允许再出现额外卡片包裹。
+
 ## 后续原型使用规则
 
 1. 做 Figma 原型前，先打开或引用 `Ant Design ERP UI Library`。
