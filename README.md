@@ -1,6 +1,11 @@
-# 产品经理工作流
+# ERP Product Manager Workflow
 
-这是一个面向跨境电商自研 ERP 的产品经理工作流项目。它的目标不是“记录聊天”，而是把新需求、竞品分析、方案设计、PRD、原型和 UI 优化串成一条可重复执行的工作链。
+这是一个面向中文 B 端 ERP / 跨境电商 ERP 的产品经理工作流项目。它的目标不是“记录聊天”，而是把需求沟通、方案设计、PRD、UI 设计、原型输出、知识库、操作手册和 Codex 使用守护串成一条可重复执行的工作链。
+
+这个仓库适合两类人：
+
+- 产品经理：用它把需求从想法推进到 PRD、原型和知识库沉淀。
+- 刚上手 Codex / GitHub 的同学：用 `$codex-workflow-guardian` 学会分支、checkpoint、上下文治理和可追溯协作。
 
 ## 你会怎么用
 
@@ -9,6 +14,19 @@
 3. 如果你已经有 PRD，再进入原型规划或原型生成。
 4. 如果你要优化已有页面或原型，走 UI 优化流程。
 5. 如果涉及代码、HTML、CSS、JS 改动，额外遵守编程规范 Skill。
+6. 如果涉及 Git、分支、checkpoint、长对话或发布，先走 guardian 预检。
+
+## 给新同学的协作规则
+
+本仓库采用“只读学习 + fork 后提 PR”的协作方式。
+
+- 你可以 fork 本仓库到自己的 GitHub。
+- 你可以修改 `knowledge/**`，补充业务知识、术语、流程和经验。
+- 你不要直接修改 `skills/**`、`.codex/**`、`ui-library/**`、`prototype/**`、`.github/**` 等核心工作流文件。
+- 如果你确实认为核心流程需要改，请先在 issue 或 PR 描述里说明原因，由维护者判断。
+- Figma 组件库权限不在 GitHub 控制，由仓库维护者在 Figma 里单独授权。
+
+第一次用 GitHub 的同学，可以先读 [CONTRIBUTING.md](CONTRIBUTING.md)。
 
 ## 实际工作流
 
@@ -69,7 +87,7 @@
 - `skills/karpathy-guidelines/`
   编程规范 Skill 源文件。
 - `skills/codex-workflow-guardian/`
-  Codex 分支溯源、checkpoint、上下文治理和使用提醒 Skill 源文件。
+  Codex 分支溯源、checkpoint、上下文治理、Stop Gate 和使用提醒 Skill 源文件。
 - `.codex/`
   planning-with-files hooks 和 workspace Skill，用于自动恢复和维护任务记忆。
 - `skills/shared/context-memory-workflow.md`
@@ -99,3 +117,7 @@
 
 如果你不知道从哪里开始，先看 `START_HERE.md`。  
 如果你要做具体任务，直接告诉我“这是新需求 / 竞品分析 / 现有 PRD 出原型 / UI 优化 / 代码修改”，我会按对应流程接。
+
+## License
+
+MIT License. 见 [LICENSE](LICENSE)。

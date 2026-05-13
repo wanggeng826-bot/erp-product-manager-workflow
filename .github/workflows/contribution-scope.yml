@@ -1,0 +1,36 @@
+name: Contribution Scope
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  knowledge-only:
+    name: External PRs should only change knowledge
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check changed paths
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const {owner, repo} = context.repo;
+            const pull_number = context.payload.pull_request.number;
+            const files = await github.paginate(github.rest.pulls.listFiles, {
+              owner,
+              repo,
+              pull_number,
+              per_page: 100
+            });
+            const blocked = files
+              .map(file => file.filename)
+              .filter(name => !name.startsWith('knowledge/'));
+            if (blocked.length) {
+              core.setFailed(
+                [
+                  'This repository accepts external content contributions only under knowledge/**.',
+                  'Blocked paths:',
+                  ...blocked.map(name => `- ${name}`)
+                ].join('\n')
+              );
+            }
