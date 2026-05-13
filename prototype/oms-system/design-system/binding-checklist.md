@@ -5,6 +5,7 @@
 | Token variables | CSS uses Ant-like token variables from `tokens.md` | passed |
 | `ErpShell` | Sidebar, menu groups, active item, main content | passed |
 | `PageHeaderBar` | Breadcrumb, page title, metadata | passed |
+| `PageHeaderBar / Actions` container | Transparent layout only; no card wrapper, no fixed empty block | passed |
 | `OperationalSummary` | Compact support counters, not dashboard cards | passed |
 | `QueryFilterBar` | Single high-frequency filter row, no right clipping | passed |
 | `StoreSelector` | BI 驾驶舱样式树形多选：platform -> BU -> site -> store, platform icon + name, expand/collapse, parent-child linkage | passed |

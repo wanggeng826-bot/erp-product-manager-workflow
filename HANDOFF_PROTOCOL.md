@@ -1,7 +1,7 @@
-# Claude ↔ Codex 交接协议
+# Claude ↔ Codex 交接协议（双路径）
 
-> 本文件规定 **Claude 输出 PRD** 与 **Codex 生成原型** 之间的标准交接形式。
-> 一句话：PRD 末尾必须有一节叫"原型生成输入包"，Codex 只读这一节就能干活。
+> 本文件规定 PRD 与原型生成之间的标准交接形式。
+> 一句话：PRD 末尾必须有一节叫"原型生成输入包"（合并版 PRD 第 10 节），**Claude 自生**或 **Codex 接手**都只读这一节就能干活。
 
 ## 1. 为什么要这个协议
 
@@ -19,32 +19,74 @@
 
 ---
 
-## 2. 谁产什么、放哪、何时停
+## 2. 双路径：Claude 自生 vs Codex 接手
 
 ```
-┌─────────┐                      ┌─────────┐                      ┌──────────┐
-│ Claude  │ ── 写 PRD + 输入包 ──▶│ 落地于  │ ── Codex 读 ────────▶│  Codex   │
-│ (我)    │                      │ intake/ │                      │  生成原型 │
-│         │                      │ prd/    │                      │          │
-└─────────┘                      └─────────┘                      └──────────┘
-     │                                                                   │
-     ▼                                                                   ▼
- 用户确认 PRD                                                    用户验收原型
-     │                                                                   │
-     │ 如果原型出来后用户改主意 →                                          │
-     │   小改 → 直接改 prototype/                                          │
-     │   大改 → 回到 Claude 改 PRD + 输入包 → Codex 重生成                  │
-     ▼                                                                   ▼
- 沉淀回 knowledge/                                            截图归档到 prototype/<name>/
+                       PRD 写完 + 保存到 intake/prd/<name>.md
+                                       │
+                                       ▼
+                         用户表达 / 当前状态判定
+                                       │
+            ┌──────────────────────────┴──────────────────────────┐
+            ▼                                                       ▼
+   用户说"画原型 / 出原型 / 你来做"               用户说"交给 Codex" / 不说 / 额度紧张
+   或 Claude 额度充足                                       或 默认行为
+            │                                                       │
+            ▼                                                       ▼
+   ┌────────────────────┐                                ┌────────────────────┐
+   │ 路径 B · Claude     │                                │ 路径 A · 交给 Codex │
+   │ 自生原型           │                                │                    │
+   │                    │                                │                    │
+   │ 读 ui-library/      │                                │ Claude 停下        │
+   │ + tokens.css       │                                │ 告知 PRD 路径      │
+   │ + components/      │                                │ 用户切到 Codex     │
+   │                    │                                │ Codex 读 §10       │
+   │ 按 §10 输入包       │                                │ 输入包             │
+   │ 实现到              │                                │ 生成原型到         │
+   │ prototype/<name>/  │                                │ prototype/<name>/  │
+   │                    │                                │                    │
+   │ 跑 binding-        │                                │ 跑 binding-        │
+   │ checklist 自检     │                                │ checklist 自检     │
+   └────────────────────┘                                └────────────────────┘
+            │                                                       │
+            └──────────────────────────┬──────────────────────────┘
+                                       ▼
+                              用户验收原型
+                                       │
+              ┌────────────────────────┴────────────────────────┐
+              ▼                                                  ▼
+       小改（位置/文案/状态）                              大改（流程/字段/权限）
+              │                                                  │
+              ▼                                                  ▼
+       在 prototype/ 增量改                            回 Claude 改 PRD §10 输入包
+              │                                                  │
+              │                                                  ▼
+              │                                          重新走路径 A 或 B
+              └────────────────────────┬─────────────────────────┘
+                                       ▼
+                       从最终原型反向沉淀业务规则到
+                            knowledge/modules/
 ```
 
 ### Claude 的边界（我）
 
-- ✅ 写需求澄清、冻结事实、PRD 主体、原型生成输入包
+- ✅ 写需求澄清、冻结事实、PRD 主体、原型生成输入包（PRD §10）
 - ✅ 把 PRD 保存到 `intake/prd/<name>.md`
 - ✅ 沉淀稳定信息到 `knowledge/modules/<module>.md`
-- ❌ 不生成原型 HTML（那是 Codex 的事）
-- ❌ 不直接改 `prototype/` 下的代码（除非用户要 UI 评审/微调）
+- ✅ **【路径 B】用户说"画原型 / 你来做"或额度充足时，自生 HTML 原型**到 `prototype/<name>/`
+- ❌ 【路径 A】用户没说或说"交给 Codex"时，**不**主动生成原型——保存 PRD 后停下
+
+### 路径判定优先级（Claude 视角）
+
+| 用户表达 / 信号 | 路径 |
+|---|---|
+| "画原型" / "出原型" / "你来做" / "继续做" | **B 自生** |
+| "交给 Codex" / "转 Codex" | **A 交接** |
+| 用户没说，且 PRD 较短（< 3 个页面）| **B 自生**（默认补全） |
+| 用户没说，但 PRD 较长（≥ 5 个页面，token 紧张） | **A 交接** |
+| 当次会话已多次 ui-library 读写 + Figma MCP 调用 | **A 交接** |
+
+不确定时**问用户**，不要默认。
 
 ### Codex 的边界（独立工具）
 
@@ -57,9 +99,9 @@
 
 ---
 
-## 3. 输入包结构（PRD 必有的最后一节）
+## 3. 输入包结构（合并版 PRD 第 10 节）
 
-PRD 末尾必有一节 `## X. 原型生成输入包（Codex 消费）`，按以下七块结构填：
+PRD 末尾必有一节 `## 10. 原型生成输入包`，按以下七块结构填。完整模板见 `skills/erp-product-manager/references/prd-template.md` §10。
 
 ### 3.1 必读引用（Required Reading）
 
@@ -68,6 +110,7 @@ figma:
   fileKey: KaI3eGyylfiwrPlU3OR08C
   page_to_use: "04 Templates" or "03 ERP Patterns"
   preferred_template: ListPageTemplate   # 或 "自定义"
+  theme_mode: Default                    # Default / Dark / Glass
 
 html_mirror:
   tokens_css: ../../ui-library/tokens.css
@@ -76,6 +119,7 @@ html_mirror:
 specs:
   - knowledge/figma-ant-design-ui-library.md
   - knowledge/product-design-preferences.md
+  - knowledge/prd-style-anchor.md
   - skills/erp-product-manager/references/ui-interaction-spec.md
   - skills/erp-product-manager/references/erp-reference-patterns.md
   - skills/ui-optimization-master/references/erp-ui-pattern-library.md
@@ -102,7 +146,9 @@ specs:
 | P1 | 结果区 | DataTablePanel | components/data-table-panel.html | 含 BatchActionBar |
 | P1 | 详情 | DetailDrawer | components/detail-drawer.html | 4 个 Tab |
 
-**禁止**自己发明组件——如果输入包里某个区域映射不到任何已有组件，回 Claude 反馈，由 Claude 决定补组件还是改方案。
+**禁止**自己发明组件——如果输入包里某个区域映射不到任何已有组件：
+- 路径 A（Codex 接手）：Codex 停下，在 `prototype-spec.md` 写"映射断裂：X 区域无对应组件"，回 Claude 反馈
+- 路径 B（Claude 自生）：Claude 停下，问用户是补组件到 ui-library 还是改 PRD 方案
 
 ### 3.4 状态覆盖矩阵（State Matrix）
 

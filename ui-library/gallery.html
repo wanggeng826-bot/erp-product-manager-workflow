@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ERP UI Library Gallery</title>
+    <link rel="stylesheet" href="./tokens.css" />
+    <style>
+      body {
+        margin: 0;
+        padding: var(--space-6);
+        color: var(--color-text);
+        background: var(--color-bg-layout);
+        font-family: var(--font-family);
+      }
+      h1 { margin: 0 0 var(--space-4); font-size: var(--font-size-2xl); }
+      p { margin: 0 0 var(--space-6); color: var(--color-text-secondary); }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: var(--space-4);
+      }
+      .card {
+        background: var(--color-bg-container);
+        border: 1px solid var(--color-border-secondary);
+        border-radius: var(--radius-lg);
+        padding: var(--space-4);
+      }
+      .card h2 {
+        margin: 0 0 var(--space-2);
+        font-size: var(--font-size-lg);
+      }
+      .card a {
+        color: var(--color-primary-6);
+        text-decoration: none;
+      }
+      .card a:hover { color: var(--color-primary-7); text-decoration: underline; }
+    </style>
+  </head>
+  <body>
+    <h1>ERP UI Library Gallery</h1>
+    <p>权威源为 Figma：Ant Design ERP UI Library。此页仅为 HTML 镜像组件入口。</p>
+    <div class="grid">
+      <section class="card"><h2>ErpShell</h2><a href="./components/erp-shell.html">打开组件</a></section>
+      <section class="card"><h2>PageHeaderBar</h2><a href="./components/page-header-bar.html">打开组件</a></section>
+      <section class="card"><h2>QueryFilterBar</h2><a href="./components/query-filter-bar.html">打开组件</a></section>
+      <section class="card"><h2>DataTablePanel</h2><a href="./components/data-table-panel.html">打开组件</a></section>
+      <section class="card"><h2>DetailDrawer</h2><a href="./components/detail-drawer.html">打开组件</a></section>
+      <section class="card"><h2>EditDrawer</h2><a href="./components/edit-drawer.html">打开组件</a></section>
+      <section class="card"><h2>CreateModal</h2><a href="./components/create-modal.html">打开组件</a></section>
+      <section class="card"><h2>RiskConfirm</h2><a href="./components/risk-confirm.html">打开组件</a></section>
+      <section class="card"><h2>StoreSelector</h2><a href="./components/store-selector.html">打开组件</a></section>
+      <section class="card"><h2>DateComparisonControl</h2><a href="./components/date-comparison.html">打开组件</a></section>
+      <section class="card"><h2>MetricComparisonCard</h2><a href="./components/metric-comparison-card.html">打开组件</a></section>
+      <section class="card"><h2>FeedbackState</h2><a href="./components/feedback-state.html">打开组件</a></section>
+      <section class="card"><h2>OperationLog</h2><a href="./components/operation-log.html">打开组件</a></section>
+      <section class="card"><h2>FieldHelp</h2><a href="./components/field-help.html">打开组件</a></section>
+      <section class="card"><h2>ImportFlow</h2><a href="./components/import-flow.html">打开组件</a></section>
+    </div>
+  </body>
+</html>

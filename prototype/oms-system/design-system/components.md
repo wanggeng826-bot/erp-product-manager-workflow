@@ -21,3 +21,5 @@
 - Do not show fake disabled business actions in the main UI when the user only requested visual evaluation.
 - Details use drawer, not a new page.
 - Table remains the primary work surface; counters only support prioritization.
+- Page header action area is a transparent layout container only (`no fill/no shadow/no stroke/no extra radius`).
+- Header action area must hug buttons and right-align; no fixed blank card-like wrapper is allowed.

@@ -60,6 +60,13 @@ Confirm each relevant component has a stable pattern:
 
 If a page uses a component not listed here, record why it is needed.
 
+### Header Action Container Guard
+
+- `PageHeaderBar / Actions` is a layout container, not a visual card.
+- Must keep `fill=none`, `stroke=none`, `effect=none`, `padding=0`, `radius=0`.
+- Must stay right-aligned and `Hug contents`; do not reserve fixed blank area for future buttons.
+- One screen has one highest-priority action; avoid dual primary buttons in header actions.
+
 ## 3. Page-Level Checks
 
 - One page has one primary task.
@@ -95,6 +102,7 @@ If a page uses a component not listed here, record why it is needed.
 - CSS tokens or variables are used for recurring colors, spacing, radius, and shadows.
 - JS interactions are limited to the expected prototype behaviors.
 - Drawers, modals, dropdowns, filters, row actions, and batch actions are clickable where relevant.
+- Page header right actions have no extra wrapper card/background and no floating white box artifact.
 - No visible native `<select>` for formal HTML prototypes; use custom Ant-style select/dropdown surfaces.
 - Batch search fields, when needed, support textarea expansion, newline/comma parsing, recognized-count feedback, and chip echo after apply.
 - Formal and demo artifacts are separated.
