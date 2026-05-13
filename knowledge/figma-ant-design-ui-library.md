@@ -5,6 +5,8 @@
 - Figma 文件名：`Ant Design ERP UI Library`
 - Figma URL：https://www.figma.com/design/KaI3eGyylfiwrPlU3OR08C
 - fileKey：`KaI3eGyylfiwrPlU3OR08C`
+- 库版本：`v0.2.1`
+- Ant 基线：`ant.design 6.3.7` + `ant-design-pro v6`
 - 创建日期：2026-05-12
 - 用途：后续 Figma 原型优先从该库取 Ant Design / 中文 B 端 ERP 组件和模板。
 
@@ -49,11 +51,38 @@
 
 1. 做 Figma 原型前，先打开或引用 `Ant Design ERP UI Library`。
 2. 先检索同名基础组件：Button、Input、Select、Table 相关模式、Tag、Drawer、Modal/Popconfirm 等。
-3. 如果任务要求最新 Pro 风格，优先选用 `Button v6`、`ListPageTemplate v6`、`ErpShell v6`。
+3. 如果任务要求最新 Pro 风格，优先选用 `Button v6`、`ListPageTemplate v6`、`ErpShell v6`，并在交付描述里标注「基于库版本 `v0.2.1`」。
 4. 未指定主题时默认 `Theme=Default`；用户明确要求暗色或玻璃效果时切到 `Dark` 或 `Glass`。
 5. 中文 ERP 列表页优先使用 `ListPageTemplate` 或 `ListPageTemplate v6`，再替换业务字段和内容。
 6. 页面组合优先使用 `PageHeaderBar`、`QueryFilterBar`、`DataTablePanel`、`DetailDrawer`、`RiskConfirm`、`StoreSelector`。
 7. 如需跨文件作为团队 Library 使用，需要用户在 Figma 里发布该文件；在同一文件中 Codex 可直接实例化本地组件。
+
+## 版本号策略（新增）
+
+版本格式：`v<major>.<minor>.<patch>`。
+
+- `major`：结构级不兼容调整（组件命名、层级、变量集合重构）。
+- `minor`：新增组件、主题模式、重要交互模式扩展。
+- `patch`：不改契约的修复（布局约束、容器尺寸、样式细节修复）。
+
+当前建议：
+
+- `v0.2.0`：Pro v6 对齐 + v0.2 组件补齐。
+- `v0.2.1`：动作区容器约束与 `v0.2 Supplements` 布局闭环修复。
+
+## Figma ↔ 知识文件同步节奏（新增）
+
+每次 Figma 库发生以下变更，必须在同一次任务内同步本文件：
+
+1. 新增/删除组件或组件集。
+2. Token/主题模式调整。
+3. 布局约束修复（如固定宽高、自动布局、容器可见性）。
+
+同步动作至少包含：
+
+1. 更新「库版本」与「已创建内容」。
+2. 在「连通验证记录」新增一条可追溯记录。
+3. 评估并执行 HTML 镜像同步。
 
 ## 风格边界
 
@@ -107,6 +136,7 @@
 | 2026-05-12 | `get_metadata(fileKey=KaI3eGyylfiwrPlU3OR08C, nodeId=0:1)` | 返回 Cover 页，含全部基础组件实例（Button × 15 状态、Input × 5、Select × 4、Checkbox × 4、Radio × 3、Switch × 3、Tag × 5、Alert × 4、Pagination、Tabs、Empty、Spin、Skeleton）。✅ 库与上文清单完全一致 |
 | 2026-05-13 | `use_figma`（动作区约束修正） | `PageHeaderBar / Actions` 已统一为透明布局容器（无 fill/stroke/effect，padding/radius=0，hug 内容）。✅ |
 | 2026-05-13 | `use_figma`（v0.2 组件补齐） | 已新增 `EditDrawer / CreateModal / DateComparisonControl / MetricComparisonCard / FeedbackState / OperationLog / FieldHelp / ImportFlow` 组件。✅ |
+| 2026-05-13 | `use_figma`（v0.2 Supplements 闭环修复） | 修复 `48:43` / `48:158` 窄列挤压问题，改为 `1480px` 包裹网格布局；8 个组件全部可见且无 `100px` 异常容器。✅ |
 
 ## 后续维护
 

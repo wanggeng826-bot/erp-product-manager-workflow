@@ -66,6 +66,7 @@ If a page uses a component not listed here, record why it is needed.
 - Must keep `fill=none`, `stroke=none`, `effect=none`, `padding=0`, `radius=0`.
 - Must stay right-aligned and `Hug contents`; do not reserve fixed blank area for future buttons.
 - One screen has one highest-priority action; avoid dual primary buttons in header actions.
+- Newly created Auto Layout wrappers must not stay at Figma default `100px` fixed width; set `HUG` or explicit business width.
 
 ## 3. Page-Level Checks
 
@@ -98,6 +99,7 @@ If a page uses a component not listed here, record why it is needed.
 
 ## 6. Prototype Implementation Checks
 
+- Figma source library version is explicitly recorded in the delivery note (for example: `v0.2.1`).
 - HTML class names reflect component roles.
 - CSS tokens or variables are used for recurring colors, spacing, radius, and shadows.
 - JS interactions are limited to the expected prototype behaviors.

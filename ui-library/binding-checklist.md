@@ -20,6 +20,7 @@
 - [ ] 同类元素（按钮、状态标签、表格、抽屉）在整个页面内的样式/类名一致
 - [ ] 按钮语义使用 `color + variant`（`btn--solid/outlined/text/link` + `btn--color-*`），不回退成纯旧语义
 - [ ] `PageHeaderBar / Actions` 是透明布局容器（无 fill/stroke/effect，padding=0，radius=0，hug contents）
+- [ ] 新增 Auto Layout 外层容器不允许保留 Figma 默认 `100px` 固定宽度；必须显式 `HUG` 或设置业务宽度
 
 ## C · 源映射（来自 ui-interaction-spec §20.4 与 prototype-generation-guide §9.1）
 
@@ -72,6 +73,13 @@
 - [ ] 列表字段只用：菜单 / 一级功能 / 二级功能
 - [ ] 记录字段只用：操作人 / 操作类型 / 操作对象 / 操作详情 / 操作时间
 - [ ] 没有新增模板外的列
+
+## I · Figma 镜像一致性（新增）
+
+- [ ] 当前任务引用了 Figma 库版本号（如 `v0.2.1`）
+- [ ] Figma 有新增组件/约束修复时，`components-index.md` 已同步
+- [ ] Figma 有 token 或主题变更时，`tokens.css` 与 `tokens.md` 已同步
+- [ ] 本文件中的约束项与 Figma 最新修复一致（如动作区容器、Auto Layout 宽度约束）
 
 ## 一句话验收语
 

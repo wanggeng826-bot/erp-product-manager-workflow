@@ -94,6 +94,30 @@ ui-library/
 2. 已补齐 HTML 镜像与说明文档。
 3. 已对齐 Pro v6 规范要求：支持 `Default / Dark / Glass` 主题变量、Button `color + variant` 语义。
 
+## 版本映射（新增）
+
+| 资产 | 当前版本 | 说明 |
+|---|---|---|
+| Figma 权威库 | `v0.2.1` | 含 Pro v6 对齐与布局闭环修复 |
+| HTML 镜像 | `v0.2.1` | 与 Figma `v0.2.1` 对齐 |
+
+当 Figma 版本升级后，HTML 镜像必须在同一任务或下一次提交内补齐版本号。
+
+## HTML 镜像一致性检查（新增）
+
+下列场景必须执行镜像同步检查：
+
+1. Figma 新增/删除组件、组件集、变体属性。
+2. Figma 调整 token 或主题模式。
+3. Figma 修复了布局约束问题（Auto Layout、固定宽高、容器填充/阴影）。
+
+最小检查项：
+
+1. `components-index.md` 是否包含最新组件清单。
+2. `tokens.css` / `tokens.md` 是否同步主题与语义规则。
+3. `binding-checklist.md` 是否同步新增约束。
+4. 本文件版本映射是否更新。
+
 ## 怎么扩展
 
 - 新增组件：在 `components/` 下加一对 `<name>.html` + `<name>.md`，再到 `components-index.md` 和 `gallery.html` 各加一项链接
@@ -103,3 +127,4 @@ ui-library/
 ## 变更记录
 
 - 2026-05-13 · `v0.2`：补齐缺失组件、补充 Pro v6 主题与语义规则。
+- 2026-05-13 · `v0.2.1`：补充版本映射、镜像一致性检查清单、与 Figma `v0.2.1` 对齐。
