@@ -14,6 +14,7 @@ It is the main workflow entry for:
 - 竞品分析
 - 页面与交互规划
 - 基于 PRD 的 HTML 原型规划
+- 已有原型的小范围内容调整
 
 ## Domain Context
 
@@ -50,6 +51,12 @@ Follow these numbered steps strictly to avoid jumping ahead or missing requireme
 
 ```
 用户输入 → 判定分支：
+├─ 已有原型的小范围调整（"基于这个原型改一下" / "调文案" / "调按钮" / "调布局细节"）
+│   → 走 Fast Path
+│     - 只读当前目标原型目录、相关 `prototype-spec.md`、必要的 `styles.css` / `script.js`
+│     - 只看当前 diff 和直接相关文件
+│     - 不重开需求澄清，不重读广泛知识库，不重跑完整原型规划流程
+│
 ├─ 携带竞品资料（URL / 截图 / "参考 XX" / "拆解 XX 的某模块"）
 │   → 走 `./references/competitor-analysis-expert.md` 的 5 阶段流程
 │     (资料盘点 → 竞品拆解 → 业务反推 → 方案 A/B/C → 研发级 PRD)
@@ -69,6 +76,7 @@ Follow these numbered steps strictly to avoid jumping ahead or missing requireme
 ### Step 1.5: Reference Loading
 
 Load references using **strict relative paths** only when needed:
+- **Fast Path（已有原型微调）:** 仅读取目标目录下直接相关文件，例如 `../../prototype/<name>/index.html`、`styles.css`、`script.js`、`prototype-spec.md`，以及必要的 `git diff`。除非用户要求结构重做或发现来源缺失，否则不要读取 `../../knowledge/README.md`、长 planning 文件、Figma 总说明、AI UI production workflow。
 - **Long-term knowledge & case boundaries:** Read `../../knowledge/README.md`, then relevant files under `../../knowledge/`.
 - **Figma UI Library（权威组件源，必读）:** 任何涉及 UI 设计、原型规划、方案配图、组件选型的任务，开场必读 `../../knowledge/figma-ant-design-ui-library.md`。该文件记录了 Figma 文件 `Ant Design ERP UI Library` 的 fileKey (`KaI3eGyylfiwrPlU3OR08C`)、组件清单、MCP 调用流程。**所有 UI 组件以该 Figma 文件为单一权威源**，HTML 镜像与文字规范文件均为衍生物，不一致时以 Figma 为准。
 - **Pro v6 最新迭代基线（按需必读）:** 用户提到 `latest`、`新版`、`preview.pro.ant.design`、`ant-design-pro v6` 时，必读 `../../knowledge/ant-design-pro-v6-baseline.md`，并将原型规划切换到 v6 语义（cssVar 主题模式、`color + variant` 组件心智、v6 template 优先）。
@@ -182,6 +190,10 @@ PRD 已保存 → 用户表达：
 **Example 2: User asks for a prototype from an existing PRD**
 *User:* "这是我写的采购订单 PRD，帮我出个交互原型。"
 *Agent Action:* Read the provided PRD. Read UI references (`./references/ui-interaction-spec.md`, etc.). Verify source mapping, then output the HTML prototype structure without reopening discovery unless the PRD is fundamentally broken.
+
+**Example 2.5: User asks for a small tweak on an existing prototype**
+*User:* "基于已经生成好的原型，把这里的筛选区和按钮文案调一下。"
+*Agent Action:* Stay on Fast Path. Read only the target prototype files and `prototype-spec.md`. Do not reopen PRD discovery, broad knowledge loading, or full workflow references unless the requested tweak changes page structure or source scope.
 
 **Example 3: User asks for competitor analysis**
 *User:* "帮我拆解一下某跨境电商 ERP 的发货模块。"
