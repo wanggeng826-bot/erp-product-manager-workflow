@@ -37,6 +37,11 @@
     .c-page-header__actions {
       display: flex; align-items: center; gap: var(--space-2);
       flex-shrink: 0;
+      padding: 0;
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
     }
 
     /* 演示页：把组件放在一个 wrapper 里看效果 */
@@ -111,33 +116,6 @@
         <button class="btn btn--primary" aria-disabled="true" title="当前角色无权限">+ 新建角色</button>
       </div>
     </header>
-
-
-    <hr style="margin: 48px 0; border: 0; border-top: 1px dashed var(--color-border);" />
-
-
-    <!-- ============================================================
-         反模式（不要这样做）：
-         × 两个并排的主按钮——一屏只能有一个最高优先级
-         × 标题字超过 24px——B 端要克制
-         × 描述文字超过 2 行——长说明请放到 FieldHelp 或文档
-         ============================================================ -->
-    <div style="background: var(--color-error-bg); border: 1px solid var(--color-error-border); border-radius: var(--radius); padding: var(--space-4); color: var(--color-error);">
-      ❌ 反模式示例（仅展示，请勿复制）：
-      <header class="c-page-header" style="margin-top: var(--space-3); opacity: 0.6;">
-        <div class="c-page-header__left">
-          <h1 class="c-page-header__title" style="font-size: 32px;">订单管理中心</h1>
-          <p class="c-page-header__desc">
-            这是一个非常长的描述，会让首屏变得拥挤，业务用户不会读。
-            如果真的需要说明，请把它放到帮助中心或 FieldHelp 弹层，不要塞在页面标题下面。
-          </p>
-        </div>
-        <div class="c-page-header__actions">
-          <button class="btn btn--primary">+ 新建订单</button>
-          <button class="btn btn--primary">导入订单</button>
-        </div>
-      </header>
-    </div>
 
   </div>
 </body>

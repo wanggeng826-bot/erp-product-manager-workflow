@@ -8,6 +8,7 @@
 
 - [ ] 已 `<link>` 引用 `ui-library/tokens.css`
 - [ ] 页面里没有硬编码颜色（搜 `#fff`、`#000`、`#1677ff` 之外的字面色都应是从 var(--xxx) 来）
+- [ ] 已声明主题模式（默认 `data-theme="default"`；按需求切 `dark/glass`）
 - [ ] 字号只用 `--font-size-*` 体系，没有「随手 13px」
 - [ ] 间距只用 4 的倍数（`--space-*`）
 - [ ] 圆角不超过 `--radius-lg` (8px)
@@ -17,6 +18,8 @@
 - [ ] 每个可见区块都能映射到 `components-index.md` 里的一个组件
 - [ ] 没有自创的「半组件」——发现新模式先回 `components/` 沉淀，再来组装
 - [ ] 同类元素（按钮、状态标签、表格、抽屉）在整个页面内的样式/类名一致
+- [ ] 按钮语义使用 `color + variant`（`btn--solid/outlined/text/link` + `btn--color-*`），不回退成纯旧语义
+- [ ] `PageHeaderBar / Actions` 是透明布局容器（无 fill/stroke/effect，padding=0，radius=0，hug contents）
 
 ## C · 源映射（来自 ui-interaction-spec §20.4 与 prototype-generation-guide §9.1）
 
@@ -52,6 +55,7 @@
 
 - [ ] 3 秒内能识别出这是「中文 B 端 ERP 后台」，不是欧美 SaaS / 营销看板
 - [ ] 没有大留白、大渐变、glass 玻璃感、装饰性背景
+- [ ] 页面标题右上角动作区没有“额外白色小卡片”包裹
 - [ ] 表格 / 筛选 / 抽屉 比 卡片 / 图表 视觉权重高
 - [ ] 图标功能性、不花哨
 

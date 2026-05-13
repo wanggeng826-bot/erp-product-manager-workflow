@@ -73,6 +73,7 @@ PRD结构必须如下：
 7. 验收标准（必须采用 BDD 行为驱动开发格式：Given 前置条件... When 触发动作... Then 预期结果...）
 8. 里程碑规划与资源预估
 9. 开放问题（未确认项及其对研发的阻塞程度）
+10. **【本项目附加节】原型生成输入包（给 Codex / Claude 自生原型用，详见下文 PROJECT OVERRIDE）**
 
 【全局一致性锚点格式（每次输出都要附带在文末）】
 - 术语表（统一业务概念）
@@ -81,3 +82,34 @@ PRD结构必须如下：
 - 关键约束（技术/成本/合规）
 - 已确认决策（Decision Log）
 - 待确认问题（Open Questions）
+
+---
+
+# PROJECT OVERRIDE（本项目层约束，优先级高于以上原始提示词）
+
+> 以下规则**覆盖** sub-agent 提示词原文里的相关指令。当冲突时，按本节执行。
+
+## 1. UI 框架 Override
+- 原提示词若引用 Element Plus，**本项目一律改用 Ant Design**（fileKey: `KaI3eGyylfiwrPlU3OR08C`）。
+- 组件命名、状态语义、token 与 `knowledge/figma-ant-design-ui-library.md` 对齐。
+
+## 2. PRD 结构 Override（10 节版本）
+原提示词 PRD 是 9 节；本项目末尾**必须追加第 10 节"原型生成输入包"**，按 7 块结构填：
+1. 必读引用（Figma fileKey + ui-library 路径 + tokens.css + theme_mode）
+2. 页面清单（页面 ID / 名称 / 路径 / 模板 / 抽屉弹窗）
+3. 组件映射表（页面区域 → Figma 组件 → HTML 镜像）
+4. 状态覆盖矩阵（每页 × 8 态）
+5. 风险操作清单（动作 / 触发位置 / 风险等级 / 二次确认形式 / 文案）
+6. 权限差异表（角色 × 操作）
+7. Mock 数据样本（5-8 条真实数据）
+
+完整模板见 `skills/erp-product-manager/references/prd-template.md` §10。
+
+## 3. 验收标准 Override
+原提示词只说"BDD 格式"；本项目额外要求：**每个核心功能至少 3 个 Scenario（正向 / 异常 / 边界）**，不许偷懒只写一个。
+
+## 4. 文件保存位置
+PRD 完整版保存到：`intake/prd/<short-name>.md`（命名 kebab-case，如 `order-batch-cancel`）。
+
+## 5. 沉淀回知识库
+PRD 验收通过后，**主动**从中提取业务规则沉淀到 `knowledge/modules/<module>.md`。不沉淀 = 本次需求白做。
