@@ -53,6 +53,31 @@ Before substantial work:
 
 If the worktree has many unrelated changes, do not hide it. State the risk and either isolate the new work or propose checkpoint commits.
 
+## Stop Gate
+
+Before executing, predict whether the request is likely to fail, corrupt traceability, or make rollback harder. If a stop condition is met, pause the task and tell the user what must be fixed before continuing.
+
+Stop instead of proceeding when:
+
+- The current branch is clearly wrong for the task and switching/creating a branch is the safer next step.
+- The worktree already contains broad uncommitted changes and the new task would touch unrelated files.
+- The user asks for destructive Git operations, cleanup, deletion, reset, force push, or broad overwrite without explicit confirmation.
+- Credentials, tokens, private account data, or sensitive screenshots would be written into tracked files.
+- A PRD/prototype task lacks source map, confirmed input, or `prototype-spec.md` requirements and Codex would need to invent business rules.
+- The conversation has mixed multiple major goals and a handoff/new thread is needed before continuing.
+- Required local configuration is missing or suspicious, such as Git identity before a push/PR workflow, missing dependency setup for verification, or unclear target branch.
+
+Use this format when stopping:
+
+```markdown
+我先暂停，不继续执行。
+原因：
+需要你先确认/修正：
+我建议的下一步：
+```
+
+Only continue after the user confirms the safer path or fixes the configuration. For low-risk issues, warn and continue; for traceability, data-loss, or sensitive-data risks, stop.
+
 ## Execution Loop
 
 During work:

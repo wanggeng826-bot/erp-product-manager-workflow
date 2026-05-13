@@ -13,6 +13,29 @@
 | Unclear branch purpose | Branch name does not match work or multiple projects share one branch | Explain branch role and suggest a new `codex/<scope>` branch for unrelated work |
 | Sensitive data risk | Credentials, tokens, accounts, or test URLs appear in docs/screenshots | Do not write secrets; redact screenshots or record rule only |
 | Guardian not invoked | User asks for broad work but does not mention this skill | Invoke it proactively and state the guardrail being applied |
+| Wrong branch | Branch name or current diff does not match the new task | Stop and ask to create/switch branch or checkpoint first |
+| Unsafe continuation | Existing dirty worktree plus new unrelated task | Stop and require checkpoint/stash/new branch decision |
+| Missing configuration | Git identity, target branch, dependency setup, or verification path is missing for the requested action | Stop and ask user to fix or approve a scoped workaround |
+| Destructive request | Reset, delete, overwrite, force push, broad cleanup, or generated-file purge | Stop and require explicit confirmation with scope |
+
+## Stop Conditions
+
+Stop the task and do not edit files when any of these are true:
+
+- More than one major task is already uncommitted and the new request is unrelated.
+- The requested work belongs on a different branch or case directory.
+- The next action could lose user work, remove files, rewrite history, expose secrets, or make rollback ambiguous.
+- The task would require guessing business rules, page source, or permissions for a formal PRD/prototype.
+- The user asks to proceed after a long context shift without enough handoff to recover the task.
+
+Stop response template:
+
+```markdown
+我先暂停，不继续执行。
+原因：...
+需要你先确认/修正：...
+我建议的下一步：...
+```
 
 ## Pre-Work Checklist
 
@@ -23,6 +46,7 @@
 - [ ] Existing `task_plan.md`, `findings.md`, `progress.md` checked for continuation tasks.
 - [ ] Case boundary confirmed; do not read `cases/**` unless requested.
 - [ ] If the user did not explicitly ask for guardian mode, decide whether triggers require proactive use.
+- [ ] Stop Gate checked: wrong branch, unsafe dirty worktree, missing config, destructive action, sensitive data, missing source map.
 
 ## During-Work Checklist
 
