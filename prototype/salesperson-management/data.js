@@ -131,6 +131,8 @@ const people = [
 ];
 
 const logs = [
+  { type: "客服归属配置", operator: "王耕", object: "SMT033", detail: "客服负责人设为 王小云；销售负责人仍为 张赛；仅影响新订单", time: "2026-05-14 01:42:16" },
+  { type: "店铺角色配置", operator: "沈浩楠", object: "SMT072", detail: "检测到客服负责人未配置，已进入待补清单", time: "2026-05-14 01:18:33" },
   { type: "编辑人员配置", operator: "王耕", object: "张赛", detail: "新增店铺 SMT033、SMT008；生效日期 2026-05-01", time: "2026-05-13 14:26:21" },
   { type: "归属重算", operator: "王耕", object: "SMT033", detail: "按 ShopID + Order_CreateTime 重新匹配订单归属，共命中 32 单", time: "2026-05-13 14:21:07" },
   { type: "移除人员", operator: "沈浩楠", object: "廖中霞", detail: "解除当前业务单元关联；名下 0 个店铺", time: "2026-05-12 18:04:33" },
@@ -210,6 +212,29 @@ const storeTree = [
   }
 ];
 
+const customerServicePeople = [
+  { id: "cs1", name: "王小云", employeeNo: "CS-2001", org: "客服运营中心 > 速卖通客服组" },
+  { id: "cs2", name: "刘欣", employeeNo: "CS-2008", org: "客服运营中心 > Shopee客服组" },
+  { id: "cs3", name: "赵敏", employeeNo: "CS-2012", org: "客服运营中心 > 亚马逊客服组" }
+];
+
+const storeRoleRows = [
+  { id: "smt033", store: "SMT033", platform: "AliExpress", salesOwner: "张赛", serviceOwner: "王小云", unit: "深圳速卖通工具组", activeFrom: "2026-05-01", status: "生效中", todayOrders: 32, abnormal: "" },
+  { id: "smt048", store: "SMT048", platform: "AliExpress", salesOwner: "张旭", serviceOwner: "刘欣", unit: "深圳速卖通工具组", activeFrom: "2026-05-01", status: "生效中", todayOrders: 18, abnormal: "" },
+  { id: "smt072", store: "SMT072", platform: "AliExpress", salesOwner: "黄爱纯", serviceOwner: "", unit: "深圳速卖通工具组", activeFrom: "2026-05-01", status: "待补客服", todayOrders: 9, abnormal: "客服未配置" },
+  { id: "shopee-tw-01", store: "Shopee台湾01店", platform: "Shopee", salesOwner: "张赛", serviceOwner: "刘欣", unit: "深圳速卖通工具组", activeFrom: "2026-05-01", status: "生效中", todayOrders: 14, abnormal: "" },
+  { id: "smt127", store: "SMT127", platform: "AliExpress", salesOwner: "万思", serviceOwner: "", unit: "深圳速卖通工具组", activeFrom: "2026-05-13", status: "待补客服", todayOrders: 3, abnormal: "客服未配置" }
+];
+
+const globalStoreRoleRows = [
+  ...storeRoleRows,
+  { id: "new-tiktok-us-01", store: "TikTok-US-01", platform: "TikTok Shop", salesOwner: "", serviceOwner: "", unit: "", unitPath: "未分配业务单元", activeFrom: "2026-05-14", status: "待认领", todayOrders: 0, abnormal: "新店铺待分配业务单元" },
+  { id: "new-smt188", store: "SMT188", platform: "AliExpress", salesOwner: "", serviceOwner: "", unit: "", unitPath: "未分配业务单元", activeFrom: "2026-05-14", status: "待认领", todayOrders: 0, abnormal: "新店铺待分配业务单元" },
+  { id: "shopee-tw-02", store: "Shopee台湾02店", platform: "Shopee", salesOwner: "王五", serviceOwner: "刘欣", unit: "菲律宾土组", unitPath: "四海芯舟 > 东南亚项目部 > 菲律宾土组", activeFrom: "2026-04-20", status: "生效中", todayOrders: 21, abnormal: "" },
+  { id: "amz-de-01", store: "AMZ-DE-01", platform: "Amazon", salesOwner: "钱七", serviceOwner: "赵敏", unit: "欧美组", unitPath: "四海芯舟 > 亚马逊工业事业部 > 欧美组", activeFrom: "2026-03-18", status: "生效中", todayOrders: 7, abnormal: "" },
+  { id: "smt100", store: "SMT100", platform: "AliExpress", salesOwner: "张旭", serviceOwner: "王小云", unit: "深圳速卖通元器件组", unitPath: "四海芯舟 > 速卖通事业部 > 深圳速卖通元器件组", activeFrom: "2026-05-01", status: "生效中", todayOrders: 12, abnormal: "" }
+];
+
 const targetRows = [
   { id: "bu", type: "BU", name: "深圳速卖通工具组", values: [100, 100, 110, 120, 120, 130], actual: [92, 96, 104, 38, 0, 0] },
   { id: "person-zhangsai", parentId: "bu", type: "PERSON", name: "张赛", values: [36, 36, 38, 42, 42, 45], actual: [35, 33, 37, 16, 0, 0] },
@@ -257,6 +282,20 @@ function ensureRuntimeStyles() {
     .filter-chip-row { display:flex; gap:8px; flex-wrap:wrap; padding:0 24px 12px; }
     .filter-chip { display:inline-flex; align-items:center; height:24px; padding:0 8px; border-radius:var(--radius-sm); background:var(--color-bg-spotlight); color:var(--color-text-secondary); font-size:12px; border:1px solid var(--color-border-secondary); }
     .store-summary { display:flex; align-items:center; gap:6px; flex-wrap:wrap; padding:10px 0 0; }
+    .role-summary-grid { display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:12px; padding:16px 24px 0; }
+    .role-summary-card { border:1px solid var(--color-border-secondary); border-radius:var(--radius-lg); padding:12px 14px; background:#fff; }
+    .role-summary-card .label { color:var(--color-text-tertiary); font-size:12px; }
+    .role-summary-card .value { margin-top:6px; color:var(--color-text); font-size:18px; font-weight:600; }
+    .role-cell-main { font-weight:600; color:var(--color-text); }
+    .role-cell-sub { margin-top:3px; color:var(--color-text-tertiary); font-size:12px; }
+    .exception-strip { display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:10px; padding:12px 24px 0; }
+    .exception-item { border:1px solid var(--color-border-secondary); border-radius:var(--radius); padding:10px 12px; background:var(--color-bg-spotlight); }
+    .exception-item strong { display:block; color:var(--color-text); font-size:13px; }
+    .exception-item span { display:block; margin-top:4px; color:var(--color-text-tertiary); font-size:12px; line-height:1.5; }
+    .assignment-flow { display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:8px; margin-top:12px; }
+    .assignment-flow .flow-step { border:1px solid var(--color-border-secondary); border-radius:var(--radius); padding:10px; background:var(--color-bg-spotlight); }
+    .assignment-flow .flow-label { color:var(--color-text-tertiary); font-size:12px; }
+    .assignment-flow .flow-value { margin-top:4px; font-weight:600; color:var(--color-text); }
     .date-row { display:flex; gap:12px; align-items:center; }
     .radio-row { display:flex; gap:16px; align-items:center; margin-top:6px; }
     .radio-pill { display:inline-flex; align-items:center; gap:6px; font-size:13px; color:var(--color-text-secondary); }
@@ -320,15 +359,9 @@ function ensureRuntimeStyles() {
     .import-stage { padding:12px 16px; border-right:1px solid var(--color-border-secondary); color:var(--color-text-secondary); font-weight:500; text-align:center; }
     .import-stage:last-child { border-right:0; }
     .import-stage.active { color:var(--color-primary-6); background:var(--color-primary-1); box-shadow:inset 0 -2px 0 var(--color-primary-6); }
+    .import-stage:disabled { cursor:not-allowed; color:var(--color-text-tertiary); background:var(--color-bg-spotlight); }
     .import-drawer { max-width:none; }
     .import-drawer .drawer-body { background:var(--color-bg-layout); padding:22px 28px 96px; }
-    .import-knowledge-block { border:1px solid var(--color-primary-3); border-radius:var(--radius-lg); background:linear-gradient(180deg,#edf6ff,#f7fbff); padding:12px; margin-bottom:16px; }
-    .import-principles { display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:12px; }
-    .principle-card { border:1px solid var(--color-primary-3); border-radius:var(--radius-lg); padding:16px 18px; background:#fff; min-height:108px; }
-    .principle-card .icon { font-size:18px; margin-bottom:6px; }
-    .principle-card strong { color:#1d39c4; font-size:15px; }
-    .principle-card p { margin-top:6px; color:#2f54eb; font-size:13px; line-height:1.7; }
-    .product-thinking { margin-top:12px; padding:12px 14px; border:1px solid var(--color-primary-3); border-radius:var(--radius); background:var(--color-primary-1); color:var(--color-primary-7); font-weight:500; }
     .import-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
     .import-card { border:1px solid var(--color-border-secondary); border-radius:var(--radius-lg); padding:20px 22px; background:#fff; box-shadow:var(--shadow-1); }
     .import-card h4 { margin-bottom:8px; font-size:16px; }
@@ -478,11 +511,11 @@ function setModule(moduleName) {
 
 function jumpToUnitConfig(orderId) {
   state.module = "unit";
-  state.unitTab = "members";
+  state.unitTab = "storeRoles";
   state.selectedOrders.clear();
   renderMain();
   scrollContentToTop();
-  showToast(`${orderId ? `订单 ${orderId} ` : ""}已切换到业务单元配置，可维护人员与店铺归属`, "success");
+  showToast(`${orderId ? `订单 ${orderId} ` : ""}已切换到店铺角色配置，可维护销售与客服归属`, "success");
 }
 
 function scrollContentToTop() {
@@ -511,15 +544,16 @@ function renderUnitPage() {
               <h2>${escapeHtml(org.label)}</h2>
               <span class="permission-badge">管理权限生效中</span>
             </div>
-            <div class="page-context">业务单元配置：${escapeHtml(org.sub)}；维护人员、业务职能、店铺资源、目标与日志</div>
+            <div class="page-context">业务单元配置：${escapeHtml(org.sub)}；维护成员准入、店铺销售/客服角色归属、目标与日志</div>
           </div>
         </div>
       </div>
       <div class="tab-bar">
         <button class="tab-item ${state.unitTab === "members" ? "active" : ""}" onclick="setUnitTab('members')">成员列表</button>
+        <button class="tab-item ${state.unitTab === "storeRoles" ? "active" : ""}" onclick="setUnitTab('storeRoles')">店铺角色配置</button>
         <button class="tab-item ${state.unitTab === "logs" ? "active" : ""}" onclick="setUnitTab('logs')">操作日志</button>
       </div>
-      ${state.unitTab === "members" ? renderMembersTab() : renderLogsTab()}
+      ${state.unitTab === "members" ? renderMembersTab() : state.unitTab === "storeRoles" ? renderStoreRolesTab() : renderLogsTab()}
     </section>
   `;
 }
@@ -548,7 +582,7 @@ function renderMembersTab() {
         <button class="btn btn-default" onclick="showToast('已按当前条件刷新成员列表', 'success')">查询</button>
       </div>
     </div>
-    <div class="table-summary">展示当前业务单元下 ${memberCount} 名成员；店铺列支持悬浮查看平台分组明细。</div>
+    <div class="table-summary">展示当前业务单元下 ${memberCount} 名成员；本页只维护人员准入与销售职能，店铺的销售/客服责任在“店铺角色配置”页签统一维护。</div>
     <div class="page-panel-body">
       <div class="data-table-wrap">
         <table class="data-table">
@@ -664,10 +698,348 @@ function jumpToPersonLog(personId) {
   showToast(`已筛选 ${person ? person.name : "该人员"} 的操作日志`, "success");
 }
 
+function renderStoreRolesTab() {
+  const org = currentOrg();
+  const rows = currentBusinessUnitStoreRows();
+  const pendingStores = globalStoreRoleRows.filter(row => !row.unit).length;
+  const missingService = globalStoreRoleRows.filter(row => row.unit === org.label && !row.serviceOwner).length;
+  const activeStores = globalStoreRoleRows.filter(row => row.unit === org.label && row.status === "生效中").length;
+  return `
+    <div class="section-heading">
+      <span class="mark">店</span>
+      <h3>店铺角色配置</h3>
+    </div>
+    <div class="role-summary-grid">
+      <div class="role-summary-card"><div class="label">当前业务单元</div><div class="value">${escapeHtml(org.label)}</div></div>
+      <div class="role-summary-card"><div class="label">当前 BU 店铺</div><div class="value">${storeRoleRows.length}</div></div>
+      <div class="role-summary-card"><div class="label">销售归属生效</div><div class="value">${activeStores}</div></div>
+      <div class="role-summary-card"><div class="label">新店铺待认领</div><div class="value" style="color:${pendingStores ? "var(--color-warning)" : "var(--color-success)"}">${pendingStores}</div></div>
+    </div>
+    <div class="table-tools">
+      <button class="btn btn-default" onclick="showToast('已按当前业务单元导出店铺角色清单', 'success')">导出角色清单</button>
+      <button class="btn btn-default" onclick="showToast('批量设置客服建议走导入或多选批量处理', 'warning')">批量设置客服</button>
+      <div class="table-tools-right">
+        <button class="btn btn-default" onclick="openGlobalStoreSearchDrawer()">全局查找店铺</button>
+        ${renderFakeSelect("全部平台", ["全部平台", "AliExpress", "Shopee", "Amazon"])}
+        ${renderFakeSelect("全部状态", ["全部状态", "生效中", "待补客服"])}
+        <input class="form-input" placeholder="搜索当前业务单元店铺/负责人..." />
+        <button class="btn btn-primary" onclick="openStoreRoleDrawer('${rows[0]?.id || "smt033"}')">配置店铺角色</button>
+      </div>
+    </div>
+    <div class="table-summary">当前页面只展示 ${escapeHtml(org.label)} 的店铺角色配置；不确定店铺属于哪个业务单元时，使用“全局查找店铺”在抽屉内跨业务单元检索。</div>
+    <div class="exception-strip">
+      <div class="exception-item"><strong>新店铺待认领：${pendingStores}</strong><span>新店铺不显示在左侧树，统一进入任务池。<button class="action-link" onclick="openPendingStoresDrawer()">去处理</button></span></div>
+      <div class="exception-item"><strong>跨 BU 转移</strong><span>在当前店铺行点击“转移BU”，指定目标业务单元、生效日期和历史订单处理方式。</span></div>
+      <div class="exception-item"><strong>未知归属搜索</strong><span>点击“全局查找店铺”打开抽屉，不改变当前业务单元上下文。</span></div>
+      <div class="exception-item"><strong>异常闭环</strong><span>重复店铺、停用 BU、负责人失效、重叠生效期都进入校验和日志。</span></div>
+    </div>
+    <div class="page-panel-body">
+      <div class="data-table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>店铺</th>
+              <th>平台</th>
+              <th>销售负责人</th>
+              <th>客服负责人</th>
+              <th>业务单元</th>
+              <th>今日订单</th>
+              <th>状态</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>${rows.map(renderStoreRoleRow).join("")}</tbody>
+        </table>
+      </div>
+      ${renderPagination(rows.length)}
+    </div>
+  `;
+}
+
+function currentBusinessUnitStoreRows() {
+  const org = currentOrg();
+  return globalStoreRoleRows.filter(row => row.unit === org.label);
+}
+
+function openPendingStoresDrawer() {
+  const rows = globalStoreRoleRows.filter(row => !row.unit);
+  const drawer = document.getElementById("orderDrawer");
+  drawer.classList.remove("import-drawer");
+  drawer.innerHTML = `
+    <div class="drawer-header">
+      <h3>待认领新店铺</h3>
+      <button type="button" class="modal-close" onclick="closeOrderDrawer()">×</button>
+    </div>
+    <div class="drawer-body">
+      <div class="alert alert-warning" style="margin-bottom:14px;">新店铺由平台店铺主数据同步产生，尚未归属任何业务单元。运营负责人需要先认领到业务单元，再配置销售负责人和客服负责人。</div>
+      <div class="filter-row" style="padding:0 0 14px;">
+        <div class="filter-item"><label>平台</label>${renderFakeSelect("全部平台", ["全部平台", "AliExpress", "TikTok Shop", "Shopee"])}</div>
+        <div class="filter-item"><label>录入时间</label><input class="form-input" value="近 7 天" /></div>
+        <div class="filter-item"><label>店铺</label><input class="form-input" placeholder="搜索店铺名称/编码" /></div>
+        <button class="btn btn-primary" onclick="showToast('待认领店铺列表已刷新', 'success')">查询</button>
+      </div>
+      ${renderStoreLookupTable(rows, "pending")}
+    </div>
+    <div class="drawer-footer">
+      <button type="button" class="btn btn-default" onclick="closeOrderDrawer()">关闭</button>
+    </div>
+  `;
+  document.getElementById("orderDrawerMask").classList.add("visible");
+  drawer.classList.add("visible");
+}
+
+function openGlobalStoreSearchDrawer() {
+  const drawer = document.getElementById("orderDrawer");
+  drawer.classList.remove("import-drawer");
+  drawer.innerHTML = `
+    <div class="drawer-header">
+      <h3>全局查找店铺</h3>
+      <button type="button" class="modal-close" onclick="closeOrderDrawer()">×</button>
+    </div>
+    <div class="drawer-body">
+      <div class="alert alert-info" style="margin-bottom:14px;">全局查找是辅助定位工具，不改变当前左侧业务单元。查到店铺后，可查看其所属业务单元、发起转移或认领配置。</div>
+      <div class="filter-row" style="padding:0 0 14px;">
+        <div class="filter-item"><label>店铺</label><input class="form-input" value="SMT" placeholder="输入店铺名称/编码" /></div>
+        <div class="filter-item"><label>平台</label>${renderFakeSelect("全部平台", ["全部平台", "AliExpress", "Shopee", "Amazon", "TikTok Shop"])}</div>
+        <div class="filter-item"><label>业务单元</label>${renderFakeSelect("全部业务单元", ["全部业务单元", "未分配", "深圳速卖通工具组", "菲律宾土组"])}</div>
+        <button class="btn btn-primary" onclick="showToast('全局店铺检索已刷新', 'success')">查询</button>
+      </div>
+      ${renderStoreLookupTable(globalStoreRoleRows, "global")}
+    </div>
+    <div class="drawer-footer">
+      <button type="button" class="btn btn-default" onclick="closeOrderDrawer()">关闭</button>
+    </div>
+  `;
+  document.getElementById("orderDrawerMask").classList.add("visible");
+  drawer.classList.add("visible");
+}
+
+function renderStoreLookupTable(rows, mode) {
+  return `
+    <table class="data-table">
+      <thead>
+        <tr><th>店铺</th><th>平台</th><th>当前业务单元</th><th>销售负责人</th><th>客服负责人</th><th>状态</th><th>操作</th></tr>
+      </thead>
+      <tbody>
+        ${rows.map(row => {
+          const isPending = !row.unit;
+          return `
+            <tr>
+              <td><div class="role-cell-main">${escapeHtml(row.store)}</div><div class="role-cell-sub">录入/生效：${escapeHtml(row.activeFrom)}</div></td>
+              <td>${escapeHtml(row.platform)}</td>
+              <td><div class="role-cell-main">${escapeHtml(row.unit || "未分配")}</div><div class="role-cell-sub">${escapeHtml(row.unitPath || "待认领到业务单元")}</div></td>
+              <td>${escapeHtml(row.salesOwner || "待配置")}</td>
+              <td>${escapeHtml(row.serviceOwner || "待配置")}</td>
+              <td>${isPending ? `<span class="tag tag-warning">待认领</span>` : row.abnormal ? `<span class="tag tag-warning">${escapeHtml(row.abnormal)}</span>` : `<span class="tag tag-success">生效中</span>`}</td>
+              <td>
+                <div class="action-cell">
+                  <button class="action-link" onclick="openStoreRoleDrawer('${row.id}')">${isPending ? "认领配置" : "编辑角色"}</button>
+                  ${isPending ? "" : `<button class="action-link" onclick="openStoreTransferDrawer('${row.id}')">转移BU</button>`}
+                </div>
+              </td>
+            </tr>
+          `;
+        }).join("")}
+      </tbody>
+    </table>
+    <div class="table-summary" style="padding:10px 0 0;">${mode === "pending" ? "处理完成后，店铺会进入对应业务单元的店铺角色配置列表。" : "全局查找只负责定位，不会改变当前业务单元上下文。"}</div>
+  `;
+}
+
+function renderStoreRoleRow(row) {
+  const isPending = !row.unit;
+  const unitText = row.unit || "未分配";
+  return `
+    <tr>
+      <td>
+        <div class="role-cell-main">${escapeHtml(row.store)}</div>
+        <div class="role-cell-sub">生效日期：${escapeHtml(row.activeFrom)}</div>
+      </td>
+      <td>${escapeHtml(row.platform)}</td>
+      <td>
+        <div class="role-cell-main">${escapeHtml(row.salesOwner)}</div>
+        <div class="role-cell-sub">销售归属 / 业绩口径</div>
+      </td>
+      <td>
+        ${row.serviceOwner ? `<div class="role-cell-main">${escapeHtml(row.serviceOwner)}</div><div class="role-cell-sub">客服责任 / 服务口径</div>` : `<span class="tag tag-warning">待配置客服</span>`}
+      </td>
+      <td>
+        <div class="role-cell-main">${escapeHtml(unitText)}</div>
+        <div class="role-cell-sub">${escapeHtml(row.unitPath || "当前业务单元")}</div>
+      </td>
+      <td>${row.todayOrders}</td>
+      <td>${isPending ? `<span class="tag tag-warning">待认领</span>` : row.abnormal ? `<span class="tag tag-warning">${escapeHtml(row.abnormal)}</span>` : `<span class="tag tag-success">生效中</span>`}</td>
+      <td>
+        <div class="action-cell">
+          <button class="action-link" onclick="openStoreRoleDrawer('${row.id}')">${isPending ? "认领配置" : "编辑角色"}</button>
+          ${isPending ? "" : `<button class="action-link" onclick="openStoreTransferDrawer('${row.id}')">转移BU</button>`}
+          <button class="action-link" onclick="showToast('${escapeHtml(row.store)} 的角色变更历史已筛选', 'success')">历史</button>
+        </div>
+      </td>
+    </tr>
+  `;
+}
+
+function openStoreRoleDrawer(storeId) {
+  const row = globalStoreRoleRows.find(item => item.id === storeId) || globalStoreRoleRows[0];
+  const isPending = !row.unit;
+  const drawer = document.getElementById("orderDrawer");
+  drawer.classList.remove("import-drawer");
+  drawer.innerHTML = `
+    <div class="drawer-header">
+      <h3>编辑店铺角色归属</h3>
+      <button type="button" class="modal-close" onclick="closeOrderDrawer()">×</button>
+    </div>
+    <div class="drawer-body">
+      <div class="step-panel">
+        <h4>店铺基础信息</h4>
+        <div class="step-body">
+          <div class="criteria-grid">
+            <div><label class="form-label">店铺</label><input class="form-input" value="${escapeAttr(row.store)}" disabled /></div>
+            <div><label class="form-label">平台</label><input class="form-input" value="${escapeAttr(row.platform)}" disabled /></div>
+            <div><label class="form-label">当前业务单元</label><input class="form-input" value="${escapeAttr(row.unit || "未分配业务单元")}" disabled /></div>
+          </div>
+          <div class="assignment-flow">
+            <div class="flow-step"><div class="flow-label">订单出单</div><div class="flow-value">${escapeHtml(row.store)}</div></div>
+            <div class="flow-step"><div class="flow-label">销售归属</div><div class="flow-value">${escapeHtml(row.salesOwner || "待配置")}</div></div>
+            <div class="flow-step"><div class="flow-label">客服归属</div><div class="flow-value">${escapeHtml(row.serviceOwner || "待配置")}</div></div>
+            <div class="flow-step"><div class="flow-label">业务单元</div><div class="flow-value">${escapeHtml(row.unit || "待认领")}</div></div>
+          </div>
+          ${isPending ? `<div class="alert alert-warning" style="margin-top:12px;">这是新录入店铺，尚未归属任何业务单元。保存时需先认领到当前业务单元，再配置销售与客服负责人。</div>` : ""}
+        </div>
+      </div>
+      ${isPending ? `
+      <div class="step-panel">
+        <h4>业务单元认领</h4>
+        <div class="step-body">
+          <div class="criteria-grid">
+            <div><label class="form-label">认领到业务单元 <span class="required">*</span></label>${renderFakeSelect(currentOrg().label, orgRows.filter(item => item.level === 3).map(item => item.label))}</div>
+            <div><label class="form-label">认领原因 <span class="required">*</span></label>${renderFakeSelect("新店铺上线", ["新店铺上线", "平台店铺迁移", "历史遗漏补录"])}</div>
+            <div><label class="form-label">生效日期 <span class="required">*</span></label><input class="form-input" value="2026-05-14" /></div>
+          </div>
+          <div class="alert alert-info" style="margin-top:12px;">认领后店铺会进入当前业务单元列表；后续订单将按店铺角色识别销售、客服和业务单元。</div>
+        </div>
+      </div>` : ""}
+      <div class="step-panel">
+        <h4>销售角色</h4>
+        <div class="step-body">
+          <div class="criteria-grid">
+            <div><label class="form-label">销售负责人 <span class="required">*</span></label>${renderFakeSelect(row.salesOwner || "请选择销售负责人", people.map(item => item.name))}</div>
+            <div><label class="form-label">生效日期 <span class="required">*</span></label><input class="form-input" value="${escapeAttr(row.activeFrom)}" /></div>
+            <div><label class="form-label">影响范围</label>${renderFakeSelect("仅影响新订单", ["仅影响新订单", "同步生成历史调整任务"])}</div>
+          </div>
+          <div class="alert alert-info" style="margin-top:12px;">销售负责人用于订单销售归属、业务单元归属、销售目标与业绩统计。修改历史订单需走“订单归属处理”。</div>
+        </div>
+      </div>
+      <div class="step-panel">
+        <h4>客服角色</h4>
+        <div class="step-body">
+          <div class="criteria-grid">
+            <div><label class="form-label">客服负责人 <span class="required">*</span></label>${renderFakeSelect(row.serviceOwner || "请选择客服同学", customerServicePeople.map(item => item.name))}</div>
+            <div><label class="form-label">客服组织</label><input class="form-input" value="${escapeAttr(customerServicePeople.find(item => item.name === row.serviceOwner)?.org || "客服运营中心")}" disabled /></div>
+            <div><label class="form-label">服务口径</label>${renderFakeSelect("店铺维度", ["店铺维度", "平台维度", "国家站点维度"])}</div>
+          </div>
+          <div class="alert ${row.serviceOwner ? "alert-info" : "alert-warning"}" style="margin-top:12px;">
+            ${row.serviceOwner ? "客服负责人用于售后责任、客服绩效和服务异常追溯，不参与销售目标拆解。" : "该店铺已有销售归属但未配置客服负责人，后续客服绩效和售后责任会出现空归属。"}
+          </div>
+        </div>
+      </div>
+      <div class="step-panel">
+        <h4>保存前校验</h4>
+        <div class="step-body">
+          <table class="data-table">
+            <thead><tr><th>校验项</th><th>结果</th><th>说明</th></tr></thead>
+            <tbody>
+              <tr><td>业务单元</td><td>${isPending ? `<span class="tag tag-warning">待认领</span>` : `<span class="tag tag-success">通过</span>`}</td><td>新店铺必须先进入业务单元，才能参与订单归属。</td></tr>
+              <tr><td>销售归属</td><td>${row.salesOwner ? `<span class="tag tag-success">通过</span>` : `<span class="tag tag-warning">待补</span>`}</td><td>店铺有唯一销售负责人，可识别销售员与业务单元。</td></tr>
+              <tr><td>客服归属</td><td>${row.serviceOwner ? `<span class="tag tag-success">通过</span>` : `<span class="tag tag-warning">待补</span>`}</td><td>客服归属不影响销售业绩，但影响售后责任。</td></tr>
+              <tr><td>历史订单</td><td><span class="tag tag-default">不自动改写</span></td><td>默认只影响新订单；历史重算需在订单归属处理内建任务。</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="drawer-footer">
+      <button type="button" class="btn btn-default" onclick="closeOrderDrawer()">取消</button>
+      <button type="button" class="btn btn-primary" onclick="saveStoreRole('${row.id}')">保存角色配置</button>
+    </div>
+  `;
+  document.getElementById("orderDrawerMask").classList.add("visible");
+  drawer.classList.add("visible");
+}
+
+function saveStoreRole(storeId) {
+  closeOrderDrawer();
+  showToast(`${globalStoreRoleRows.find(row => row.id === storeId)?.store || "店铺"} 的销售/客服角色配置已保存`, "success");
+}
+
+function openStoreTransferDrawer(storeId) {
+  const row = globalStoreRoleRows.find(item => item.id === storeId) || globalStoreRoleRows[0];
+  const drawer = document.getElementById("orderDrawer");
+  drawer.classList.remove("import-drawer");
+  drawer.innerHTML = `
+    <div class="drawer-header">
+      <h3>转移店铺业务单元</h3>
+      <button type="button" class="modal-close" onclick="closeOrderDrawer()">×</button>
+    </div>
+    <div class="drawer-body">
+      <div class="step-panel">
+        <h4>Step 1：确认转移对象</h4>
+        <div class="step-body">
+          <div class="criteria-grid">
+            <div><label class="form-label">店铺</label><input class="form-input" value="${escapeAttr(row.store)}" disabled /></div>
+            <div><label class="form-label">当前业务单元</label><input class="form-input" value="${escapeAttr(row.unit || "未分配")}" disabled /></div>
+            <div><label class="form-label">当前销售 / 客服</label><input class="form-input" value="${escapeAttr(`${row.salesOwner || "待配置"} / ${row.serviceOwner || "待配置"}`)}" disabled /></div>
+          </div>
+        </div>
+      </div>
+      <div class="step-panel">
+        <h4>Step 2：设置目标业务单元</h4>
+        <div class="step-body">
+          <div class="criteria-grid">
+            <div><label class="form-label">目标业务单元 <span class="required">*</span></label>${renderFakeSelect("深圳速卖通元器件组", orgRows.filter(item => item.level === 3 && item.label !== row.unit).map(item => item.label))}</div>
+            <div><label class="form-label">目标销售负责人 <span class="required">*</span></label>${renderFakeSelect("请选择销售负责人", people.map(item => item.name))}</div>
+            <div><label class="form-label">目标客服负责人</label>${renderFakeSelect(row.serviceOwner || "请选择客服负责人", customerServicePeople.map(item => item.name))}</div>
+            <div><label class="form-label">生效日期 <span class="required">*</span></label><input class="form-input" value="2026-05-14" /></div>
+            <div><label class="form-label">历史订单处理</label>${renderFakeSelect("仅影响新订单", ["仅影响新订单", "同步创建历史订单调整任务"])}</div>
+            <div><label class="form-label">转移原因 <span class="required">*</span></label>${renderFakeSelect("业务团队调整", ["业务团队调整", "店铺经营权变更", "组织架构调整"])}</div>
+          </div>
+          <div class="alert alert-warning" style="margin-top:12px;">跨业务单元转移会影响后续订单的销售归属、业务单元归属和客服责任；默认不改写历史订单，若需历史重算会生成订单归属处理任务。</div>
+        </div>
+      </div>
+      <div class="step-panel">
+        <h4>Step 3：影响预览</h4>
+        <div class="step-body">
+          <table class="data-table">
+            <thead><tr><th>影响项</th><th>当前</th><th>保存后</th></tr></thead>
+            <tbody>
+              <tr><td>业务单元</td><td>${escapeHtml(row.unit || "未分配")}</td><td>深圳速卖通元器件组</td></tr>
+              <tr><td>销售负责人</td><td>${escapeHtml(row.salesOwner || "待配置")}</td><td>需选择目标负责人</td></tr>
+              <tr><td>客服负责人</td><td>${escapeHtml(row.serviceOwner || "待配置")}</td><td>${escapeHtml(row.serviceOwner || "需选择客服")}</td></tr>
+              <tr><td>历史订单</td><td>保持原归属</td><td>不自动改写，必要时创建调整任务</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="drawer-footer">
+      <button type="button" class="btn btn-default" onclick="closeOrderDrawer()">取消</button>
+      <button type="button" class="btn btn-danger" onclick="confirmStoreTransfer('${row.id}')">确认转移</button>
+    </div>
+  `;
+  document.getElementById("orderDrawerMask").classList.add("visible");
+  drawer.classList.add("visible");
+}
+
+function confirmStoreTransfer(storeId) {
+  closeOrderDrawer();
+  showToast(`${globalStoreRoleRows.find(row => row.id === storeId)?.store || "店铺"} 的业务单元转移任务已创建`, "success");
+}
+
 function renderLogsTab() {
   return `
     <div class="filter-row">
-      <div class="filter-item"><label>日志类型</label>${renderFakeSelect("全部类型", ["全部类型", "添加人员", "移除人员", "角色调整", "编辑人员配置", "归属重算"])}</div>
+      <div class="filter-item"><label>日志类型</label>${renderFakeSelect("全部类型", ["全部类型", "添加人员", "移除人员", "角色调整", "编辑人员配置", "店铺角色配置", "客服归属配置", "归属重算"])}</div>
       <div class="filter-item"><label>操作人</label>${renderFakeSelect("全部操作人", ["全部操作人", "王耕", "沈浩楠"])}</div>
       <div class="filter-item"><label>操作对象</label><input class="form-input" placeholder="搜索被操作销售员/店铺" /></div>
       <div class="filter-item"><label>操作时间</label><input class="form-input" value="近 30 天" /></div>
@@ -934,16 +1306,7 @@ function openTargetImportDrawer(stage = "download") {
       <div class="import-stage-row">
         <button type="button" class="import-stage ${stage === "download" ? "active" : ""}" onclick="openTargetImportDrawer('download')">⬇ 阶段一：下载模板</button>
         <button type="button" class="import-stage ${stage === "upload" ? "active" : ""}" onclick="openTargetImportDrawer('upload')">⬆ 阶段二：上传文件</button>
-        <button type="button" class="import-stage ${stage === "result" ? "active" : ""}" onclick="openTargetImportDrawer('result')">✓ 阶段三：结果反馈</button>
-      </div>
-      <div class="import-knowledge-block">
-        <div class="import-principles">
-          <div class="principle-card"><div class="icon">⚡</div><strong>效率 Efficiency</strong><p>一次处理大量目标，节省手工逐格维护时间。</p></div>
-          <div class="principle-card"><div class="icon">🎯</div><strong>准确性 Accuracy</strong><p>模板结构、字段格式、业务关系分层校验。</p></div>
-          <div class="principle-card"><div class="icon">☝</div><strong>易用性 Usability</strong><p>每一步告诉用户该做什么、为什么失败。</p></div>
-          <div class="principle-card"><div class="icon">💬</div><strong>反馈 Feedback</strong><p>任务中心统一追踪，结果文件可下载复盘。</p></div>
-        </div>
-        <div class="product-thinking">${importProductThinking(stage)}</div>
+        <button type="button" class="import-stage ${stage === "result" ? "active" : ""}" ${stage === "result" ? "" : "disabled"}>✓ 阶段三：结果反馈</button>
       </div>
       ${stage === "download" ? renderTargetImportDownload(org) : stage === "upload" ? renderTargetImportUpload(org) : renderTargetImportResult(org)}
     </div>
@@ -951,12 +1314,6 @@ function openTargetImportDrawer(stage = "download") {
   `;
   document.getElementById("orderDrawerMask").classList.add("visible");
   drawer.classList.add("visible");
-}
-
-function importProductThinking(stage) {
-  if (stage === "upload") return "产品思考：上传阶段必须让用户知道当前进行到哪一步、系统会如何处理、完成后去哪里下载结果文件。";
-  if (stage === "result") return "产品思考：上传后不在弹窗里等待，统一进入任务中心；结果文件保留原始行，并追加状态列，方便复盘修正。";
-  return "产品思考：导入前先给用户足够明确的模板、规则和示例，降低上传后才发现错误的概率。";
 }
 
 function renderTargetImportDownload(org) {
@@ -985,7 +1342,7 @@ function renderTargetImportDownload(org) {
     </div>
     <div class="import-grid" style="margin-top:16px;">
       <div class="import-card">
-        <h4>Excel 数据校验方法</h4>
+        <h4>模板填写约束</h4>
         <div class="method-table">
           <div class="method-row"><strong>下拉列表</strong><span>目标层级、人员、店铺从系统范围生成</span></div>
           <div class="method-row"><strong>数字限制</strong><span>月份目标必须为非负数字</span></div>
@@ -994,8 +1351,8 @@ function renderTargetImportDownload(org) {
         </div>
       </div>
       <div class="import-card error-report-card">
-        <h4>错误报告方案</h4>
-        <div class="alert alert-info">默认采用方案二：单 Sheet + 状态列。导入结果下载文件在原始数据右侧增加“是否导入成功”和“错误原因”两列。</div>
+        <h4>结果文件格式</h4>
+        <div class="alert alert-info">导入结果下载文件会保留原始数据，并在右侧追加“是否导入成功”和“错误原因”两列。</div>
         <div class="template-preview">
           <table class="result-table">
             <thead><tr><th>业务单元编码</th><th>对象</th><th>05月目标</th><th class="status-col">是否导入成功</th><th class="error-col">错误原因</th></tr></thead>
@@ -1026,11 +1383,11 @@ function renderTargetImportUpload(org) {
       </div>
       <div class="upload-file">
         <div><strong>年度目标导入_深圳速卖通元器件组_2026.xlsx</strong><div class="text-secondary">已读取 268 行，预计导入 240 行，跳过 28 行</div></div>
-        <span class="tag tag-success">文件已解析</span>
+        <span class="tag tag-warning">预检未通过</span>
       </div>
     </div>
     <div class="import-card" style="margin-top:16px;">
-      <h4>数据校验逻辑（三层结构）</h4>
+      <h4>预检结果</h4>
       <div class="timeline-list">
         <div class="timeline-item"><span class="timeline-index" style="background:#f5222d;">1</span><div><h4>模板结构校验</h4><p class="text-secondary">检查表头、Sheet、模板版本是否匹配。不匹配立即中止，提示“请使用标准模板”。</p></div></div>
         <div class="timeline-item"><span class="timeline-index" style="background:#fa8c16;">2</span><div><h4>单行数据格式校验</h4><p class="text-secondary">逐行检查年度、编码、月份金额、数字格式、必填项和目标层级。</p></div></div>
@@ -1039,8 +1396,22 @@ function renderTargetImportUpload(org) {
       <div class="validation-list">
         <div class="validation-item"><strong>模板结构</strong><span class="tag tag-success">通过</span></div>
         <div class="validation-item"><strong>单行格式</strong><span class="tag tag-warning">12 行需跳过</span></div>
-        <div class="validation-item"><strong>业务逻辑</strong><span class="tag tag-error">3 处差额需处理</span></div>
-        <div class="validation-item"><strong>任务中心</strong><span>点击“开始导入”后进入后台任务，可在任务中心下载结果文件</span></div>
+        <div class="validation-item"><strong>业务逻辑</strong><span class="tag tag-error">3 处强校验未通过</span></div>
+        <div class="validation-item"><strong>导入动作</strong><span class="tag tag-error">已阻断</span></div>
+      </div>
+      <div class="alert alert-error" style="margin-top:14px;">
+        该文件存在人员-店铺目标拆解不平、人员目标超过业务单元目标等强校验问题。系统不会创建导入任务，请先下载预检报告并修正文件。
+      </div>
+      <div class="template-preview" style="margin-top:12px;">
+        <div class="preview-head"><strong>预检问题预览</strong><span>仅展示前 3 条</span></div>
+        <table>
+          <thead><tr><th>原始行号</th><th>对象</th><th>月份</th><th>校验结果</th><th>处理建议</th></tr></thead>
+          <tbody>
+            <tr><td>18</td><td>张赛</td><td>05月</td><td><span class="tag tag-error">店铺差额 ¥3,000</span></td><td>调平张赛名下店铺 05月目标</td></tr>
+            <tr><td>24</td><td>深圳速卖通工具组</td><td>06月</td><td><span class="tag tag-error">人员目标超过 BU</span></td><td>降低人员目标或提高 BU 总目标</td></tr>
+            <tr><td>27</td><td>SMT127</td><td>04月</td><td><span class="tag tag-warning">已结账月份</span></td><td>覆盖模式下跳过已结账月份</td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
   `;
@@ -1065,7 +1436,7 @@ function renderTargetImportResult(org) {
       </div>
     </div>
     <div class="import-card" style="margin-top:16px;">
-      <h4>结果文件预览（方案二：单 Sheet + 状态列）</h4>
+      <h4>结果文件预览</h4>
       <table class="data-table result-table">
         <thead><tr><th>原始行号</th><th>业务单元编码</th><th>目标对象</th><th>05月目标</th><th class="status-col">是否导入成功</th><th class="error-col">错误原因</th></tr></thead>
         <tbody>
@@ -1092,7 +1463,8 @@ function renderTargetImportFooter(stageIndex) {
       <div class="drawer-footer">
         <button type="button" class="btn btn-default" onclick="openTargetImportDrawer('download')">上一步</button>
         <button type="button" class="btn btn-default" onclick="closeOrderDrawer()">取消</button>
-        <button type="button" class="btn btn-primary" onclick="openTargetImportDrawer('result'); showToast('导入任务已创建，可在任务中心查看进度', 'success')">开始导入</button>
+        <button type="button" class="btn btn-default" onclick="showToast('已下载年度目标预检报告', 'warning')">下载预检报告</button>
+        <button type="button" class="btn btn-primary" disabled>修正后才可开始导入</button>
       </div>
     `;
   }
@@ -1771,6 +2143,12 @@ window.toggleAllPeople = toggleAllPeople;
 window.togglePerson = togglePerson;
 window.showStorePopover = showStorePopover;
 window.jumpToPersonLog = jumpToPersonLog;
+window.openPendingStoresDrawer = openPendingStoresDrawer;
+window.openGlobalStoreSearchDrawer = openGlobalStoreSearchDrawer;
+window.openStoreRoleDrawer = openStoreRoleDrawer;
+window.saveStoreRole = saveStoreRole;
+window.openStoreTransferDrawer = openStoreTransferDrawer;
+window.confirmStoreTransfer = confirmStoreTransfer;
 window.openPersonnelModal = openPersonnelModal;
 window.toggleStoreNode = toggleStoreNode;
 window.savePersonnel = savePersonnel;

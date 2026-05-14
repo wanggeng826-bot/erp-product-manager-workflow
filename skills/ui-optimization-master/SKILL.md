@@ -80,6 +80,8 @@ Always review against these principles:
 - Accessibility, chart, state, token, and responsive checks should be applied in an ERP-appropriate way without changing the desktop-first internal-system baseline.
 - Dense ERP information remains scannable and predictable.
 - Visual style is restrained, professional, and operation-focused.
+- Pages with a selected context, such as a left-tree business unit, must keep the main content scoped to that context. Global search, unassigned pools, and cross-organization migration are auxiliary workflows, not peer tabs that reset the meaning of the selected context.
+- For master-data ownership pages, review lifecycle exceptions before visual polish: unassigned objects, unknown ownership search, cross-organization transfer, invalid owner, disabled organization, duplicate record, overlapping effective date, and historical data recalculation.
 
 ## Hard Rules
 
@@ -94,6 +96,7 @@ Flag these as high-priority issues:
 - Navigation, tabs, cards, summaries, or buttons cannot map back to PRD or confirmed requirements.
 - Page invents modules not present in PRD.
 - Page has duplicate title areas, duplicate summary areas, or duplicate action areas.
+- Page puts global lookup, unassigned pools, or cross-organization operations as peer tabs under a selected local context, causing the left-tree selection and page content scope to conflict.
 - User must jump pages for simple view or light edit tasks.
 - Delete lacks second confirmation.
 - Important operation lacks undo, rollback, or irreversible warning.
