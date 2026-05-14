@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OMS Demo</title>
+    <link rel="stylesheet" href="../../ui-library/tokens.css" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="erp-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">OMS</div>
+          <div>
+            <div class="brand-title">订单履约 Demo</div>
+            <div class="brand-subtitle">Router Draft Run</div>
+          </div>
+        </div>
+        <nav class="side-menu" aria-label="OMS 菜单">
+          <button class="side-item active" data-page="orders" type="button">
+            <span class="side-icon">订</span>
+            <span>订单列表</span>
+          </button>
+          <button class="side-item" data-page="review" type="button">
+            <span class="side-icon">审</span>
+            <span>待审订单</span>
+          </button>
+          <button class="side-item" data-page="packages" type="button">
+            <span class="side-icon">包</span>
+            <span>包裹列表</span>
+          </button>
+        </nav>
+      </aside>
+
+      <main class="main">
+        <header class="page-header">
+          <div class="header-left">
+            <button class="header-icon-btn" type="button" aria-label="折叠菜单">☰</button>
+            <div class="header-search">
+              <span>⌕</span>
+              <input placeholder="搜索订单号 / 包裹号 / SKU" aria-label="全局搜索" />
+            </div>
+          </div>
+          <div class="header-meta">
+            <button class="header-icon-btn" type="button">帮助</button>
+            <button class="header-icon-btn" type="button">通知</button>
+            <span class="avatar">F</span>
+            <span>Freddy · 运营负责人</span>
+          </div>
+        </header>
+
+        <div class="breadcrumb-bar">首页 / OMS / <span id="breadcrumbCurrent">订单列表</span></div>
+
+        <section class="page-title-panel">
+          <div>
+            <h1 id="pageTitle">订单列表</h1>
+            <p id="pageDescription">集中查看订单状态、履约节点和异常包裹处理。</p>
+          </div>
+          <div class="page-title-actions">
+            <button class="btn" type="button">导出</button>
+            <button class="btn primary" type="button">创建手工订单</button>
+          </div>
+        </section>
+
+        <section class="content-panel query-panel">
+          <div class="query-grid">
+            <label class="field">
+              <span>单号搜索</span>
+              <input id="keywordInput" placeholder="请输入订单号 / 包裹号" />
+            </label>
+            <div class="field select-field" data-select="platform">
+              <span>平台</span>
+              <button class="select-trigger" id="platformTrigger" type="button" aria-expanded="false">
+                <span id="platformValue">全部平台</span>
+                <span>⌄</span>
+              </button>
+              <div class="select-menu hidden" id="platformMenu">
+                <button class="select-option selected" type="button" data-value="all">全部平台</button>
+                <button class="select-option" type="button" data-value="Amazon">Amazon</button>
+                <button class="select-option" type="button" data-value="Shopee">Shopee</button>
+                <button class="select-option" type="button" data-value="TikTok">TikTok</button>
+              </div>
+            </div>
+            <div class="field field-store">
+              <span>店铺</span>
+              <button class="store-trigger" id="storeTrigger" type="button" aria-expanded="false">
+                <span class="platform-dot amazon" id="storePlatformDot">A</span>
+                <span id="storeSummary">Amazon / 北美事业部 / US / 北美优选-US</span>
+                <span>⌄</span>
+              </button>
+              <div class="store-popover hidden" id="storePopover">
+                <input class="store-search" id="storeSearch" placeholder="搜索平台 / 站点 / 店铺" aria-label="搜索店铺" />
+                <div class="store-tree" id="storeTree" aria-label="店铺选择树">
+                  <div class="tree-node level-0 expanded" data-node="amazon">
+                    <button class="tree-toggle" type="button">⌄</button>
+                    <label class="tree-label">
+                      <input type="checkbox" class="tree-check" data-node="amazon" checked />
+                      <span class="platform-dot amazon">A</span>
+                      <span class="node-title">Amazon</span>
+                    </label>
+                  </div>
+                  <div class="tree-node level-1 expanded" data-node="amazon-na" data-parent="amazon">
+                    <button class="tree-toggle" type="button">⌄</button>
+                    <label class="tree-label">
+                      <input type="checkbox" class="tree-check" data-node="amazon-na" data-parent="amazon" checked />
+                      <span class="node-title">北美事业部</span>
+                    </label>
+                  </div>
+                  <div class="tree-node level-2 expanded" data-node="amazon-na-us" data-parent="amazon-na">
+                    <button class="tree-toggle" type="button">⌄</button>
+                    <label class="tree-label">
+                      <input type="checkbox" class="tree-check" data-node="amazon-na-us" data-parent="amazon-na" checked />
+                      <span class="node-title">US</span>
+                    </label>
+                  </div>
+                  <div class="tree-node level-3 leaf" data-parent="amazon-na-us" data-path="Amazon / 北美事业部 / US / 北美优选-US" data-store-value="北美优选-US" data-platform="amazon">
+                    <span class="tree-spacer"></span>
+                    <label class="tree-label">
+                      <input type="checkbox" class="tree-check store-check" checked />
+                      <span class="node-title">北美优选-US</span>
+                    </label>
+                  </div>
+                  <div class="tree-node level-3 leaf" data-parent="amazon-na-us" data-path="Amazon / 北美事业部 / US / 家居补货-US" data-store-value="家居补货-US" data-platform="amazon">
+                    <span class="tree-spacer"></span>
+                    <label class="tree-label">
+                      <input type="checkbox" class="tree-check store-check" />
+                      <span class="node-title">家居补货-US</span>
+                    </label>
+                  </div>
+                  <div class="tree-node level-0" data-node="shopee">
+                    <button class="tree-toggle" type="button">›</button>
+                    <label class="tree-label">
+                      <input type="checkbox" class="tree-check" data-node="shopee" />
+                      <span class="platform-dot shopee">S</span>
+                      <span class="node-title">Shopee</span>
+                    </label>
+                  </div>
+                  <div class="tree-node level-1 tree-hidden" data-parent="shopee" data-node="shopee-my">
+                    <button class="tree-toggle" type="button">›</button>
+                    <label class="tree-label">
+                      <input type="checkbox" class="tree-check" data-node="shopee-my" data-parent="shopee" />
+                      <span class="node-title">马来事业部</span>
+                    </label>
+                  </div>
+                  <div class="tree-node level-2 tree-hidden" data-parent="shopee-my" data-node="shopee-my-site">
+                    <button class="tree-toggle" type="button">›</button>
+                    <label class="tree-label">
+                      <input type="checkbox" class="tree-check" data-node="shopee-my-site" data-parent="shopee-my" />
+                      <span class="node-title">MY</span>
+                    </label>
+                  </div>
+                  <div class="tree-node level-3 leaf tree-hidden" data-parent="shopee-my-site" data-path="Shopee / 马来事业部 / MY / 马来工业-MY" data-store-value="马来工业-MY" data-platform="shopee">
+                    <span class="tree-spacer"></span>
+                    <label class="tree-label">
+                      <input type="checkbox" class="tree-check store-check" />
+                      <span class="node-title">马来工业-MY</span>
+                    </label>
+                  </div>
+                  <div class="tree-node level-0" data-node="tiktok">
+                    <button class="tree-toggle" type="button">›</button>
+                    <label class="tree-label">
+                      <input type="checkbox" class="tree-check" data-node="tiktok" />
+                      <span class="platform-dot tiktok">T</span>
+                      <span class="node-title">TikTok Shop</span>
+                    </label>
+                  </div>
+                  <div class="tree-node level-1 tree-hidden" data-parent="tiktok" data-node="tiktok-sea">
+                    <button class="tree-toggle" type="button">›</button>
+                    <label class="tree-label">
+                      <input type="checkbox" class="tree-check" data-node="tiktok-sea" data-parent="tiktok" />
+                      <span class="node-title">东南亚事业部</span>
+                    </label>
+                  </div>
+                  <div class="tree-node level-2 tree-hidden" data-parent="tiktok-sea" data-node="tiktok-ph-site">
+                    <button class="tree-toggle" type="button">›</button>
+                    <label class="tree-label">
+                      <input type="checkbox" class="tree-check" data-node="tiktok-ph-site" data-parent="tiktok-sea" />
+                      <span class="node-title">PH</span>
+                    </label>
+                  </div>
+                  <div class="tree-node level-3 leaf tree-hidden" data-parent="tiktok-ph-site" data-path="TikTok Shop / 东南亚事业部 / PH / 东南亚精选-PH" data-store-value="东南亚精选-PH" data-platform="tiktok">
+                    <span class="tree-spacer"></span>
+                    <label class="tree-label">
+                      <input type="checkbox" class="tree-check store-check" />
+                      <span class="node-title">东南亚精选-PH</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="store-footer">
+                  <span id="storeFooterText">已选 1 个店铺</span>
+                  <button class="btn" id="storeDone" type="button">确定</button>
+                </div>
+              </div>
+            </div>
+            <div class="field select-field" data-select="warehouse">
+              <span>仓库</span>
+              <button class="select-trigger" id="warehouseTrigger" type="button" aria-expanded="false">
+                <span id="warehouseValue">全部仓库</span>
+                <span>⌄</span>
+              </button>
+              <div class="select-menu hidden" id="warehouseMenu">
+                <button class="select-option selected" type="button" data-value="all">全部仓库</button>
+                <button class="select-option" type="button" data-value="深圳 A 仓">深圳 A 仓</button>
+                <button class="select-option" type="button" data-value="义乌 B 仓">义乌 B 仓</button>
+                <button class="select-option" type="button" data-value="海外中转仓">海外中转仓</button>
+              </div>
+            </div>
+            <label class="field">
+              <span>付款时间</span>
+              <input value="2026/05/01 - 2026/05/14" />
+            </label>
+            <div class="query-actions">
+              <button class="btn primary" id="applyFilterBtn" type="button">搜索</button>
+              <button class="btn" id="resetFilterBtn" type="button">重置</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="board-grid">
+          <div class="content-panel main-panel">
+            <div class="status-tabs" id="statusTabs"></div>
+            <div class="table-toolbar">
+              <div>
+                <strong id="tableTitle">订单队列</strong>
+                <span id="tableSubtitle">共 0 条</span>
+              </div>
+              <div class="toolbar-actions">
+                <button class="btn text" type="button">批量审核</button>
+                <button class="btn text" type="button">异常处理</button>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead id="tableHead"></thead>
+                <tbody id="tableBody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <aside class="content-panel side-panel">
+            <div class="panel-title">履约看板</div>
+            <div class="mini-queue" id="miniQueue"></div>
+            <div class="panel-title secondary">今日关注</div>
+            <ul class="todo-list" id="todoList"></ul>
+          </aside>
+        </section>
+      </main>
+    </div>
+
+    <div class="drawer-mask hidden" id="drawerMask"></div>
+    <aside class="detail-drawer hidden" id="detailDrawer" aria-hidden="true">
+      <div class="drawer-header">
+        <div>
+          <h2 id="drawerTitle">详情</h2>
+          <p id="drawerSubtitle">查看订单和履约链路</p>
+        </div>
+        <button class="drawer-close" id="closeDrawerBtn" type="button">✕</button>
+      </div>
+      <div class="drawer-body" id="drawerBody"></div>
+    </aside>
+
+    <div class="modal-mask hidden" id="modalMask"></div>
+    <section class="risk-modal hidden" id="riskModal" aria-hidden="true">
+      <div class="modal-header">
+        <h2>申请包裹拦截</h2>
+        <button class="drawer-close" id="closeModalBtn" type="button">✕</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+      <div class="modal-actions">
+        <button class="btn" id="cancelModalBtn" type="button">取消</button>
+        <button class="btn danger" id="confirmInterceptBtn" type="button">确认拦截</button>
+      </div>
+    </section>
+
+    <div class="toast hidden" id="toast"></div>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
