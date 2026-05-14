@@ -2,6 +2,12 @@
 # planning-with-files: User prompt submit hook for Codex
 # Reused from the Cursor integration.
 
+ACTIVE_FILE=".codex/planning-active"
+
+if [ ! -f "$ACTIVE_FILE" ]; then
+    exit 0
+fi
+
 if [ -f task_plan.md ]; then
     echo "[planning-with-files] ACTIVE PLAN — current state:"
     head -50 task_plan.md

@@ -172,4 +172,6 @@ When editing HTML prototypes:
 
 Use `$erp-product-manager` for new requirement discovery, competitor analysis, solution design, PRD writing, and new prototype generation.
 
-Use `$ui-optimization-master` for UI review, prototype quality gates, Ant Design compliance checks, formal prototype cleanup, page structure optimization, and existing HTML prototype refinement.
+Do not auto-invoke `$ui-optimization-master` during initial prototype creation. Initial generation stays draft-first.
+
+Use `$ui-optimization-master` only after the user asks for final review, UI review, formal quality gate, Ant Design compliance checks, formal prototype cleanup, page structure optimization, or existing HTML prototype refinement.

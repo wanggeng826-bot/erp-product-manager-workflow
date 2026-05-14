@@ -3,6 +3,11 @@
 # Reused from the Cursor integration; Codex adapts followup_message separately.
 
 PLAN_FILE="task_plan.md"
+ACTIVE_FILE=".codex/planning-active"
+
+if [ ! -f "$ACTIVE_FILE" ]; then
+    exit 0
+fi
 
 if [ ! -f "$PLAN_FILE" ]; then
     exit 0
