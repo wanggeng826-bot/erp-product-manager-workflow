@@ -15,7 +15,19 @@ jobs:
         with:
           script: |
             const {owner, repo} = context.repo;
-            const pull_number = context.payload.pull_request.number;
+            const pr = context.payload.pull_request;
+            const pull_number = pr.number;
+            const isInternalBranch = pr.head.repo.full_name === `${owner}/${repo}`;
+            const isWorkflowBranch = pr.head.ref.startsWith('codex/');
+            const isMaintainerBot = pr.user.login === 'wanggeng826-bot';
+
+            if (isInternalBranch && (isWorkflowBranch || isMaintainerBot)) {
+              core.info(
+                `Skipping knowledge-only path restriction for internal workflow PR: ${pr.head.ref} by ${pr.user.login}.`
+              );
+              return;
+            }
+
             const files = await github.paginate(github.rest.pulls.listFiles, {
               owner,
               repo,

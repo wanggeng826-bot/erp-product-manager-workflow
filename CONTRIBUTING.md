@@ -26,6 +26,15 @@
 
 - `knowledge/**`
 
+维护者或仓库内 `codex/*` 工作流分支可以修改核心工作流文件，例如：
+
+- `skills/**`
+- `.codex/**`
+- `README.md`
+- `START_HERE.md`
+- `AGENTS.md`
+- `.github/**`
+
 适合补充的内容包括：
 
 - ERP 业务术语
@@ -57,6 +66,8 @@
 3. 只修改 `knowledge/**`。
 4. 提 Pull Request。
 5. 在 PR 描述里写清楚：你改了什么、为什么改、信息来源是什么。
+
+如果你是维护者，或 PR 来自仓库内 `codex/*` 分支，则可以提交工作流、Skill、hook 和入口文档更新。
 
 ## PR 标题建议
 
