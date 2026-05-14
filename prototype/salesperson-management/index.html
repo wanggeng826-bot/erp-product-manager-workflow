@@ -1,524 +1,1731 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>销售人员管理 V1.2 · 原型</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>销售人员管理 V1.2 — 交互原型</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
-:root {
-  --color-primary-1: #e6f4ff; --color-primary-3: #91caff;
-  --color-primary-6: #1677ff; --color-primary-7: #0958d9;
-  --color-success: #52c41a; --color-success-bg: #f6ffed; --color-success-border: #b7eb8f;
-  --color-warning: #faad14; --color-warning-bg: #fffbe6; --color-warning-border: #ffe58f;
-  --color-error: #ff4d4f; --color-error-bg: #fff2f0; --color-error-border: #ffccc7;
-  --color-info: #1677ff;
-  --color-text: rgba(0,0,0,0.88); --color-text-secondary: rgba(0,0,0,0.65);
-  --color-text-tertiary: rgba(0,0,0,0.45); --color-text-disabled: rgba(0,0,0,0.25);
-  --color-bg-layout: #f5f7fa; --color-bg-container: #ffffff;
-  --color-bg-elevated: #ffffff; --color-bg-spotlight: #fafafa;
-  --color-bg-mask: rgba(0,0,0,0.45);
-  --color-border: #d9d9d9; --color-border-secondary: #f0f0f0; --color-split: #f0f0f0;
-  --font-family: -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Helvetica Neue",Arial,sans-serif;
-  --font-size-xs: 12px; --font-size-sm: 13px; --font-size: 14px;
-  --font-size-lg: 16px; --font-size-xl: 18px; --font-size-2xl: 20px;
-  --font-weight-medium: 500; --font-weight-semibold: 600;
-  --line-height-base: 1.5715;
-  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
-  --space-5: 20px; --space-6: 24px; --space-8: 32px;
-  --radius-sm: 4px; --radius: 6px; --radius-lg: 8px; --radius-pill: 999px;
-  --shadow-1: 0 1px 2px 0 rgba(0,0,0,0.03),0 1px 6px -1px rgba(0,0,0,0.02);
-  --shadow-2: 0 6px 16px 0 rgba(0,0,0,0.08),0 3px 6px -4px rgba(0,0,0,0.12);
-  --shadow-drawer: -6px 0 16px 0 rgba(0,0,0,0.08);
-  --shadow-modal: 0 6px 16px 0 rgba(0,0,0,0.08),0 3px 6px -4px rgba(0,0,0,0.12);
-  --layout-sider-width: 240px; --layout-header-height: 56px;
-  --control-height: 32px; --control-height-lg: 40px;
-  --motion: 200ms cubic-bezier(0.4,0,0.2,1); --motion-slow: 300ms cubic-bezier(0.4,0,0.2,1);
-  --z-sticky: 100; --z-drawer: 900; --z-modal: 1000; --z-popover: 1030;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-[hidden] { display: none !important; }
-html, body {
-  min-width: 1280px; overflow-x: hidden;
-  color: var(--color-text); background: var(--color-bg-layout);
-  font-family: var(--font-family); font-size: var(--font-size);
-  line-height: var(--line-height-base);
-}
-button, input, textarea, select { font: inherit; }
-button { white-space: nowrap; cursor: pointer; border: none; background: none; }
-h1,h2,h3,h4,p { margin: 0; }
-ul, ol { list-style: none; }
+  :root {
+    --primary: #3B82F6; --primary-hover: #2563EB; --primary-dark: #1D4ED8;
+    --primary-light: #EFF6FF; --primary-border: #BFDBFE;
+    --success: #10B981; --success-light: #ECFDF5; --success-border: #A7F3D0;
+    --warning: #F59E0B; --warning-light: #FFFBEB; --warning-border: #FDE68A;
+    --danger: #EF4444; --danger-light: #FEF2F2; --danger-border: #FECACA;
+    --orange: #F97316; --orange-light: #FFF7ED; --orange-border: #FED7AA;
+    --text: #111827; --text-secondary: #4B5563; --text-muted: #9CA3AF;
+    --border: #E5E7EB; --border-light: #F3F4F6;
+    --bg: #F8FAFC; --bg-white: #FFFFFF;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,.04);
+    --shadow: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+    --shadow-md: 0 4px 6px rgba(0,0,0,.04), 0 2px 4px rgba(0,0,0,.04);
+    --shadow-lg: 0 10px 25px rgba(0,0,0,.07), 0 4px 10px rgba(0,0,0,.04);
+    --radius: 6px; --radius-md: 8px; --radius-lg: 12px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: -apple-system, "PingFang SC", "Helvetica Neue", "Microsoft YaHei", sans-serif; color:var(--text); background:var(--bg); font-size:14px; line-height:1.6; -webkit-font-smoothing:antialiased; }
 
-/* APP SHELL */
-.app-shell { display: flex; min-height: 100vh; }
+  /* ===== TOP NAV ===== */
+  .top-nav { height:56px; background:var(--bg-white); border-bottom:1px solid var(--border); display:flex; align-items:center; padding:0 24px; position:fixed; top:0; left:0; right:0; z-index:100; backdrop-filter:blur(8px); }
+  .top-nav .logo { font-size:16px; font-weight:700; color:var(--primary-dark); display:flex; align-items:center; gap:8px; margin-right:32px; letter-spacing:-.3px; }
+  .top-nav .logo i { font-size:20px; color:var(--primary); }
+  .top-nav .nav-items { display:flex; gap:2px; background:var(--bg); border-radius:8px; padding:3px; }
+  .top-nav .nav-item { padding:7px 18px; border-radius:6px; cursor:pointer; font-size:13px; color:var(--text-secondary); transition:all .2s ease; font-weight:500; }
+  .top-nav .nav-item:hover { color:var(--text); background:var(--bg-white); }
+  .top-nav .nav-item.active { background:var(--bg-white); color:var(--primary); box-shadow:var(--shadow-sm); font-weight:600; }
 
-/* SIDEBAR */
-.sidebar {
-  flex: 0 0 var(--layout-sider-width); width: var(--layout-sider-width);
-  position: sticky; top: 0; height: 100vh; overflow: hidden;
-  display: flex; flex-direction: column;
-  background: #fff; border-right: 1px solid var(--color-border-secondary);
-}
-.sidebar-header {
-  display: flex; align-items: center; gap: var(--space-3);
-  height: var(--layout-header-height); padding: 0 var(--space-4);
-  border-bottom: 1px solid var(--color-border-secondary);
-}
-.sidebar-logo {
-  width: 32px; height: 32px;
-  background: var(--color-primary-6); color: #fff;
-  border-radius: var(--radius-sm);
-  display: flex; align-items: center; justify-content: center;
-  font-weight: var(--font-weight-semibold); font-size: var(--font-size-sm);
-}
-.sidebar-title { font-size: var(--font-size-lg); font-weight: var(--font-weight-semibold); }
-.sidebar-subtitle { font-size: var(--font-size-xs); color: var(--color-text-tertiary); }
-.sidebar-label {
-  padding: var(--space-4) var(--space-4) var(--space-2);
-  font-size: var(--font-size-xs); color: var(--color-text-tertiary);
-  font-weight: var(--font-weight-medium);
-}
-.sidebar-search {
-  margin: 0 var(--space-3) var(--space-3); position: relative;
-}
-.sidebar-search input {
-  width: 100%; height: var(--control-height);
-  padding: 0 var(--space-3) 0 30px; border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm); font-size: var(--font-size-sm);
-  background: var(--color-bg-spotlight); outline: none;
-  transition: border-color var(--motion);
-}
-.sidebar-search input:focus { border-color: var(--color-primary-6); }
-.sidebar-search .sicon {
-  position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
-  color: var(--color-text-tertiary); font-size: var(--font-size-sm);
-}
+  /* ===== LAYOUT ===== */
+  .app-container { margin-top:56px; display:flex; min-height:calc(100vh - 56px); }
+  .sidebar { width:280px; background:var(--bg-white); border-right:1px solid var(--border); display:flex; flex-direction:column; flex-shrink:0; }
+  .sidebar-header { padding:14px 14px 10px; }
+  .sidebar-title { font-size:15px; font-weight:600; color:var(--text); display:flex; align-items:center; gap:8px; margin-bottom:0; }
+  .sidebar-title i { color:var(--primary); }
+  .sidebar-search { width:100%; padding:7px 12px 7px 34px; border:1px solid var(--border); border-radius:var(--radius); font-size:13px; outline:none; background:var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") no-repeat 10px center; transition:.2s; }
+  .sidebar-search:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(59,130,246,.1); background:var(--bg-white); }
+  .sidebar-search::placeholder { color:var(--text-muted); }
+  .sidebar-tree { flex:1; overflow-y:auto; padding:0 8px 16px; }
 
-/* TREE NAV */
-.tree-nav { flex: 1; overflow-y: auto; padding: var(--space-2) var(--space-2); }
-.tree-node { user-select: none; }
-.tree-row {
-  display: flex; align-items: center; gap: var(--space-1);
-  height: 32px; padding: 0 8px 0 calc(8px + var(--tree-level, 0) * 16px); cursor: pointer;
-  font-size: var(--font-size-sm); color: var(--color-text);
-  line-height: 32px; transition: background var(--motion); position: relative;
-  border-radius: var(--radius);
-}
-.tree-row:hover { background: var(--color-bg-spotlight); }
-.tree-row.active { color: var(--color-primary-6); background: var(--color-primary-1); font-weight: var(--font-weight-medium); }
-.tree-row .expand-icon {
-  display: inline-flex; width: 14px; height: 14px; align-items: center; justify-content: center;
-  flex-shrink: 0; font-size: 10px; color: var(--color-text-tertiary);
-  transition: transform var(--motion);
-}
-.tree-row .expand-icon.expanded { transform: rotate(90deg); }
-.tree-row .node-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.tree-row .node-badge {
-  flex-shrink: 0; min-width: 22px; height: 20px; padding: 0 6px; margin-left: var(--space-1);
-  font-size: var(--font-size-xs); line-height: 18px; text-align: center;
-  border-radius: var(--radius-pill); background: var(--color-bg-spotlight);
-  color: var(--color-text-tertiary);
-}
-.tree-row.active .node-badge { background: rgba(22,119,255,0.12); color: var(--color-primary-6); }
+  /* Sidebar section blocks */
+  .sidebar-section { margin-bottom:8px; }
+  .sidebar-section-header {
+    display:flex; align-items:center; gap:6px;
+    padding:8px 10px 6px;
+    font-size:12px; font-weight:600; color:var(--text-secondary);
+    user-select:none;
+  }
+  .sidebar-section-header i { font-size:12px; color:var(--text-muted); }
+  .sidebar-section-divider { height:1px; background:var(--border); margin:2px 10px 6px; }
 
-/* MAIN CONTENT */
-.main-content { flex: 1; min-width: 0; display: flex; flex-direction: column; background: var(--color-bg-layout); }
+  /* Menu item with danger (warning) status */
+  .tree-node.danger { color:var(--danger); font-weight:500; }
+  .tree-node.danger:hover { background:var(--danger-light); color:var(--danger); }
+  .tree-node.danger .folder-icon { color:var(--danger); }
+  .tree-node.danger .count-badge { background:var(--danger); color:#fff; font-weight:600; }
+  .tree-node.danger .status-dot { width:6px; height:6px; border-radius:50%; background:var(--danger); flex-shrink:0; margin-right:2px; }
+  .tree-node { padding:7px 10px; cursor:pointer; display:flex; align-items:center; gap:6px; font-size:13px; transition:all .15s ease; border-radius:var(--radius); margin-bottom:1px; color:var(--text-secondary); }
+  .tree-node:hover { background:var(--bg); color:var(--text); }
+  .tree-node.active { background:var(--primary-light); color:var(--primary); font-weight:600; box-shadow:inset 0 0 0 1px var(--primary-border); }
+  [data-store-view].active { background:var(--primary-light); color:var(--primary); font-weight:600; box-shadow:inset 0 0 0 1px var(--primary-border); }
+  [data-store-view].active .folder-icon { color:var(--primary); }
+  [data-store-view].active .count-badge { background:rgba(59,130,246,.15); color:var(--primary); }
+  .tree-node .expand { width:14px; font-size:10px; color:var(--text-muted); flex-shrink:0; }
+  .tree-node .folder-icon { font-size:14px; color:var(--text-muted); flex-shrink:0; }
+  .tree-node.active .folder-icon { color:var(--primary); }
+  .tree-node .node-text { flex:1; min-width:0; }
+  .tree-node .node-name { display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:13px; }
+  .tree-node .node-path { display:block; font-size:10px; color:var(--text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:1px; }
+  .tree-node.active .node-path { color:var(--primary); opacity:.7; }
+  .tree-node .count-badge { background:var(--bg); color:var(--text-muted); font-size:11px; padding:1px 7px; border-radius:10px; flex-shrink:0; font-weight:500; }
+  .tree-node.active .count-badge { background:rgba(59,130,246,.15); color:var(--primary); }
+  .tree-node.l2 { padding-left:26px; }
+  .tree-node.l3 { padding-left:42px; }
+  .tree-node.l4 { padding-left:58px; }
 
-/* TOP BAR */
-.top-bar {
-  display: flex; align-items: center; justify-content: space-between;
-  height: var(--layout-header-height); padding: 0 var(--space-6);
-  background: #fff; border-bottom: 1px solid var(--color-border-secondary); flex-shrink: 0;
-}
-.top-bar-left { display: flex; align-items: center; gap: var(--space-3); }
-.top-bar-breadcrumb { font-size: var(--font-size-sm); color: var(--color-text-tertiary); }
-.top-bar-breadcrumb span { color: var(--color-text); }
-.top-bar-right { display: flex; align-items: center; gap: var(--space-3); }
+  .main-content { flex:1; padding:24px; overflow-y:auto; background:var(--bg); }
 
-/* CONTENT AREA */
-.content-area { flex: 1; padding: var(--space-4) var(--space-6); overflow-y: auto; }
+  /* ===== PAGE HEADER ===== */
+  .page-header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:20px; }
+  .page-header-left h1 { font-size:20px; font-weight:700; color:var(--text); }
+  .page-header-left .status-badge { display:inline-flex; align-items:center; gap:5px; font-size:12px; color:var(--success); margin-top:6px; }
+  .page-header-left .status-badge i { font-size:10px; }
+  .page-header-right { display:flex; align-items:center; gap:8px; }
 
-/* PAGE PANEL */
-.page-panel { background: #fff; border-radius: var(--radius-lg); box-shadow: var(--shadow-1); margin-bottom: var(--space-4); }
-.page-panel-header {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: var(--space-4) var(--space-6); border-bottom: 1px solid var(--color-border-secondary);
-}
-.page-panel-title { display: flex; align-items: center; gap: var(--space-3); }
-.page-panel-title h2 { font-size: var(--font-size-xl); font-weight: var(--font-weight-semibold); }
-.page-panel-body { padding: var(--space-6); }
+  /* Segmented Tabs */
+  .seg-tabs { display:inline-flex; border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; background:var(--bg-white); }
+  .seg-tab { padding:8px 18px; cursor:pointer; font-size:13px; color:var(--text-secondary); border-right:1px solid var(--border); display:flex; align-items:center; gap:6px; transition:.15s; font-weight:500; }
+  .seg-tab:last-child { border-right:none; }
+  .seg-tab:hover { color:var(--primary); background:var(--primary-light); }
+  .seg-tab.active { color:var(--primary); background:var(--primary-light); font-weight:600; }
+  .seg-tab i { font-size:13px; }
 
-/* PERMISSION BADGE */
-.permission-badge {
-  display: inline-flex; align-items: center; gap: var(--space-1);
-  padding: 2px 10px; font-size: var(--font-size-xs);
-  color: var(--color-success); background: var(--color-success-bg);
-  border: 1px solid var(--color-success-border); border-radius: var(--radius-pill);
-}
+  /* ===== CARD ===== */
+  .card { background:var(--bg-white); border-radius:var(--radius-lg); border:1px solid var(--border); margin-bottom:16px; box-shadow:var(--shadow-sm); overflow:hidden; }
+  .card-header { padding:16px 20px; border-bottom:1px solid var(--border-light); display:flex; align-items:center; justify-content:space-between; background:var(--bg-white); }
+  .card-title { font-size:15px; font-weight:600; display:flex; align-items:center; gap:8px; color:var(--text); }
+  .card-title i { color:var(--primary); }
+  .card-body { padding:0; }
 
-/* TABS */
-.tab-bar { display: flex; border-bottom: 1px solid var(--color-border-secondary); padding: 0 var(--space-6); }
-.tab-item {
-  padding: var(--space-3) var(--space-4); font-size: var(--font-size);
-  color: var(--color-text-secondary); cursor: pointer;
-  border-bottom: 2px solid transparent; margin-bottom: -1px;
-  transition: color var(--motion), border-color var(--motion);
-}
-.tab-item:hover { color: var(--color-primary-6); }
-.tab-item.active { color: var(--color-primary-6); border-bottom-color: var(--color-primary-6); font-weight: var(--font-weight-medium); }
+  .filter-bar { display:flex; align-items:center; gap:10px; padding:14px 20px; border-bottom:1px solid var(--border-light); flex-wrap:wrap; background:var(--bg); }
+  .filter-right { margin-left:auto; display:flex; gap:8px; align-items:center; }
 
-/* TOOLBAR */
-.toolbar { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-4) 0; }
-.toolbar-spacer { flex: 1; }
+  /* ===== BUTTONS ===== */
+  .btn { padding:7px 16px; border-radius:var(--radius); border:1px solid var(--border); cursor:pointer; font-size:13px; display:inline-flex; align-items:center; gap:6px; transition:all .15s ease; background:var(--bg-white); color:var(--text); font-weight:500; white-space:nowrap; }
+  .btn:hover { border-color:var(--primary); color:var(--primary); background:var(--primary-light); }
+  .btn:active { transform:scale(.98); }
+  .btn-primary { background:var(--primary); color:#fff; border-color:var(--primary); font-weight:500; }
+  .btn-primary:hover { background:var(--primary-hover); border-color:var(--primary-hover); color:#fff; box-shadow:0 2px 6px rgba(59,130,246,.3); }
+  .btn-danger { color:var(--danger); border-color:var(--danger-border); background:#fff; }
+  .btn-danger:hover { background:var(--danger); color:#fff; border-color:var(--danger); }
+  .btn-danger-fill { background:var(--danger); color:#fff; border-color:var(--danger); }
+  .btn-danger-fill:hover { background:#DC2626; box-shadow:0 2px 6px rgba(239,68,68,.3); }
+  .btn-success { color:var(--success); border-color:var(--success-border); background:#fff; }
+  .btn-success:hover { background:var(--success); color:#fff; border-color:var(--success); }
+  .btn-text { border:none; background:none; color:var(--primary); padding:4px 8px; font-weight:500; }
+  .btn-text:hover { background:var(--primary-light); border-radius:4px; }
+  .btn-disabled { opacity:.45; cursor:not-allowed; pointer-events:none; }
+  .btn-sm { padding:5px 12px; font-size:12px; }
 
-/* BUTTONS */
-.btn {
-  display: inline-flex; align-items: center; gap: var(--space-2);
-  height: var(--control-height); padding: 0 var(--space-4);
-  font-size: var(--font-size); border-radius: var(--radius);
-  border: 1px solid transparent; transition: all var(--motion);
-  font-weight: var(--font-weight-medium);
-}
-.btn-sm { height: 28px; padding: 0 var(--space-3); font-size: var(--font-size-sm); }
-.btn-primary { color: #fff; background: var(--color-primary-6); border-color: var(--color-primary-6); }
-.btn-primary:hover { background: var(--color-primary-7); border-color: var(--color-primary-7); }
-.btn-default { color: var(--color-text); background: #fff; border-color: var(--color-border); }
-.btn-default:hover { color: var(--color-primary-6); border-color: var(--color-primary-6); }
-.btn-danger { color: var(--color-error); background: #fff; border-color: var(--color-error); }
-.btn-danger:hover { color: #fff; background: var(--color-error); }
-.btn-text { color: var(--color-primary-6); background: transparent; border: none; padding: 0 var(--space-2); }
-.btn-text:hover { color: var(--color-primary-7); background: var(--color-primary-1); }
-.btn-text-danger { color: var(--color-text-secondary); }
-.btn-text-danger:hover { color: var(--color-error); background: var(--color-error-bg); }
-.btn-link { color: var(--color-primary-6); background: transparent; border: none; padding: 0; height: auto; }
-.btn-link:hover { color: var(--color-primary-7); }
-.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .icon-btn { width:32px; height:32px; border-radius:var(--radius); border:none; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; font-size:14px; transition:all .15s ease; }
+  .icon-btn:hover { transform:scale(1.08); box-shadow:var(--shadow-sm); }
+  .icon-btn.edit { background:var(--primary-light); color:var(--primary); }
+  .icon-btn.edit:hover { background:var(--primary); color:#fff; }
+  .icon-btn.transfer { background:var(--warning-light); color:var(--warning); }
+  .icon-btn.transfer:hover { background:var(--warning); color:#fff; }
+  .icon-btn.remove { background:var(--danger-light); color:var(--danger); }
+  .icon-btn.remove:hover { background:var(--danger); color:#fff; }
 
-/* SELECT / INPUT */
-.form-select { position: relative; display: inline-block; }
-.form-select-trigger {
-  display: inline-flex; align-items: center; gap: var(--space-2);
-  height: var(--control-height); padding: 0 var(--space-3);
-  font-size: var(--font-size-sm); border: 1px solid var(--color-border);
-  border-radius: var(--radius); background: #fff; cursor: pointer;
-  min-width: 120px; justify-content: space-between;
-  transition: border-color var(--motion);
-}
-.form-select-trigger:hover { border-color: var(--color-primary-6); }
-.form-select-trigger .arrow { font-size: 10px; color: var(--color-text-tertiary); transition: transform var(--motion); }
-.form-select.open .form-select-trigger .arrow { transform: rotate(180deg); }
-.form-select-menu {
-  position: absolute; top: calc(100% + 4px); left: 0; min-width: 100%;
-  background: #fff; border: 1px solid var(--color-border);
-  border-radius: var(--radius); box-shadow: var(--shadow-2);
-  z-index: var(--z-sticky); display: none;
-}
-.form-select.open .form-select-menu { display: block; }
-.form-select-option {
-  padding: var(--space-2) var(--space-3); font-size: var(--font-size-sm);
-  cursor: pointer; transition: background var(--motion);
-}
-.form-select-option:hover { background: var(--color-bg-spotlight); }
-.form-select-option.selected { color: var(--color-primary-6); background: var(--color-primary-1); }
+  /* ===== INPUTS ===== */
+  .input { padding:7px 12px; border:1px solid var(--border); border-radius:var(--radius); font-size:13px; outline:none; transition:all .15s ease; background:var(--bg-white); color:var(--text); }
+  .input:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(59,130,246,.1); }
+  .input::placeholder { color:var(--text-muted); }
+  .input-search { padding-left:34px; background:var(--bg-white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") no-repeat 12px center; }
+  .select { padding:7px 12px; border:1px solid var(--border); border-radius:var(--radius); font-size:13px; background:var(--bg-white); min-width:120px; outline:none; color:var(--text); cursor:pointer; transition:all .15s ease; }
+  .select:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(59,130,246,.1); }
 
-.form-input {
-  height: var(--control-height); padding: 0 var(--space-3);
-  font-size: var(--font-size-sm); border: 1px solid var(--color-border);
-  border-radius: var(--radius); background: #fff; outline: none;
-  transition: border-color var(--motion); width: 200px;
-}
-.form-input:focus { border-color: var(--color-primary-6); box-shadow: 0 0 0 2px rgba(22,119,255,0.1); }
-.form-input::placeholder { color: var(--color-text-disabled); }
+  /* Custom date input — matches Ant Design DatePicker style */
+  .date-input-wrap {
+    position:relative; display:inline-flex; align-items:center;
+  }
+  .date-input-wrap .input {
+    padding-left:34px; width:160px; cursor:pointer;
+    background:var(--bg-white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2'%3E%3Crect x='3' y='4' width='18' height='18' rx='2'/%3E%3Cline x1='16' y1='2' x2='16' y2='6'/%3E%3Cline x1='8' y1='2' x2='8' y2='6'/%3E%3Cline x1='3' y1='10' x2='21' y2='10'/%3E%3C/svg%3E") no-repeat 12px center;
+  }
+  .date-input-wrap .input:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(59,130,246,.1); }
 
-/* TABLE */
-.data-table-wrap { overflow-x: auto; }
-.data-table { width: 100%; border-collapse: collapse; font-size: var(--font-size); }
-.data-table th {
-  padding: var(--space-3) var(--space-4); text-align: left;
-  font-weight: var(--font-weight-medium); color: var(--color-text-secondary);
-  background: var(--color-bg-spotlight); border-bottom: 1px solid var(--color-border-secondary);
-  white-space: nowrap; font-size: var(--font-size-sm);
-}
-.data-table td {
-  padding: var(--space-3) var(--space-4);
-  border-bottom: 1px solid var(--color-border-secondary); vertical-align: middle;
-}
-.data-table tbody tr:hover { background: var(--color-bg-spotlight); }
-.data-table .text-secondary { color: var(--color-text-tertiary); font-size: var(--font-size-sm); }
-.data-table .action-cell { display: flex; gap: var(--space-1); align-items: center; }
+  /* ===== TABLE ===== */
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  th { background:#F1F5F9; padding:10px 16px; text-align:center; font-weight:600; color:var(--text-secondary); font-size:12px; border-bottom:2px solid var(--border); white-space:nowrap; letter-spacing:.2px; }
+  td { padding:12px 16px; border-bottom:1px solid var(--border-light); vertical-align:middle; text-align:center; transition:background .1s ease; }
+  tbody tr { transition:background .1s ease; }
+  tbody tr:hover td { background:#F8FAFC; }
+  tbody tr:nth-child(even) td { background:#FAFBFC; }
+  tbody tr:nth-child(even):hover td { background:#F1F5F9; }
+  .checkbox { width:16px; height:16px; accent-color:var(--primary); cursor:pointer; border-radius:3px; }
 
-/* STORE POPOVER */
-.store-trigger {
-  color: var(--color-primary-6); cursor: pointer;
-  border-bottom: 1px dashed var(--color-primary-6); position: relative;
-}
-.store-trigger:hover { color: var(--color-primary-7); }
-.store-popover {
-  position: absolute; z-index: var(--z-popover);
-  background: #fff; border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-2); padding: var(--space-4);
-  min-width: 280px; max-width: 360px; display: none;
-  border: 1px solid var(--color-border-secondary);
-}
-.store-popover.visible { display: block; }
-.store-popover .platform-group { margin-bottom: var(--space-3); }
-.store-popover .platform-group:last-child { margin-bottom: 0; }
-.store-popover .platform-label {
-  font-size: var(--font-size-xs); color: var(--color-text-tertiary);
-  font-weight: var(--font-weight-medium); margin-bottom: var(--space-1);
-  padding: 2px var(--space-2); background: var(--color-bg-spotlight);
-  border-radius: var(--radius-sm); display: inline-block;
-}
-.store-popover .store-list { display: flex; flex-wrap: wrap; gap: var(--space-1); padding-left: var(--space-2); }
-.store-popover .store-tag {
-  font-size: var(--font-size-xs); color: var(--color-text);
-  padding: 2px var(--space-2); background: var(--color-bg-layout); border-radius: var(--radius-sm);
-}
+  /* ===== TAGS ===== */
+  .tag { display:inline-flex; align-items:center; padding:2px 10px; border-radius:20px; font-size:12px; font-weight:500; letter-spacing:.1px; }
+  .tag-primary { background:var(--primary-light); color:var(--primary); }
+  .tag-orange { background:var(--orange-light); color:var(--orange); }
+  .tag-success { background:var(--success-light); color:var(--success); }
+  .tag-danger { background:var(--danger-light); color:var(--danger); }
+  .tag-warning { background:var(--warning-light); color:var(--warning); }
+  .tag-info { background:var(--border-light); color:var(--text-muted); }
 
-/* TAGS */
-.tag {
-  display: inline-flex; align-items: center;
-  padding: 2px 8px; font-size: var(--font-size-xs);
-  border-radius: var(--radius-sm); font-weight: var(--font-weight-medium);
-}
-.tag-success { color: var(--color-success); background: var(--color-success-bg); border: 1px solid var(--color-success-border); }
-.tag-warning { color: var(--color-warning); background: var(--color-warning-bg); border: 1px solid var(--color-warning-border); }
-.tag-error { color: var(--color-error); background: var(--color-error-bg); border: 1px solid var(--color-error-border); }
-.tag-default { color: var(--color-text-secondary); background: var(--color-bg-spotlight); }
-.tag-primary { color: var(--color-primary-6); background: var(--color-primary-1); }
+  .person-cell { text-align:left !important; }
+  .person-name { font-weight:600; color:var(--text); font-size:14px; }
+  .person-sub { font-size:11px; color:var(--text-muted); margin-top:2px; }
 
-/* MODAL */
-.modal-mask {
-  position: fixed; inset: 0; z-index: var(--z-modal);
-  background: var(--color-bg-mask);
-  display: none; align-items: center; justify-content: center;
-}
-.modal-mask.visible { display: flex; }
-.modal {
-  background: #fff; border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-modal); width: 720px; max-width: 90vw;
-  max-height: 85vh; display: flex; flex-direction: column;
-  animation: modalIn var(--motion-slow) ease-out;
-}
-.modal.wide { width: 900px; }
-@keyframes modalIn { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
-.modal-header {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: var(--space-4) var(--space-6); border-bottom: 1px solid var(--color-border-secondary);
-}
-.modal-header h3 { font-size: var(--font-size-lg); font-weight: var(--font-weight-semibold); }
-.modal-close {
-  width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;
-  border-radius: var(--radius-sm); color: var(--color-text-tertiary); font-size: var(--font-size-lg);
-  transition: all var(--motion);
-}
-.modal-close:hover { background: var(--color-bg-spotlight); color: var(--color-text); }
-.modal-body { flex: 1; overflow-y: auto; padding: var(--space-6); }
-.modal-footer {
-  display: flex; align-items: center; justify-content: flex-end; gap: var(--space-3);
-  padding: var(--space-4) var(--space-6); border-top: 1px solid var(--color-border-secondary);
-}
-.modal-footer-left { flex: 1; }
+  /* Shop Popover */
+  .shop-popover { cursor:pointer; color:var(--primary); position:relative; display:inline-block; }
+  .shop-popover:hover .shop-tooltip { display:block; }
+  .shop-tooltip { display:none; position:absolute; top:calc(100% + 8px); left:50%; transform:translateX(-50%); background:var(--bg-white); border:1px solid var(--border); border-radius:8px; box-shadow:var(--shadow-md); padding:14px; z-index:50; min-width:240px; text-align:left; }
+  .shop-tooltip::before { content:''; position:absolute; top:-6px; left:50%; transform:translateX(-50%) rotate(45deg); width:10px; height:10px; background:var(--bg-white); border-left:1px solid var(--border); border-top:1px solid var(--border); }
+  .shop-group-label { font-size:11px; font-weight:700; color:var(--primary); margin-bottom:4px; }
+  .shop-group-items { font-size:12px; color:var(--text); line-height:1.8; margin-bottom:8px; }
 
-/* FORM */
-.form-group { margin-bottom: var(--space-4); }
-.form-group:last-child { margin-bottom: 0; }
-.form-label {
-  display: block; margin-bottom: var(--space-2);
-  font-size: var(--font-size-sm); font-weight: var(--font-weight-medium);
-  color: var(--color-text-secondary);
-}
-.form-label .required { color: var(--color-error); margin-left: 2px; }
-.form-input-block { width: 100%; }
+  /* ===== PAGINATION ===== */
+  .pagination { display:flex; align-items:center; justify-content:flex-end; gap:4px; padding:12px 20px; background:var(--bg-white); border-top:1px solid var(--border-light); }
+  .page-btn { min-width:32px; height:32px; display:flex; align-items:center; justify-content:center; border:1px solid var(--border); border-radius:var(--radius); cursor:pointer; background:var(--bg-white); font-size:13px; transition:all .15s ease; color:var(--text-secondary); }
+  .page-btn:hover { border-color:var(--primary); color:var(--primary); background:var(--primary-light); }
+  .page-btn.active { background:var(--primary); color:#fff; border-color:var(--primary); font-weight:600; }
 
-/* TREE TABLE (Store Pool) */
-.tree-table { width: 100%; border-collapse: collapse; font-size: var(--font-size-sm); }
-.tree-table th {
-  padding: var(--space-2) var(--space-3); text-align: left; font-weight: var(--font-weight-medium);
-  color: var(--color-text-secondary); background: var(--color-bg-spotlight);
-  border-bottom: 1px solid var(--color-border-secondary); white-space: nowrap;
-}
-.tree-table td {
-  padding: var(--space-2) var(--space-3); border-bottom: 1px solid var(--color-border-secondary);
-  vertical-align: middle;
-}
-.tree-table .tree-toggle {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 16px; height: 16px; cursor: pointer; font-size: 10px;
-  color: var(--color-text-tertiary); flex-shrink: 0;
-}
-.tree-table .tree-expand-icon { transition: transform var(--motion); }
-.tree-table .tree-expand-icon.expanded { transform: rotate(90deg); }
-.tree-table tr.row-other-store { background: #fffbe6; }
-.tree-table .store-status-green { color: var(--color-success); font-size: var(--font-size-xs); }
-.tree-table .store-status-orange { color: #fa8c16; font-size: var(--font-size-xs); }
+  /* ===== MODAL ===== */
+  .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:200; display:none; align-items:center; justify-content:center; backdrop-filter:blur(2px); }
+  .modal-overlay.show { display:flex; animation:fadeIn .2s ease; }
+  .modal { background:var(--bg-white); border-radius:var(--radius-lg); box-shadow:var(--shadow-lg); max-height:88vh; overflow:hidden; display:flex; flex-direction:column; animation:modalIn .25s ease-out; }
+  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+  @keyframes modalIn { from { opacity:0; transform:scale(.95) translateY(8px); } to { opacity:1; transform:scale(1) translateY(0); } }
+  .modal-header { padding:18px 24px; border-bottom:1px solid var(--border-light); font-size:16px; font-weight:600; display:flex; align-items:center; justify-content:space-between; }
+  .modal-body { padding:24px; overflow-y:auto; flex:1; }
+  .modal-footer { padding:14px 24px; border-top:1px solid var(--border-light); display:flex; justify-content:flex-end; gap:10px; background:var(--bg); }
+  .modal-close { cursor:pointer; font-size:18px; color:var(--text-muted); width:32px; height:32px; display:flex; align-items:center; justify-content:center; border-radius:var(--radius); transition:all .15s ease; }
+  .modal-close:hover { background:var(--border-light); color:var(--text); }
 
-/* CUSTOM CHECKBOX */
-.custom-checkbox {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 16px; height: 16px; border: 1px solid var(--color-border);
-  border-radius: 2px; cursor: pointer; flex-shrink: 0;
-  transition: all var(--motion); background: #fff;
-}
-.custom-checkbox.checked { background: var(--color-primary-6); border-color: var(--color-primary-6); }
-.custom-checkbox.checked::after { content: '✓'; color: #fff; font-size: 11px; }
-.custom-checkbox.indeterminate { background: var(--color-primary-6); border-color: var(--color-primary-6); }
-.custom-checkbox.indeterminate::after { content: '−'; color: #fff; font-size: 13px; line-height: 1; }
+  /* ===== ALERT ===== */
+  .alert { padding:12px 16px; border-radius:var(--radius-md); font-size:13px; line-height:1.6; display:flex; gap:10px; align-items:flex-start; }
+  .alert-warning { background:var(--warning-light); border:1px solid var(--warning-border); color:#92400E; }
+  .alert-danger { background:var(--danger-light); border:1px solid var(--danger-border); color:#991B1B; }
+  .alert-info { background:var(--primary-light); border:1px solid var(--primary-border); color:#1E40AF; }
+  .alert-success { background:var(--success-light); border:1px solid var(--success-border); color:#065F46; }
+  .alert-icon { font-size:16px; flex-shrink:0; margin-top:1px; }
 
-/* ALERT */
-.alert {
-  padding: var(--space-3) var(--space-4); border-radius: var(--radius);
-  font-size: var(--font-size-sm); line-height: 1.6;
-}
-.alert-warning { color: #ad6800; background: var(--color-warning-bg); border: 1px solid var(--color-warning-border); }
-.alert-info { color: var(--color-primary-7); background: var(--color-primary-1); border: 1px solid var(--color-primary-3); }
-.alert-error { color: var(--color-error); background: var(--color-error-bg); border: 1px solid var(--color-error-border); }
+  /* ===== FORM ===== */
+  .form-row { display:flex; gap:16px; margin-bottom:16px; align-items:center; flex-wrap:wrap; }
+  .form-label { font-size:13px; color:var(--text-secondary); min-width:72px; text-align:right; flex-shrink:0; }
+  .form-label .req { color:var(--danger); margin-right:2px; }
+  .radio-group { display:flex; gap:16px; }
+  .radio-item { display:flex; align-items:center; gap:5px; cursor:pointer; font-size:13px; }
+  .radio { width:15px; height:15px; accent-color:var(--primary); }
 
-/* TOAST */
-.toast-container {
-  position: fixed; top: 24px; left: 50%; transform: translateX(-50%);
-  z-index: 1100; display: flex; flex-direction: column; gap: var(--space-2);
-}
-.toast {
-  padding: var(--space-3) var(--space-4); border-radius: var(--radius);
-  font-size: var(--font-size-sm); box-shadow: var(--shadow-2);
-  animation: toastIn var(--motion-slow) ease-out;
-  display: flex; align-items: center; gap: var(--space-2);
-}
-@keyframes toastIn { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: translateY(0); } }
-.toast-success { color: var(--color-success); background: var(--color-success-bg); border: 1px solid var(--color-success-border); }
-.toast-warning { color: #ad6800; background: var(--color-warning-bg); border: 1px solid var(--color-warning-border); }
-.toast-error { color: var(--color-error); background: var(--color-error-bg); border: 1px solid var(--color-error-border); }
+  /* Tree Table */
+  .tree-table th { font-size:11px; background:var(--bg); }
+  .tree-table td { padding:10px 12px; }
+  .store-status { font-size:12px; display:inline-flex; align-items:center; gap:4px; }
+  .store-status.green { color:var(--success); }
+  .store-status.orange { color:var(--orange); }
+  .row-highlight { background:var(--orange-light) !important; }
 
-/* DRAWER */
-.drawer-mask {
-  position: fixed; inset: 0; z-index: var(--z-drawer);
-  background: var(--color-bg-mask); display: none;
-}
-.drawer-mask.visible { display: block; }
-.drawer {
-  position: fixed; top: 0; right: 0; bottom: 0;
-  width: 100%; max-width: 1200px; background: var(--color-bg-layout);
-  z-index: var(--z-drawer); display: flex; flex-direction: column;
-  box-shadow: var(--shadow-drawer);
-  transform: translateX(100%); transition: transform var(--motion-slow);
-}
-.drawer.visible { transform: translateX(0); }
+  .selected-area { display:flex; flex-wrap:wrap; gap:6px; padding:10px; background:var(--bg); border-radius:var(--radius); min-height:40px; align-items:center; }
+  .sel-tag { display:inline-flex; align-items:center; gap:4px; padding:4px 10px; background:var(--bg-white); border:1px solid var(--border); border-radius:20px; font-size:12px; }
+  .sel-tag.warn { border-color:var(--orange); background:var(--orange-light); }
+  .sel-tag .x { cursor:pointer; color:var(--text-muted); font-size:13px; }
 
-/* PAGINATION */
-.pagination {
-  display: flex; align-items: center; justify-content: flex-end; gap: var(--space-2);
-  padding: var(--space-4) 0;
-}
-.pagination-btn {
-  height: 28px; padding: 0 var(--space-2); font-size: var(--font-size-sm);
-  border: 1px solid var(--color-border); border-radius: var(--radius-sm);
-  background: #fff; cursor: pointer; transition: all var(--motion);
-}
-.pagination-btn:hover { color: var(--color-primary-6); border-color: var(--color-primary-6); }
-.pagination-btn.active { color: #fff; background: var(--color-primary-6); border-color: var(--color-primary-6); }
+  .confirm-box { background:var(--bg-white); border-radius:var(--radius-lg); padding:32px; width:480px; box-shadow:var(--shadow-lg); text-align:center; }
+  .confirm-icon { font-size:48px; text-align:center; margin-bottom:12px; line-height:1; }
+  .confirm-title { font-size:17px; font-weight:600; text-align:center; margin-bottom:12px; color:var(--text); }
+  .confirm-text { font-size:13px; color:var(--text-secondary); line-height:1.8; margin-bottom:20px; text-align:left; }
+  .confirm-detail { margin:14px 0; padding:14px; background:var(--bg); border-radius:var(--radius-md); font-size:12px; line-height:2; text-align:left; }
+  .confirm-actions { display:flex; justify-content:center; gap:12px; }
 
-/* ORDER ATTRIBUTION */
-.filter-row {
-  display: flex; align-items: flex-end; gap: var(--space-4); flex-wrap: wrap;
-  padding: var(--space-4) var(--space-6);
-}
-.filter-item { display: flex; flex-direction: column; gap: var(--space-1); }
-.filter-item label { font-size: var(--font-size-xs); color: var(--color-text-tertiary); }
-.bulk-bar {
-  display: flex; align-items: center; gap: var(--space-3);
-  padding: var(--space-3) var(--space-6);
-  background: var(--color-primary-1); border-radius: var(--radius);
-  margin: var(--space-3) var(--space-6);
-}
-.store-search-input {
-  width: 100%; height: var(--control-height); padding: 0 var(--space-3);
-  border: 1px solid var(--color-border); border-radius: var(--radius);
-  font-size: var(--font-size-sm); outline: none;
-  transition: border-color var(--motion);
-}
-.store-search-input:focus { border-color: var(--color-primary-6); }
-.text-strikethrough { text-decoration: line-through; color: var(--color-text-tertiary); }
-.text-highlight { color: var(--color-primary-6); font-weight: var(--font-weight-medium); }
+  /* ===== DASHBOARD ===== */
+  .dashboard { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:20px; }
+  .dash-card { background:var(--bg-white); border:1px solid var(--border); border-radius:var(--radius-lg); padding:20px 24px; box-shadow:var(--shadow-sm); transition:box-shadow .2s ease; }
+  .dash-card:hover { box-shadow:var(--shadow-md); }
+  .dash-label { font-size:12px; color:var(--text-muted); margin-bottom:8px; font-weight:500; letter-spacing:.2px; }
+  .dash-value { font-size:28px; font-weight:700; color:var(--text); letter-spacing:-.5px; }
+  .dash-sub { margin-top:8px; font-size:12px; }
+  .progress-bar { height:6px; background:var(--border-light); border-radius:3px; margin-top:10px; overflow:hidden; }
+  .progress-fill { height:100%; border-radius:3px; transition:width .4s ease; }
+
+  /* ===== MATRIX TABLE ===== */
+  .matrix-wrap { overflow-x:auto; border-radius:var(--radius-md); }
+  .matrix-table { font-size:12px; min-width:1600px; }
+  .matrix-table th { font-size:11px; text-align:center; padding:10px 8px; min-width:110px; background:#F1F5F9; }
+  .matrix-table td { text-align:center; padding:8px 6px; position:relative; }
+  .m-target { font-weight:600; font-size:13px; padding:2px 4px; border-radius:3px; transition:all .15s ease; }
+  .m-target.editable { color:var(--primary); border-bottom:1px dashed var(--primary); cursor:pointer; display:inline-block; position:relative; }
+  .m-target.editable:hover { background:var(--primary-light); }
+  .m-target.locked { color:var(--text-muted); }
+  .m-actual { font-size:11px; color:var(--text-muted); margin-top:3px; }
+  .m-diff { position:absolute; bottom:0; left:2px; right:2px; background:var(--danger); color:#fff; font-size:10px; padding:1px 4px; border-radius:0 0 4px 4px; font-weight:500; }
+  .m-left { text-align:left !important; white-space:nowrap; min-width:220px; position:sticky; left:0; background:var(--bg-white); z-index:2; border-right:1px solid var(--border-light); }
+  .m-right { position:sticky; right:0; background:var(--bg-white); z-index:2; min-width:140px; border-left:1px solid var(--border-light); }
+  th.m-left { background:#F1F5F9; }
+  th.m-right { background:#F1F5F9; }
+  .m-input { width:90px; padding:4px 6px; border:2px solid var(--primary); border-radius:4px; font-size:13px; font-weight:600; text-align:center; outline:none; background:#fff; color:var(--primary); }
+  .m-input:focus { box-shadow:0 0 0 3px rgba(59,130,246,.15); }
+
+  /* ===== STEPS ===== */
+  .steps { display:flex; gap:0; margin-bottom:24px; background:var(--bg-white); border-radius:var(--radius-lg); padding:20px 16px; border:1px solid var(--border); box-shadow:var(--shadow-sm); }
+  .step { flex:1; text-align:center; position:relative; }
+  .step::after { content:''; position:absolute; top:15px; left:calc(50% + 20px); right:calc(-50% + 20px); height:2px; background:var(--border-light); }
+  .step:last-child::after { display:none; }
+  .step.done::after { background:var(--success); }
+  .step.active::after { background:linear-gradient(90deg,var(--success),var(--border-light)); }
+  .step-num { width:30px; height:30px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; margin-bottom:6px; position:relative; z-index:1; }
+  .step.active .step-num { background:var(--primary); color:#fff; box-shadow:0 0 0 4px rgba(59,130,246,.15); }
+  .step.done .step-num { background:var(--success); color:#fff; }
+  .step:not(.active):not(.done) .step-num { background:var(--border-light); color:var(--text-muted); }
+  .step-label { font-size:12px; color:var(--text-muted); font-weight:500; }
+  .step.active .step-label { color:var(--primary); font-weight:600; }
+  .step.done .step-label { color:var(--success); }
+
+  /* ===== DRAWER ===== */
+  .drawer { position:fixed; top:0; right:0; bottom:0; width:100%; max-width:900px; background:var(--bg-white); z-index:201; display:flex; flex-direction:column; box-shadow:-8px 0 30px rgba(0,0,0,.12); }
+  .drawer-header { padding:18px 28px; border-bottom:1px solid var(--border); font-size:16px; font-weight:600; display:flex; align-items:center; justify-content:space-between; background:var(--bg-white); }
+  .drawer-body { flex:1; padding:28px; overflow-y:auto; background:var(--bg); }
+  .drawer-footer { padding:14px 28px; border-top:1px solid var(--border); display:flex; justify-content:flex-end; gap:12px; background:var(--bg-white); }
+
+  .section-title { font-size:14px; font-weight:600; color:var(--text); margin-bottom:14px; padding-left:10px; border-left:3px solid var(--primary); }
+  .page-tabs { display:flex; gap:0; border-bottom:2px solid var(--border-light); margin-bottom:16px; }
+  .page-tab { padding:10px 20px; cursor:pointer; color:var(--text-secondary); border-bottom:2px solid transparent; margin-bottom:-2px; font-size:14px; font-weight:500; }
+  .page-tab:hover { color:var(--primary); }
+  .page-tab.active { color:var(--primary); border-bottom-color:var(--primary); font-weight:600; }
+
+  .text-muted { color:var(--text-muted); font-size:12px; }
+  .badge { background:var(--danger); color:#fff; font-size:10px; padding:1px 6px; border-radius:10px; margin-left:4px; font-weight:600; }
+  .divider { height:1px; background:var(--border-light); margin:20px 0; }
+  .mt-8 { margin-top:8px; }
+  .mt-16 { margin-top:16px; }
+  .mb-8 { margin-bottom:8px; }
+  .mb-16 { margin-bottom:16px; }
+
+  .page { display:none; }
+  .page.active { display:block; }
+  .bu-tab, .order-tab { display:none; }
+  .bu-tab.active, .order-tab.active { display:block; }
+
+  /* Toast notification */
+  .toast { position:fixed; top:72px; left:50%; transform:translateX(-50%); padding:10px 20px; border-radius:var(--radius-md); font-size:13px; font-weight:500; z-index:999; display:none; align-items:center; gap:8px; box-shadow:var(--shadow-md); animation:slideDown .3s ease; }
+  .toast.show { display:flex; }
+  .toast-success { background:var(--success-light); border:1px solid var(--success-border); color:#065F46; }
+  .toast-warning { background:var(--warning-light); border:1px solid var(--warning-border); color:#92400E; }
+  .toast-error { background:var(--danger-light); border:1px solid var(--danger-border); color:#991B1B; }
+  @keyframes slideDown { from { opacity:0; transform:translateX(-50%) translateY(-12px); } to { opacity:1; transform:translateX(-50%) translateY(0); } }
+
+  /* Upload area */
+  .upload-area { border:2px dashed var(--border); border-radius:var(--radius-md); padding:32px; text-align:center; color:var(--text-muted); cursor:pointer; transition:all .2s ease; background:var(--bg); }
+  .upload-area:hover { border-color:var(--primary); color:var(--primary); background:var(--primary-light); }
+
+  /* Batch action bar */
+  .batch-bar { background:var(--primary-light); border:1px solid var(--primary-border); border-radius:var(--radius-md); padding:10px 16px; display:flex; align-items:center; gap:12px; margin-bottom:12px; }
+  .batch-bar .count { font-weight:600; color:var(--primary); }
+
+  /* Store filter chips */
+  .store-filter-chip { padding:4px 14px; border-radius:16px; font-size:12px; cursor:pointer; color:var(--text-secondary); transition:all .15s ease; font-weight:500; background:transparent; }
+  .store-filter-chip:hover { color:var(--primary); background:var(--primary-light); }
+  .store-filter-chip.active { background:var(--primary); color:#fff; box-shadow:0 1px 3px rgba(59,130,246,.3); }
 </style>
 </head>
 <body>
-<div class="toast-container" id="toastContainer"></div>
-<div class="app-shell">
-  <aside class="sidebar" id="sidebar"></aside>
-  <main class="main-content" id="mainContent"></main>
+
+<!-- Toast Notifications -->
+<div id="toast" class="toast toast-success"><i class="fa-solid fa-circle-check"></i> <span id="toast-text"></span></div>
+
+<!-- ===== TOP NAVIGATION ===== -->
+<div class="top-nav">
+  <div class="logo"><i class="fa-solid fa-chart-line"></i> 报表系统</div>
+  <div class="nav-items">
+    <div class="nav-item active" onclick="showPage('page-bu',this)">销售人员管理</div>
+    <div class="nav-item" onclick="showPage('page-order',this)">订单归属处理</div>
+    <div class="nav-item" onclick="showPage('page-target',this)">销售目标制定</div>
+  </div>
 </div>
 
-<!-- Add/Edit Personnel Modal -->
-<div class="modal-mask" id="personnelModal">
-  <div class="modal wide">
-    <div class="modal-header">
-      <h3 id="personnelModalTitle">添加&编辑人员</h3>
-      <button class="modal-close" onclick="closeModal('personnelModal')">✕</button>
-    </div>
-    <div class="modal-body" id="personnelModalBody"></div>
-    <div class="modal-footer">
-      <div class="modal-footer-left">
-        <span class="alert alert-warning" id="personnelAlert" style="display:none;"></span>
+<!-- ============================================================ -->
+<!-- PAGE 1: 业务单元配置页                                        -->
+<!-- ============================================================ -->
+<div id="page-bu" class="page active">
+  <div class="app-container">
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title"><i class="fa-solid fa-sitemap"></i> 架构导航</div>
       </div>
-      <button class="btn btn-default" onclick="closeModal('personnelModal')">取消</button>
-      <button class="btn btn-primary" onclick="savePersonnel()">确定</button>
+      <div style="padding:0 14px 10px;">
+        <input class="sidebar-search" placeholder="搜索业务单元或店铺...">
+      </div>
+      <div class="sidebar-tree">
+        <!-- ===== 区块一：店铺管理 ===== -->
+        <div class="sidebar-section">
+          <div class="sidebar-section-header"><i class="fa-solid fa-store"></i> 店铺管理</div>
+          <!-- 未分配店铺 -->
+          <div class="tree-node danger" data-store-view="unassigned" onclick="setPageContext('store','unassigned')">
+            <span class="status-dot"></span>
+            <i class="fa-solid fa-store folder-icon"></i>
+            <span class="node-text"><span class="node-name">未分配店铺</span></span>
+            <span class="count-badge">3</span>
+          </div>
+          <!-- 全部店铺 -->
+          <div class="tree-node" data-store-view="all" onclick="setPageContext('store','all')">
+            <span class="expand"><i class="fa-solid fa-globe" style="font-size:10px; color:var(--text-muted);"></i></span>
+            <i class="fa-solid fa-store folder-icon"></i>
+            <span class="node-text"><span class="node-name">全部店铺</span></span>
+            <span class="count-badge">32</span>
+          </div>
+        </div>
+
+        <div class="sidebar-section-divider"></div>
+
+        <!-- ===== 区块二：业务单元架构 ===== -->
+        <div class="sidebar-section">
+          <div class="sidebar-section-header"><i class="fa-solid fa-diagram-project"></i> 业务单元架构</div>
+          <!-- BU 树 -->
+          <div class="tree-node" data-bu-name="四海芯舟" onclick="setPageContext('bu','四海芯舟',this)"><span class="expand">▾</span><i class="fa-regular fa-folder-open folder-icon"></i><span class="node-text"><span class="node-name">四海芯舟</span><span class="node-path">四海芯舟</span></span><span class="count-badge">76</span></div>
+          <div class="tree-node l2" data-bu-name="工业运营中心" onclick="setPageContext('bu','工业运营中心',this)"><span class="expand">▾</span><i class="fa-regular fa-folder-open folder-icon"></i><span class="node-text"><span class="node-name">工业运营中心</span><span class="node-path">四海芯舟-工业运营中心</span></span><span class="count-badge">65</span></div>
+          <div class="tree-node l3" data-bu-name="速卖通事业部" onclick="setPageContext('bu','速卖通事业部',this)"><span class="expand">▾</span><i class="fa-regular fa-folder-open folder-icon"></i><span class="node-text"><span class="node-name">速卖通事业部</span><span class="node-path">四海芯舟-工业运营中心-速...</span></span><span class="count-badge">19</span></div>
+          <div class="tree-node l4 active" data-bu-name="深圳速卖通工具组" onclick="setPageContext('bu','深圳速卖通工具组',this)"><span class="expand">▸</span><i class="fa-regular fa-folder folder-icon"></i><span class="node-text"><span class="node-name">深圳速卖通工具组</span><span class="node-path">四海芯舟-工业运营中心-速卖通事业...</span></span><span class="count-badge">7</span></div>
+          <div class="tree-node l4" data-bu-name="深圳速卖通元器件组" onclick="setPageContext('bu','深圳速卖通元器件组',this)"><span class="expand">▸</span><i class="fa-regular fa-folder folder-icon"></i><span class="node-text"><span class="node-name">深圳速卖通元器件组</span><span class="node-path">四海芯舟-工业运营中心-速...</span></span><span class="count-badge">6</span></div>
+          <div class="tree-node l4" data-bu-name="深圳速卖通全托管组" onclick="setPageContext('bu','深圳速卖通全托管组',this)"><span class="expand">▸</span><i class="fa-regular fa-folder folder-icon"></i><span class="node-text"><span class="node-name">深圳速卖通全托管组</span><span class="node-path">四海芯舟-工业运营中心-速...</span></span><span class="count-badge">12</span></div>
+          <div class="tree-node l3" data-bu-name="东南亚项目部" onclick="setPageContext('bu','东南亚项目部',this)"><span class="expand">▾</span><i class="fa-regular fa-folder-open folder-icon"></i><span class="node-text"><span class="node-name">东南亚项目部</span><span class="node-path">四海芯舟-工业运营中心-东...</span></span><span class="count-badge">9</span></div>
+          <div class="tree-node l4" data-bu-name="深圳东南亚跨境组" onclick="setPageContext('bu','深圳东南亚跨境组',this)"><span class="expand">▸</span><i class="fa-regular fa-folder folder-icon"></i><span class="node-text"><span class="node-name">深圳东南亚跨境组</span></span><span class="count-badge">3</span></div>
+          <div class="tree-node l4" data-bu-name="深圳东南亚本土组" onclick="setPageContext('bu','深圳东南亚本土组',this)"><span class="expand">▸</span><i class="fa-regular fa-folder folder-icon"></i><span class="node-text"><span class="node-name">深圳东南亚本土组</span></span><span class="count-badge">6</span></div>
+          <div class="tree-node l2" data-bu-name="亚马逊工业事业部" onclick="setPageContext('bu','亚马逊工业事业部',this)"><span class="expand">▸</span><i class="fa-regular fa-folder folder-icon"></i><span class="node-text"><span class="node-name">亚马逊工业事业部</span></span><span class="count-badge">9</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="page-header">
+        <div class="page-header-left">
+          <h1 id="page-title">深圳速卖通工具组</h1>
+          <div class="status-badge" id="status-badge"><i class="fa-solid fa-circle"></i> 管理权限生效中</div>
+        </div>
+        <div class="page-header-right">
+          <div class="seg-tabs">
+            <div class="seg-tab" data-tab="bu-store" onclick="setPageContext('store','all')"><i class="fa-solid fa-store"></i> 按店铺</div>
+            <div class="seg-tab active" data-tab="bu-personnel" onclick="setPageContext('bu', lastBuName)"><i class="fa-solid fa-users"></i> 按人员</div>
+            <div class="seg-tab" onclick="setPageContext('bu', lastBuName);showBuTab('bu-log',this)"><i class="fa-solid fa-clock-rotate-left"></i> 操作日志</div>
+          </div>
+          <button class="btn btn-primary" onclick="openModal('modal-add-person')"><i class="fa-solid fa-user-plus"></i> 绑定人员</button>
+        </div>
+      </div>
+
+      <!-- Tab: 按店铺（仅在点击"未分配店铺"或"全部店铺"时激活） -->
+      <div id="bu-store" class="bu-tab">
+        <!-- 未分配店铺通知条 -->
+        <div class="alert alert-warning mb-16" id="unassigned-alert">
+          <span class="alert-icon"><i class="fa-solid fa-triangle-exclamation"></i></span>
+          <div style="flex:1;">有 <strong>3</strong> 家新录入店铺尚未分配业务单元，请及时处理。<a href="#" onclick="filterStoreView('unassigned');return false;" style="color:var(--primary); margin-left:8px;">查看未分配店铺 →</a></div>
+          <span style="cursor:pointer; color:var(--text-muted);" onclick="this.closest('.alert').style.display='none'"><i class="fa-solid fa-xmark"></i></span>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i class="fa-solid fa-store"></i> 店铺管理</div>
+            <div style="display:flex; gap:10px; align-items:center;">
+              <input class="input input-search" placeholder="跨BU搜索店铺名称/编号..." style="width:240px;" id="store-global-search">
+              <div style="display:flex; gap:2px; background:var(--bg); border-radius:20px; padding:2px;">
+                <span class="store-filter-chip active" onclick="filterStoreChip(this,'all')">全部</span>
+                <span class="store-filter-chip" onclick="filterStoreChip(this,'unassigned')">待分配</span>
+                <span class="store-filter-chip" onclick="filterStoreChip(this,'no-sales')">缺销售</span>
+                <span class="store-filter-chip" onclick="filterStoreChip(this,'no-cs')">缺客服</span>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <table id="store-table">
+              <thead><tr>
+                <th style="width:40px;"><input type="checkbox" class="checkbox" onchange="toggleAllStoreCb(this)"></th>
+                <th style="text-align:left;">店铺名称</th>
+                <th>所属平台</th>
+                <th>销售员</th>
+                <th>客服</th>
+                <th>业务单元</th>
+                <th>操作</th>
+              </tr></thead>
+              <tbody>
+                <!-- 未分配店铺 — 红色高亮置顶 -->
+                <tr class="store-row" data-type="unassigned" style="background:var(--danger-light);">
+                  <td><input type="checkbox" class="checkbox store-cb" onchange="updateStoreBatch()"></td>
+                  <td class="person-cell"><strong>SPE055</strong> <span class="tag tag-danger" style="font-size:10px; padding:1px 6px;">NEW</span></td>
+                  <td>Shopee</td>
+                  <td><span class="tag tag-danger" style="font-size:11px;">未分配</span></td>
+                  <td><span class="tag tag-danger" style="font-size:11px;">未分配</span></td>
+                  <td><span class="tag tag-danger" style="font-size:11px;">未分配</span></td>
+                  <td>
+                    <button class="btn btn-primary btn-sm" onclick="openModal('modal-store-assign')"><i class="fa-solid fa-link"></i> 分配</button>
+                  </td>
+                </tr>
+                <tr class="store-row" data-type="unassigned" style="background:var(--danger-light);">
+                  <td><input type="checkbox" class="checkbox store-cb" onchange="updateStoreBatch()"></td>
+                  <td class="person-cell"><strong>AMZ-US-NEW01</strong> <span class="tag tag-danger" style="font-size:10px; padding:1px 6px;">NEW</span></td>
+                  <td>Amazon</td>
+                  <td><span class="tag tag-danger" style="font-size:11px;">未分配</span></td>
+                  <td><span class="tag tag-danger" style="font-size:11px;">未分配</span></td>
+                  <td><span class="tag tag-danger" style="font-size:11px;">未分配</span></td>
+                  <td>
+                    <button class="btn btn-primary btn-sm" onclick="openModal('modal-store-assign')"><i class="fa-solid fa-link"></i> 分配</button>
+                  </td>
+                </tr>
+                <tr class="store-row" data-type="unassigned" style="background:var(--danger-light);">
+                  <td><input type="checkbox" class="checkbox store-cb" onchange="updateStoreBatch()"></td>
+                  <td class="person-cell"><strong>TEMU-EU-003</strong> <span class="tag tag-danger" style="font-size:10px; padding:1px 6px;">NEW</span></td>
+                  <td>Temu</td>
+                  <td><span class="tag tag-danger" style="font-size:11px;">未分配</span></td>
+                  <td><span class="tag tag-danger" style="font-size:11px;">未分配</span></td>
+                  <td><span class="tag tag-danger" style="font-size:11px;">未分配</span></td>
+                  <td>
+                    <button class="btn btn-primary btn-sm" onclick="openModal('modal-store-assign')"><i class="fa-solid fa-link"></i> 分配</button>
+                  </td>
+                </tr>
+                <!-- 已分配店铺 -->
+                <tr class="store-row" data-type="normal">
+                  <td><input type="checkbox" class="checkbox store-cb" onchange="updateStoreBatch()"></td>
+                  <td class="person-cell"><strong>SMT033</strong></td>
+                  <td>速卖通</td>
+                  <td><span class="tag tag-primary" style="font-size:11px;">张赛</span></td>
+                  <td><span class="tag tag-success" style="font-size:11px;">赵六</span></td>
+                  <td style="font-size:12px; color:var(--text-secondary);">深圳速卖通工具组</td>
+                  <td>
+                    <button class="icon-btn edit" title="编辑" onclick="openModal('modal-add-person')"><i class="fa-solid fa-pen"></i></button>
+                    <button class="icon-btn transfer" title="转移BU" onclick="openModal('modal-store-transfer')"><i class="fa-solid fa-right-left"></i></button>
+                  </td>
+                </tr>
+                <tr class="store-row" data-type="no-cs">
+                  <td><input type="checkbox" class="checkbox store-cb" onchange="updateStoreBatch()"></td>
+                  <td class="person-cell"><strong>SMT008</strong></td>
+                  <td>速卖通</td>
+                  <td><span class="tag tag-primary" style="font-size:11px;">张赛</span></td>
+                  <td><span class="tag" style="font-size:11px; color:var(--warning); background:var(--warning-light); border-color:#FFE58F;">缺客服</span></td>
+                  <td style="font-size:12px; color:var(--text-secondary);">深圳速卖通工具组</td>
+                  <td>
+                    <button class="icon-btn edit" title="编辑" onclick="openModal('modal-add-person')"><i class="fa-solid fa-pen"></i></button>
+                    <button class="icon-btn transfer" title="转移BU" onclick="openModal('modal-store-transfer')"><i class="fa-solid fa-right-left"></i></button>
+                  </td>
+                </tr>
+                <tr class="store-row" data-type="normal">
+                  <td><input type="checkbox" class="checkbox store-cb" onchange="updateStoreBatch()"></td>
+                  <td class="person-cell"><strong>SMT072</strong></td>
+                  <td>速卖通</td>
+                  <td><span class="tag tag-primary" style="font-size:11px;">黄爱纯</span></td>
+                  <td><span class="tag tag-success" style="font-size:11px;">黄爱纯</span></td>
+                  <td style="font-size:12px; color:var(--text-secondary);">深圳速卖通工具组</td>
+                  <td>
+                    <button class="icon-btn edit" title="编辑"><i class="fa-solid fa-pen"></i></button>
+                    <button class="icon-btn transfer" title="转移BU" onclick="openModal('modal-store-transfer')"><i class="fa-solid fa-right-left"></i></button>
+                  </td>
+                </tr>
+                <tr class="store-row" data-type="normal">
+                  <td><input type="checkbox" class="checkbox store-cb" onchange="updateStoreBatch()"></td>
+                  <td class="person-cell"><strong>SMT100</strong></td>
+                  <td>速卖通</td>
+                  <td><span class="tag tag-primary" style="font-size:11px;">张旭</span></td>
+                  <td><span class="tag tag-success" style="font-size:11px;">万恩</span></td>
+                  <td style="font-size:12px; color:var(--text-secondary);">深圳速卖通工具组</td>
+                  <td>
+                    <button class="icon-btn edit" title="编辑"><i class="fa-solid fa-pen"></i></button>
+                    <button class="icon-btn transfer" title="转移BU" onclick="openModal('modal-store-transfer')"><i class="fa-solid fa-right-left"></i></button>
+                  </td>
+                </tr>
+                <tr class="store-row" data-type="no-cs">
+                  <td><input type="checkbox" class="checkbox store-cb" onchange="updateStoreBatch()"></td>
+                  <td class="person-cell"><strong>SMT048</strong></td>
+                  <td>速卖通</td>
+                  <td><span class="tag tag-primary" style="font-size:11px;">张旭</span></td>
+                  <td><span class="tag" style="font-size:11px; color:var(--warning); background:var(--warning-light); border-color:#FFE58F;">缺客服</span></td>
+                  <td style="font-size:12px; color:var(--text-secondary);">深圳速卖通工具组</td>
+                  <td>
+                    <button class="icon-btn edit" title="编辑"><i class="fa-solid fa-pen"></i></button>
+                    <button class="icon-btn transfer" title="转移BU" onclick="openModal('modal-store-transfer')"><i class="fa-solid fa-right-left"></i></button>
+                  </td>
+                </tr>
+                <tr class="store-row" data-type="normal">
+                  <td><input type="checkbox" class="checkbox store-cb" onchange="updateStoreBatch()"></td>
+                  <td class="person-cell"><strong>SMT085</strong></td>
+                  <td>速卖通</td>
+                  <td><span class="tag tag-primary" style="font-size:11px;">万恩</span></td>
+                  <td><span class="tag tag-success" style="font-size:11px;">李洋</span></td>
+                  <td style="font-size:12px; color:var(--text-secondary);">深圳速卖通工具组</td>
+                  <td>
+                    <button class="icon-btn edit" title="编辑"><i class="fa-solid fa-pen"></i></button>
+                    <button class="icon-btn transfer" title="转移BU" onclick="openModal('modal-store-transfer')"><i class="fa-solid fa-right-left"></i></button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- 批量操作条 -->
+          <div id="store-batch-bar" class="batch-bar" style="display:none; margin:0; border-radius:0; border-top:1px solid var(--primary-border);">
+            <span>已选 <span class="count" id="store-batch-count">0</span> 家店铺</span>
+            <button class="btn btn-primary btn-sm" onclick="openModal('modal-store-assign')"><i class="fa-solid fa-link"></i> 批量分配BU</button>
+            <button class="btn btn-sm" onclick="openModal('modal-store-transfer')"><i class="fa-solid fa-right-left"></i> 批量转移</button>
+            <button class="btn btn-sm" onclick="clearStoreSelection()" style="margin-left:auto;">取消选择</button>
+          </div>
+          <div class="pagination">
+            <span class="text-muted" style="margin-right:auto;">共 32 条（未分配 3 条）</span>
+            <div class="page-btn">‹</div><div class="page-btn active">1</div><div class="page-btn">2</div><div class="page-btn">›</div>
+            <select class="select" style="min-width:90px;font-size:12px;"><option>20条/页</option><option>50条/页</option></select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab: 按人员（BU节点的默认视图） -->
+      <div id="bu-personnel" class="bu-tab active">
+        <!-- Batch action bar (shown when items checked) -->
+        <div id="batch-bar" class="batch-bar" style="display:none;">
+          <span>已选 <span class="count" id="batch-count">0</span> 人</span>
+          <button class="btn btn-sm" onclick="openModal('modal-transfer')"><i class="fa-solid fa-right-left"></i> 批量转岗</button>
+          <button class="btn btn-danger btn-sm" onclick="openModal('modal-remove')"><i class="fa-solid fa-user-minus"></i> 批量移除</button>
+          <button class="btn btn-sm" onclick="clearSelection()" style="margin-left:auto;">取消选择</button>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i class="fa-solid fa-users"></i> 成员概览</div>
+            <div style="display:flex; gap:10px; align-items:center;">
+              <i class="fa-solid fa-filter" style="color:var(--text-muted); font-size:12px;"></i>
+              <select class="select" style="min-width:100px;"><option>全部职能</option><option>负责人</option><option>组员</option></select>
+              <input class="input input-search" placeholder="按Enter搜索姓名..." style="width:200px;">
+              <button class="icon-btn" style="background:var(--bg); color:var(--text-muted);" title="刷新"><i class="fa-solid fa-rotate-right"></i></button>
+            </div>
+          </div>
+          <div class="card-body">
+            <table>
+              <thead><tr>
+                <th style="width:50px;"><input type="checkbox" class="checkbox" onchange="toggleAllCheckbox(this)"></th>
+                <th style="text-align:left;">姓名</th><th>行政组织</th><th>业务单元所属</th><th>店铺</th><th>业务职能</th><th>操作</th>
+              </tr></thead>
+              <tbody>
+                <tr>
+                  <td><input type="checkbox" class="checkbox row-cb" onchange="updateBatchBar()"></td>
+                  <td class="person-cell"><div class="person-name">沈浩楠</div></td>
+                  <td style="font-size:12px; color:var(--text-secondary);">工业运营中心 > 速卖通事业部 > 速卖通工具组</td>
+                  <td>深圳速卖通工具组</td>
+                  <td></td>
+                  <td><span class="tag tag-orange">负责人</span></td>
+                  <td>
+                    <button class="icon-btn edit" title="编辑" onclick="openModal('modal-add-person')"><i class="fa-solid fa-user-pen"></i></button>
+                    <button class="icon-btn transfer" title="转岗" onclick="openModal('modal-transfer')"><i class="fa-solid fa-right-left"></i></button>
+                    <button class="icon-btn remove" title="移除" onclick="openModal('modal-remove')"><i class="fa-solid fa-user-minus"></i></button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" class="checkbox row-cb" onchange="updateBatchBar()"></td>
+                  <td class="person-cell"><div class="person-name">张赛</div><div class="person-sub">速卖通</div></td>
+                  <td style="font-size:12px; color:var(--text-secondary);">工业运营中心 > 速卖通事业部 > 速卖通工具组</td>
+                  <td>深圳速卖通工具组</td>
+                  <td><span class="shop-popover">SMT033, SMT008, SMT...<div class="shop-tooltip"><div class="shop-group-label">【速卖通】</div><div class="shop-group-items">SMT033、SMT008、SMT015、SMT022</div></div></span></td>
+                  <td><span class="tag tag-primary">组员</span></td>
+                  <td>
+                    <button class="icon-btn edit" title="编辑" onclick="openModal('modal-add-person')"><i class="fa-solid fa-user-pen"></i></button>
+                    <button class="icon-btn transfer" title="转岗" onclick="openModal('modal-transfer')"><i class="fa-solid fa-right-left"></i></button>
+                    <button class="icon-btn remove" title="移除" onclick="openModal('modal-remove')"><i class="fa-solid fa-user-minus"></i></button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" class="checkbox row-cb" onchange="updateBatchBar()"></td>
+                  <td class="person-cell"><div class="person-name">廖中霞</div></td>
+                  <td style="font-size:12px; color:var(--text-secondary);">工业运营中心 > 速卖通事业部 > 速卖通工具组</td>
+                  <td>深圳速卖通工具组</td>
+                  <td></td>
+                  <td><span class="tag tag-primary">组员</span></td>
+                  <td>
+                    <button class="icon-btn edit" title="编辑"><i class="fa-solid fa-user-pen"></i></button>
+                    <button class="icon-btn transfer" title="转岗"><i class="fa-solid fa-right-left"></i></button>
+                    <button class="icon-btn remove" title="移除"><i class="fa-solid fa-user-minus"></i></button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" class="checkbox row-cb" onchange="updateBatchBar()"></td>
+                  <td class="person-cell"><div class="person-name">黄爱纯</div><div class="person-sub">速卖通</div></td>
+                  <td style="font-size:12px; color:var(--text-secondary);">工业运营中心 > 速卖通事业部 > 速卖通工具组</td>
+                  <td>深圳速卖通工具组</td>
+                  <td>SMT072</td>
+                  <td><span class="tag tag-primary">组员</span></td>
+                  <td>
+                    <button class="icon-btn edit" title="编辑"><i class="fa-solid fa-user-pen"></i></button>
+                    <button class="icon-btn transfer" title="转岗"><i class="fa-solid fa-right-left"></i></button>
+                    <button class="icon-btn remove" title="移除"><i class="fa-solid fa-user-minus"></i></button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" class="checkbox row-cb" onchange="updateBatchBar()"></td>
+                  <td class="person-cell"><div class="person-name">张旭</div><div class="person-sub">速卖通</div></td>
+                  <td style="font-size:12px; color:var(--text-secondary);">工业运营中心 > 速卖通事业部 > 速卖通工具组</td>
+                  <td>深圳速卖通工具组</td>
+                  <td>SMT100, SMT048</td>
+                  <td><span class="tag tag-primary">组员</span></td>
+                  <td>
+                    <button class="icon-btn edit" title="编辑"><i class="fa-solid fa-user-pen"></i></button>
+                    <button class="icon-btn transfer" title="转岗"><i class="fa-solid fa-right-left"></i></button>
+                    <button class="icon-btn remove" title="移除"><i class="fa-solid fa-user-minus"></i></button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" class="checkbox row-cb" onchange="updateBatchBar()"></td>
+                  <td class="person-cell"><div class="person-name">万恩</div><div class="person-sub">速卖通</div></td>
+                  <td style="font-size:12px; color:var(--text-secondary);">工业运营中心 > 速卖通事业部 > 速卖通工具组</td>
+                  <td>深圳速卖通工具组</td>
+                  <td><span class="shop-popover">SMT085, SMT018, SMT...<div class="shop-tooltip"><div class="shop-group-label">【速卖通】</div><div class="shop-group-items">SMT085、SMT018、SMT041、SMT057、SMT099</div></div></span></td>
+                  <td><span class="tag tag-primary">组员</span></td>
+                  <td>
+                    <button class="icon-btn edit" title="编辑"><i class="fa-solid fa-user-pen"></i></button>
+                    <button class="icon-btn transfer" title="转岗"><i class="fa-solid fa-right-left"></i></button>
+                    <button class="icon-btn remove" title="移除"><i class="fa-solid fa-user-minus"></i></button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" class="checkbox row-cb" onchange="updateBatchBar()"></td>
+                  <td class="person-cell"><div class="person-name">李洋</div><div class="person-sub">速卖通</div></td>
+                  <td style="font-size:12px; color:var(--text-secondary);">工业运营中心 > 速卖通事业部 > 速卖通工具组</td>
+                  <td>深圳速卖通工具组</td>
+                  <td><span class="shop-popover">SMT077, SMT086, SMT...<div class="shop-tooltip"><div class="shop-group-label">【速卖通】</div><div class="shop-group-items">SMT077、SMT086、SMT012</div></div></span></td>
+                  <td><span class="tag tag-primary">组员</span></td>
+                  <td>
+                    <button class="icon-btn edit" title="编辑"><i class="fa-solid fa-user-pen"></i></button>
+                    <button class="icon-btn transfer" title="转岗"><i class="fa-solid fa-right-left"></i></button>
+                    <button class="icon-btn remove" title="移除"><i class="fa-solid fa-user-minus"></i></button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="pagination">
+            <span class="text-muted" style="margin-right:auto;">共 7 条</span>
+            <div class="page-btn">‹</div><div class="page-btn active">1</div><div class="page-btn">›</div>
+            <select class="select" style="min-width:90px;font-size:12px;"><option>20条/页</option><option>50条/页</option></select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab: 操作日志 -->
+      <div id="bu-log" class="bu-tab">
+        <div class="card">
+          <div class="filter-bar">
+            <select class="select"><option>全部类型</option><option>添加人员</option><option>移除人员</option><option>角色调整</option><option>编辑人员配置</option><option>归属重算</option></select>
+            <select class="select"><option>全部操作人</option><option>汪耕</option><option>沈浩楠</option><option>张赛</option></select>
+            <span class="date-input-wrap"><input class="input" type="date" value="2026-04-01" style="width:140px;"></span> <span style="color:var(--text-muted);">—</span> <span class="date-input-wrap"><input class="input" type="date" value="2026-05-13" style="width:140px;"></span>
+            <input class="input" placeholder="搜索被操作对象" style="width:160px;">
+            <button class="btn btn-primary btn-sm"><i class="fa-solid fa-magnifying-glass"></i> 查询</button>
+            <button class="btn btn-sm">重置</button>
+          </div>
+          <div class="card-body">
+            <table>
+              <thead><tr><th>时间</th><th>操作类型</th><th>操作对象</th><th style="text-align:left;">操作详情</th><th>操作人</th></tr></thead>
+              <tbody>
+                <tr><td>2026-04-02 11:04</td><td><span class="tag tag-primary">编辑人员配置</span></td><td>张赛</td><td style="text-align:left;">新增负责店铺：SMT015（原属：李洋）</td><td>汪耕</td></tr>
+                <tr><td>2026-04-01 09:30</td><td><span class="tag tag-success">添加人员</span></td><td>黄爱纯</td><td style="text-align:left;">添加至深圳速卖通工具组，职能：组员，负责平台：速卖通</td><td>汪耕</td></tr>
+                <tr><td>2026-03-30 14:22</td><td><span class="tag tag-warning">角色调整</span></td><td>沈浩楠</td><td style="text-align:left;">职能由"组员"变更为"负责人"</td><td>汪耕</td></tr>
+                <tr><td>2026-03-30 11:48</td><td><span class="tag tag-success">添加人员</span></td><td>张赛、廖中霞、万恩 等</td><td style="text-align:left;">批量添加至深圳速卖通工具组</td><td>汪耕</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- Transfer Modal -->
-<div class="modal-mask" id="transferModal">
-  <div class="modal">
-    <div class="modal-header">
-      <h3>人员转岗</h3>
-      <button class="modal-close" onclick="closeModal('transferModal')">✕</button>
+<!-- ============================================================ -->
+<!-- PAGE 2: 订单归属处理                                          -->
+<!-- ============================================================ -->
+<div id="page-order" class="page">
+  <div class="app-container" style="flex-direction:column;">
+    <div class="main-content">
+      <h1 style="font-size:20px; font-weight:700; margin-bottom:20px;">订单归属处理</h1>
+      <div class="page-tabs">
+        <div class="page-tab active" onclick="showOrderTab('order-pending',this)">待归属订单 <span class="badge">23</span></div>
+        <div class="page-tab" onclick="showOrderTab('order-history',this)">历史订单调整</div>
+      </div>
+
+      <!-- Tab: 待归属订单 -->
+      <div id="order-pending" class="order-tab active">
+        <div class="card" style="margin-bottom:16px;">
+          <div style="padding:16px 20px;">
+            <div class="form-row">
+              <span class="form-label">订单号</span>
+              <input class="input" placeholder="请输入精确订单号，多个请用英文逗号分隔" style="width:320px;">
+              <span class="form-label">下单时间</span>
+              <span class="date-input-wrap"><input class="input" type="date" value="2026-05-06" style="width:145px;"></span> <span style="color:var(--text-muted);">—</span> <span class="date-input-wrap"><input class="input" type="date" value="2026-05-13" style="width:145px;"></span>
+            </div>
+            <div class="form-row" style="margin-bottom:0;">
+              <span class="form-label">出单店铺</span>
+              <select class="select" style="width:220px;"><option value="">请选择店铺</option><option>Shopee菲律宾新店A</option><option>Amazon US 3号店</option><option>Temu EU新站点</option></select>
+              <span class="form-label">异常原因</span>
+              <select class="select"><option>全部原因</option><option>店铺未配置归属规则</option><option>对应销售员已解绑或失效</option><option>业务单元被停用</option></select>
+              <button class="btn btn-primary"><i class="fa-solid fa-magnifying-glass"></i> 查询</button>
+              <button class="btn">重置</button>
+            </div>
+          </div>
+        </div>
+        <!-- Batch bar for orders -->
+        <div id="order-batch-bar" class="batch-bar" style="display:none;">
+          <span>已选 <span class="count" id="order-batch-count">0</span> 笔订单</span>
+          <button class="btn btn-primary btn-sm" onclick="showToast('success','批量重新匹配已提交，3 笔成功')"><i class="fa-solid fa-bolt"></i> 批量重新匹配 (<span id="order-batch-num">0</span>)</button>
+          <button class="btn btn-sm" onclick="clearOrderSelection()" style="margin-left:auto;">取消选择</button>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <table>
+              <thead><tr>
+                <th style="width:45px;"><input type="checkbox" class="checkbox" onchange="toggleAllOrderCb(this)"></th>
+                <th>订单号</th><th>订单创建时间</th><th>所属平台</th><th>出单店铺</th><th>异常原因</th><th>操作</th>
+              </tr></thead>
+              <tbody>
+                <tr>
+                  <td><input type="checkbox" class="checkbox order-cb" onchange="updateOrderBatch()"></td>
+                  <td>ORD-20260510-001 <i class="fa-regular fa-copy" style="color:var(--text-muted); cursor:pointer; font-size:12px;" onclick="showToast('success','复制成功')"></i></td>
+                  <td>2026-05-10 14:32:05</td><td>Shopee</td><td><strong>Shopee菲律宾新店A</strong></td>
+                  <td><span class="tag tag-danger">店铺未配置归属规则</span></td>
+                  <td><button class="btn btn-text btn-sm">去配置</button><button class="btn btn-text btn-sm" style="color:var(--success);" onclick="showToast('success','重新匹配成功，该订单已归属')">重新匹配</button></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" class="checkbox order-cb" onchange="updateOrderBatch()"></td>
+                  <td>ORD-20260510-002 <i class="fa-regular fa-copy" style="color:var(--text-muted); cursor:pointer; font-size:12px;" onclick="showToast('success','复制成功')"></i></td>
+                  <td>2026-05-10 15:10:22</td><td>Amazon</td><td><strong>Amazon US 3号店</strong></td>
+                  <td><span class="tag tag-danger">对应销售员已解绑或失效</span></td>
+                  <td><button class="btn btn-text btn-sm">去配置</button><button class="btn btn-text btn-sm" style="color:var(--success);">重新匹配</button></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" class="checkbox order-cb" onchange="updateOrderBatch()"></td>
+                  <td>ORD-20260509-018 <i class="fa-regular fa-copy" style="color:var(--text-muted); cursor:pointer; font-size:12px;" onclick="showToast('success','复制成功')"></i></td>
+                  <td>2026-05-09 08:44:11</td><td>Temu</td><td><strong>Temu EU新站点</strong></td>
+                  <td><span class="tag tag-danger">业务单元被停用</span></td>
+                  <td><button class="btn btn-text btn-sm">去配置</button><button class="btn btn-text btn-sm" style="color:var(--success);">重新匹配</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="pagination">
+            <span class="text-muted" style="margin-right:auto;">共 23 条</span>
+            <div class="page-btn">‹</div><div class="page-btn active">1</div><div class="page-btn">2</div><div class="page-btn">›</div>
+            <select class="select" style="min-width:90px; font-size:12px;"><option>50条/页</option></select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab: 历史订单调整 -->
+      <div id="order-history" class="order-tab">
+        <div class="card">
+          <div class="filter-bar">
+            <span class="form-label">修改时间</span>
+            <span class="date-input-wrap"><input class="input" type="date" value="2026-04-13" style="width:140px;"></span> <span style="color:var(--text-muted);">—</span> <span class="date-input-wrap"><input class="input" type="date" value="2026-05-13" style="width:140px;"></span>
+            <input class="input" placeholder="订单号（支持批量粘贴）" style="width:200px;">
+            <select class="select"><option>全部操作人</option><option>汪耕</option><option>沈浩楠</option></select>
+            <button class="btn btn-primary btn-sm"><i class="fa-solid fa-magnifying-glass"></i> 查询</button>
+            <button class="btn btn-sm">重置</button>
+            <div class="filter-right">
+              <button class="btn btn-primary" onclick="openModal('modal-drawer')"><i class="fa-solid fa-plus"></i> 新建调整任务</button>
+            </div>
+          </div>
+          <div class="card-body">
+            <table>
+              <thead><tr><th>订单号</th><th>出单店铺</th><th>下单时间</th><th>修改前归属</th><th>修改后归属</th><th>修改规则</th><th>操作人</th><th>修改时间</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td>ORD-20260401-055 <i class="fa-regular fa-copy" style="color:var(--text-muted); cursor:pointer; font-size:12px;"></i></td>
+                  <td>Shopee菲律宾1店</td>
+                  <td style="color:var(--text-muted); font-size:12px;">2026-04-01</td>
+                  <td><span style="text-decoration:line-through; color:var(--text-muted);">张三 / 老北美组</span></td>
+                  <td><span style="color:var(--primary); font-weight:600;">李四 / 菲律宾本土组</span></td>
+                  <td><span class="tag tag-info">指定运营+指定业务单元</span></td>
+                  <td>汪耕</td><td>2026-04-15</td>
+                </tr>
+                <tr>
+                  <td>ORD-20260328-102</td>
+                  <td>Amazon US 1号店</td>
+                  <td style="color:var(--text-muted); font-size:12px;">2026-03-28</td>
+                  <td><span style="text-decoration:line-through; color:var(--text-muted);">王五 / 欧洲Temu组</span></td>
+                  <td><span style="color:var(--success); font-weight:600;">赵六 / 北美Amazon组</span></td>
+                  <td><span class="tag tag-info">按最新规则匹配</span></td>
+                  <td>汪耕</td><td>2026-04-10</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="modal-body" id="transferModalBody"></div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 3: 销售目标制定                                          -->
+<!-- ============================================================ -->
+<div id="page-target" class="page">
+  <div class="app-container">
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title"><i class="fa-solid fa-sitemap"></i> 业务单元</div>
+      </div>
+      <div style="padding:0 14px 10px;">
+        <input class="sidebar-search" placeholder="搜索业务单元...">
+      </div>
+      <div class="sidebar-tree">
+        <div class="sidebar-section">
+          <div class="sidebar-section-header"><i class="fa-solid fa-diagram-project"></i> 业务单元架构</div>
+          <div class="tree-node active"><span class="expand">▾</span><i class="fa-regular fa-folder-open folder-icon"></i><span class="node-text"><span class="node-name">四海芯舟</span></span><span class="count-badge">76</span></div>
+          <div class="tree-node l2"><span class="expand">▸</span><i class="fa-regular fa-folder folder-icon"></i><span class="node-text"><span class="node-name">工业运营中心</span></span><span class="count-badge">65</span></div>
+          <div class="tree-node l2"><span class="expand">▸</span><i class="fa-regular fa-folder folder-icon"></i><span class="node-text"><span class="node-name">亚马逊工业事业部</span></span><span class="count-badge">9</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="main-content">
+      <h1 style="font-size:20px; font-weight:700; margin-bottom:20px;">销售目标制定 — 四海芯舟</h1>
+
+      <!-- Dashboard Cards -->
+      <div class="dashboard">
+        <div class="dash-card">
+          <div class="dash-label">本年总目标 (2026)</div>
+          <div class="dash-value" id="dash-total">¥12,000,000</div>
+          <div class="dash-sub"><span class="tag tag-warning" id="dash-remain-tag">待分配 ¥5,000</span></div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-label">累计实际业绩</div>
+          <div class="dash-value">¥2,850,000</div>
+          <div class="dash-sub text-muted">截至 2026-05-13</div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-label">年度达成率</div>
+          <div class="dash-value" style="color:var(--warning);">23.8%</div>
+          <div class="progress-bar"><div class="progress-fill" style="width:23.8%; background:linear-gradient(90deg,var(--warning),#FFC53D);"></div></div>
+        </div>
+      </div>
+
+      <!-- Toolbar -->
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+        <select class="select"><option>2026 年</option><option>2025 年</option></select>
+        <!-- 编辑模式开关 -->
+        <div id="edit-mode-toggle" style="display:flex; align-items:center; gap:8px; padding:6px 14px; border-radius:var(--radius); border:1px solid var(--border); background:var(--bg-white); cursor:pointer;" onclick="toggleEditMode()">
+          <div id="edit-toggle-dot" style="width:36px; height:20px; border-radius:10px; background:var(--border); position:relative; transition:.3s;">
+            <div id="edit-toggle-knob" style="width:16px; height:16px; border-radius:50%; background:#fff; position:absolute; top:2px; left:2px; transition:.3s; box-shadow:0 1px 3px rgba(0,0,0,.2);"></div>
+          </div>
+          <span id="edit-mode-label" style="font-size:13px; color:var(--text-muted); font-weight:500;">编辑模式：关闭</span>
+        </div>
+        <span id="edit-hint" class="text-muted" style="display:none; align-items:center; gap:4px;"><i class="fa-solid fa-pen" style="color:var(--primary);"></i> 点击蓝色数字可编辑目标，修改后按 Enter 确认</span>
+        <span id="readonly-hint" class="text-muted" style="display:flex; align-items:center; gap:4px;"><i class="fa-solid fa-lock" style="color:var(--text-muted);"></i> 开启编辑模式后可修改未来月份目标</span>
+        <div style="margin-left:auto; display:flex; gap:8px;">
+          <button class="btn btn-sm" onclick="openModal('modal-import')"><i class="fa-solid fa-upload"></i> 导入年度目标</button>
+          <button class="btn btn-primary btn-sm" onclick="showToast('success','导出成功：销售目标_四海芯舟_2026年.xlsx')"><i class="fa-solid fa-file-export"></i> 导出当前数据</button>
+        </div>
+      </div>
+      <!-- 编辑模式下的变更摘要条 -->
+      <div id="edit-changes-bar" style="display:none; background:var(--primary-light); border:1px solid var(--primary-border); border-radius:var(--radius); padding:10px 16px; margin-bottom:12px; align-items:center; gap:12px;">
+        <i class="fa-solid fa-pen-to-square" style="color:var(--primary);"></i>
+        <span style="font-size:13px;">已修改 <strong id="change-count" style="color:var(--primary);">0</strong> 个单元格</span>
+        <button class="btn btn-sm" onclick="undoAllChanges()" style="margin-left:8px;"><i class="fa-solid fa-rotate-left"></i> 撤销全部</button>
+        <div style="margin-left:auto; display:flex; gap:8px;">
+          <button class="btn btn-sm" onclick="toggleEditMode()">退出编辑</button>
+          <button class="btn btn-primary btn-sm" onclick="saveTargets()"><i class="fa-solid fa-floppy-disk"></i> 保存修改</button>
+        </div>
+      </div>
+
+      <!-- Matrix Table with inline editing -->
+      <div class="card" style="padding:0;">
+        <div class="matrix-wrap">
+          <table class="matrix-table" id="target-table">
+            <thead>
+              <tr>
+                <th class="m-left">组织 / 人员 / 店铺</th>
+                <th>01月 <i class="fa-solid fa-lock" style="font-size:9px; color:var(--text-muted);"></i></th>
+                <th>02月 <i class="fa-solid fa-lock" style="font-size:9px; color:var(--text-muted);"></i></th>
+                <th>03月 <i class="fa-solid fa-lock" style="font-size:9px; color:var(--text-muted);"></i></th>
+                <th>04月 <i class="fa-solid fa-lock" style="font-size:9px; color:var(--text-muted);"></i></th>
+                <th>05月</th><th>06月</th><th>07月</th><th>08月</th><th>09月</th><th>10月</th><th>11月</th><th>12月</th>
+                <th class="m-right">全年汇总</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- BU Row -->
+              <tr style="background:#F0F5FF;" data-row="bu">
+                <td class="m-left" style="background:#F0F5FF;"><strong>▾ 四海芯舟</strong> <span class="tag tag-primary" style="font-size:10px; padding:1px 6px;">BU</span></td>
+                <td><div class="m-target locked">¥1,000,000</div><div class="m-actual">实: 950,000 <span style="color:var(--success)">95%</span></div></td>
+                <td><div class="m-target locked">¥1,000,000</div><div class="m-actual">实: 1,020,000 <span style="color:var(--success)">102%</span></div></td>
+                <td><div class="m-target locked">¥1,000,000</div><div class="m-actual">实: 880,000 <span style="color:var(--warning)">88%</span></div></td>
+                <td><div class="m-target locked">¥1,000,000</div></td>
+                <td><div class="m-target editable" onclick="startEdit(this,1000000)">¥1,000,000</div></td>
+                <td><div class="m-target editable" onclick="startEdit(this,1000000)">¥1,000,000</div></td>
+                <td><div class="m-target editable" onclick="startEdit(this,1000000)">¥1,000,000</div></td>
+                <td><div class="m-target editable" onclick="startEdit(this,1000000)">¥1,000,000</div></td>
+                <td><div class="m-target editable" onclick="startEdit(this,1000000)">¥1,000,000</div></td>
+                <td><div class="m-target editable" onclick="startEdit(this,1000000)">¥1,000,000</div></td>
+                <td><div class="m-target editable" onclick="startEdit(this,1000000)">¥1,000,000</div></td>
+                <td><div class="m-target editable" onclick="startEdit(this,1000000)">¥1,000,000</div></td>
+                <td class="m-right" style="background:#F0F5FF;"><div><strong id="bu-year-total">¥12,000,000</strong></div><div class="m-actual">实: ¥2,850,000</div><div style="margin-top:6px;"><span class="tag tag-warning" style="font-size:10px;" id="bu-remain">待分配 ¥5,000</span></div></td>
+              </tr>
+              <!-- Person: 张三 -->
+              <tr data-row="p1">
+                <td class="m-left" style="padding-left:28px;">▾ 张三 <span class="tag tag-success" style="font-size:10px; padding:1px 6px;">PERSON</span></td>
+                <td><div class="m-target locked">¥500,000</div><div class="m-actual">实: 480,000</div></td>
+                <td><div class="m-target locked">¥500,000</div><div class="m-actual">实: 510,000</div></td>
+                <td><div class="m-target locked">¥500,000</div><div class="m-actual">实: 450,000</div></td>
+                <td><div class="m-target locked">¥500,000</div></td>
+                <td><div class="m-target editable" onclick="startEdit(this,500000)">¥500,000</div></td>
+                <td><div class="m-target editable" onclick="startEdit(this,500000)">¥500,000</div></td>
+                <td><div class="m-target editable" onclick="startEdit(this,500000)">¥500,000</div></td>
+                <td><div class="m-target editable" onclick="startEdit(this,500000)">¥500,000</div></td>
+                <td><div class="m-target editable" onclick="startEdit(this,500000)">¥500,000</div></td>
+                <td><div class="m-target editable" onclick="startEdit(this,500000)">¥500,000</div></td>
+                <td><div class="m-target editable" onclick="startEdit(this,500000)">¥500,000</div></td>
+                <td><div class="m-target editable" onclick="startEdit(this,500000)">¥500,000</div></td>
+                <td class="m-right"><strong>¥6,000,000</strong><div style="margin-top:4px;"><span class="tag tag-success" style="font-size:10px;">拆解平齐</span></div></td>
+              </tr>
+              <!-- Store rows -->
+              <tr data-row="s1">
+                <td class="m-left" style="padding-left:52px; color:var(--text-secondary);">SMT033 <span class="tag tag-info" style="font-size:9px; padding:1px 5px;">STORE</span></td>
+                <td><div class="m-target locked" style="font-size:11px;">¥250,000</div></td><td><div class="m-target locked" style="font-size:11px;">¥250,000</div></td><td><div class="m-target locked" style="font-size:11px;">¥250,000</div></td><td><div class="m-target locked" style="font-size:11px;">¥250,000</div></td>
+                <td><div class="m-target editable" style="font-size:11px;" onclick="startEdit(this,250000)">¥250,000</div></td>
+                <td><div class="m-target editable" style="font-size:11px;" onclick="startEdit(this,250000)">¥250,000</div></td>
+                <td><div class="m-target editable" style="font-size:11px;" onclick="startEdit(this,250000)">¥250,000</div></td>
+                <td><div class="m-target editable" style="font-size:11px;" onclick="startEdit(this,250000)">¥250,000</div></td>
+                <td><div class="m-target editable" style="font-size:11px;" onclick="startEdit(this,250000)">¥250,000</div></td>
+                <td><div class="m-target editable" style="font-size:11px;" onclick="startEdit(this,250000)">¥250,000</div></td>
+                <td><div class="m-target editable" style="font-size:11px;" onclick="startEdit(this,250000)">¥250,000</div></td>
+                <td><div class="m-target editable" style="font-size:11px;" onclick="startEdit(this,250000)">¥250,000</div></td>
+                <td class="m-right">¥3,000,000</td>
+              </tr>
+              <tr data-row="s2">
+                <td class="m-left" style="padding-left:52px; color:var(--text-secondary);">SMT008 <span class="tag tag-info" style="font-size:9px; padding:1px 5px;">STORE</span></td>
+                <td><div class="m-target locked" style="font-size:11px;">¥250,000</div></td><td><div class="m-target locked" style="font-size:11px;">¥250,000</div></td><td><div class="m-target locked" style="font-size:11px;">¥250,000</div></td><td><div class="m-target locked" style="font-size:11px;">¥250,000</div></td>
+                <td><div class="m-target editable" style="font-size:11px;" onclick="startEdit(this,250000)">¥250,000</div></td>
+                <td><div class="m-target editable" style="font-size:11px;" onclick="startEdit(this,250000)">¥250,000</div></td>
+                <td><div class="m-target editable" style="font-size:11px;" onclick="startEdit(this,250000)">¥250,000</div></td>
+                <td><div class="m-target editable" style="font-size:11px;" onclick="startEdit(this,250000)">¥250,000</div></td>
+                <td><div class="m-target editable" style="font-size:11px;" onclick="startEdit(this,250000)">¥250,000</div></td>
+                <td><div class="m-target editable" style="font-size:11px;" onclick="startEdit(this,250000)">¥250,000</div></td>
+                <td><div class="m-target editable" style="font-size:11px;" onclick="startEdit(this,250000)">¥250,000</div></td>
+                <td><div class="m-target editable" style="font-size:11px;" onclick="startEdit(this,250000)">¥250,000</div></td>
+                <td class="m-right">¥3,000,000</td>
+              </tr>
+              <!-- Person: 王五 — person目标每月均为¥500,000，但06月门店合计只有¥497,000，产生¥3,000差额 -->
+              <tr data-row="p2">
+                <td class="m-left" style="padding-left:28px;">▾ 王五 <span class="tag tag-success" style="font-size:10px; padding:1px 6px;">PERSON</span></td>
+                <td><div class="m-target locked">¥500,000</div><div class="m-actual">实: 470,000</div></td>
+                <td><div class="m-target locked">¥500,000</div><div class="m-actual">实: 510,000</div></td>
+                <td><div class="m-target locked">¥500,000</div><div class="m-actual">实: 430,000</div></td>
+                <td><div class="m-target locked">¥500,000</div></td>
+                <td><div class="m-target editable" onclick="startEdit(this,500000)">¥500,000</div></td>
+                <td style="position:relative;"><div class="m-target editable" onclick="startEdit(this,500000)">¥500,000</div><div class="m-diff">差额: ¥3,000</div></td>
+                <td><div class="m-target editable" onclick="startEdit(this,500000)">¥500,000</div></td>
+                <td><div class="m-target editable" onclick="startEdit(this,500000)">¥500,000</div></td>
+                <td><div class="m-target editable" onclick="startEdit(this,500000)">¥500,000</div></td>
+                <td><div class="m-target editable" onclick="startEdit(this,500000)">¥500,000</div></td>
+                <td><div class="m-target editable" onclick="startEdit(this,500000)">¥500,000</div></td>
+                <td><div class="m-target editable" onclick="startEdit(this,500000)">¥500,000</div></td>
+                <td class="m-right"><strong>¥6,000,000</strong><div style="margin-top:4px;"><span class="tag tag-danger" style="font-size:10px;">差额: ¥3,000</span></div></td>
+              </tr>
+              <!-- Store: SMT072 under 王五 -->
+              <tr data-row="s3">
+                <td class="m-left" style="padding-left:52px; color:var(--text-secondary);">SMT072 <span class="tag tag-info" style="font-size:9px; padding:1px 5px;">STORE</span></td>
+                <td><div class="m-target locked" style="font-size:11px;">¥280,000</div></td><td><div class="m-target locked" style="font-size:11px;">¥280,000</div></td><td><div class="m-target locked" style="font-size:11px;">¥280,000</div></td><td><div class="m-target locked" style="font-size:11px;">¥280,000</div></td>
+                <td><div class="m-target editable" style="font-size:11px;" onclick="startEdit(this,280000)">¥280,000</div></td>
+                <td><div class="m-target editable" style="font-size:11px;" onclick="startEdit(this,280000)">¥280,000</div></td>
+                <td><div class="m-target editable" style="font-size:11px;" onclick="startEdit(this,280000)">¥280,000</div></td>
+                <td><div class="m-target editable" style="font-size:11px;" onclick="startEdit(this,280000)">¥280,000</div></td>
+                <td><div class="m-target editable" style="font-size:11px;" onclick="startEdit(this,280000)">¥280,000</div></td>
+                <td><div class="m-target editable" style="font-size:11px;" onclick="startEdit(this,280000)">¥280,000</div></td>
+                <td><div class="m-target editable" style="font-size:11px;" onclick="startEdit(this,280000)">¥280,000</div></td>
+                <td><div class="m-target editable" style="font-size:11px;" onclick="startEdit(this,280000)">¥280,000</div></td>
+                <td class="m-right">¥3,360,000</td>
+              </tr>
+              <!-- Store: SMT100 under 王五 — 06月只填了¥217,000（应为¥220,000），导致门店合计=¥497,000，与person的¥500,000差¥3,000 -->
+              <tr data-row="s4">
+                <td class="m-left" style="padding-left:52px; color:var(--text-secondary);">SMT100 <span class="tag tag-info" style="font-size:9px; padding:1px 5px;">STORE</span></td>
+                <td><div class="m-target locked" style="font-size:11px;">¥220,000</div></td><td><div class="m-target locked" style="font-size:11px;">¥220,000</div></td><td><div class="m-target locked" style="font-size:11px;">¥220,000</div></td><td><div class="m-target locked" style="font-size:11px;">¥220,000</div></td>
+                <td><div class="m-target editable" style="font-size:11px;" onclick="startEdit(this,220000)">¥220,000</div></td>
+                <td><div class="m-target editable" style="font-size:11px; color:var(--danger);" onclick="startEdit(this,217000)">¥217,000</div></td>
+                <td><div class="m-target editable" style="font-size:11px;" onclick="startEdit(this,220000)">¥220,000</div></td>
+                <td><div class="m-target editable" style="font-size:11px;" onclick="startEdit(this,220000)">¥220,000</div></td>
+                <td><div class="m-target editable" style="font-size:11px;" onclick="startEdit(this,220000)">¥220,000</div></td>
+                <td><div class="m-target editable" style="font-size:11px;" onclick="startEdit(this,220000)">¥220,000</div></td>
+                <td><div class="m-target editable" style="font-size:11px;" onclick="startEdit(this,220000)">¥220,000</div></td>
+                <td><div class="m-target editable" style="font-size:11px;" onclick="startEdit(this,220000)">¥220,000</div></td>
+                <td class="m-right">¥2,637,000</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!-- 保存按钮已移入编辑模式工具条 -->
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- ALL MODALS                                                    -->
+<!-- ============================================================ -->
+
+<!-- Modal: 添加/编辑人员配置 -->
+<div id="modal-add-person" class="modal-overlay" onclick="if(event.target===this)closeAll()">
+  <div class="modal" style="width:920px;">
+    <div class="modal-header"><span><i class="fa-solid fa-user-gear" style="color:var(--primary); margin-right:8px;"></i>添加/编辑人员配置 — 深圳速卖通工具组</span><span class="modal-close" onclick="closeAll()"><i class="fa-solid fa-xmark"></i></span></div>
+    <div class="modal-body">
+      <div class="form-row">
+        <span class="form-label"><span class="req">*</span>销售员</span>
+        <select class="select" style="width:200px;" id="salesperson-select">
+          <option value="">请搜索选择销售员...</option>
+          <option value="沈浩楠">沈浩楠</option>
+          <option value="张赛">张赛</option>
+          <option value="廖中霞">廖中霞</option>
+          <option value="黄爱纯">黄爱纯</option>
+          <option value="张旭">张旭</option>
+          <option value="万恩">万恩</option>
+          <option value="李洋">李洋</option>
+        </select>
+        <span class="form-label" style="margin-left:20px;"><span class="req">*</span>业务职能</span>
+        <div class="radio-group"><label class="radio-item"><input type="radio" name="role" class="radio"> 负责人</label><label class="radio-item"><input type="radio" name="role" class="radio" checked> 组员</label></div>
+      </div>
+      <div class="divider"></div>
+      <div class="form-row">
+        <span class="form-label">平台筛选</span>
+        <select class="select" style="width:260px;"><option>Shopee, Amazon (已选2个)</option><option>全部平台</option><option>Shopee</option><option>Amazon</option><option>Temu</option><option>速卖通</option></select>
+        <div style="margin-left:auto;"><input class="input input-search" placeholder="搜索店铺名称..." style="width:200px;"></div>
+      </div>
+      <div class="section-title">店铺资源池（树形选择）</div>
+      <div style="max-height:300px; overflow-y:auto; border:1px solid var(--border); border-radius:var(--radius);">
+        <table class="tree-table">
+          <thead><tr><th style="width:40px;"></th><th style="text-align:left;">店铺名称 / 层级</th><th>所属平台</th><th>当前归属状态</th></tr></thead>
+          <tbody>
+            <tr style="background:var(--bg);"><td><input type="checkbox" class="checkbox" style="opacity:.6;"></td><td style="text-align:left;"><strong>▾ Shopee</strong> <span class="text-muted">(15 店铺)</span></td><td>Shopee</td><td>—</td></tr>
+            <tr><td></td><td style="text-align:left; padding-left:28px;">▾ 东南亚本土运营中心</td><td>Shopee</td><td>—</td></tr>
+            <tr><td><input type="checkbox" class="checkbox" style="opacity:.6;"></td><td style="text-align:left; padding-left:48px;">▾ 台湾</td><td>Shopee</td><td>—</td></tr>
+            <tr><td><input type="checkbox" class="checkbox" checked></td><td style="text-align:left; padding-left:68px;">Shopee台湾01店</td><td>Shopee</td><td><span class="store-status green">🟢 当前负责</span></td></tr>
+            <tr class="row-highlight"><td><input type="checkbox" class="checkbox" checked></td><td style="text-align:left; padding-left:68px;">Shopee台湾02店</td><td>Shopee</td><td><span class="store-status orange">⚠️ 已归属：菲律宾土组-王五</span></td></tr>
+            <tr><td><input type="checkbox" class="checkbox" checked></td><td style="text-align:left; padding-left:68px;">Shopee台湾03店</td><td>Shopee</td><td></td></tr>
+            <tr><td><input type="checkbox" class="checkbox"></td><td style="text-align:left; padding-left:68px;">Shopee台湾04店</td><td>Shopee</td><td></td></tr>
+            <tr><td><input type="checkbox" class="checkbox"></td><td style="text-align:left; padding-left:48px;">▾ 菲律宾</td><td>Shopee</td><td>—</td></tr>
+            <tr><td><input type="checkbox" class="checkbox" checked></td><td style="text-align:left; padding-left:68px;">Shopee菲律宾1店</td><td>Shopee</td><td><span class="store-status green">🟢 当前负责</span></td></tr>
+            <tr class="row-highlight"><td><input type="checkbox" class="checkbox" checked></td><td style="text-align:left; padding-left:68px;">Shopee菲律宾2店</td><td>Shopee</td><td><span class="store-status orange">⚠️ 已归属：菲律宾土组-李四</span></td></tr>
+            <tr style="background:var(--bg);"><td><input type="checkbox" class="checkbox"></td><td style="text-align:left;"><strong>▸ Amazon</strong> <span class="text-muted">(20 店铺)</span></td><td>Amazon</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="mt-16"><span class="text-muted">已选 <strong id="selected-store-count">5</strong> 个店铺：</span>
+        <div class="selected-area mt-8" id="selected-store-area">
+          <span class="sel-tag" data-store="shopee-tw-01">Shopee台湾01店 <span class="x" onclick="removeStoreTag(this,'shopee-tw-01')" title="取消选择">×</span></span>
+          <span class="sel-tag warn" data-store="shopee-tw-02">Shopee台湾02店 ⚠️ <span class="x" onclick="removeStoreTag(this,'shopee-tw-02')" title="取消选择">×</span></span>
+          <span class="sel-tag" data-store="shopee-tw-03">Shopee台湾03店 <span class="x" onclick="removeStoreTag(this,'shopee-tw-03')" title="取消选择">×</span></span>
+          <span class="sel-tag" data-store="shopee-ph-01">Shopee菲律宾1店 <span class="x" onclick="removeStoreTag(this,'shopee-ph-01')" title="取消选择">×</span></span>
+          <span class="sel-tag warn" data-store="shopee-ph-02">Shopee菲律宾2店 ⚠️ <span class="x" onclick="removeStoreTag(this,'shopee-ph-02')" title="取消选择">×</span></span>
+        </div>
+      </div>
+      <div class="form-row mt-16">
+        <span class="form-label"><span class="req">*</span>生效日期</span>
+        <div class="date-input-wrap">
+          <input class="input" type="date" value="2026-05-14" min="2026-05-14" id="effective-date" style="width:160px;" onchange="validateEffectiveDate(this)">
+        </div>
+        <label class="radio-item"><input type="checkbox" class="checkbox" checked> 长期有效</label>
+        <span class="text-muted" id="date-hint" style="display:none; margin-left:8px;"></span>
+      </div>
+    </div>
     <div class="modal-footer">
-      <button class="btn btn-default" onclick="closeModal('transferModal')">取消</button>
-      <button class="btn btn-default" onclick="confirmTransfer('person')">仅人员转岗</button>
-      <button class="btn btn-primary" onclick="confirmTransfer('store')">携店铺转岗</button>
+      <button class="btn" onclick="closeAll()">取 消</button>
+      <button class="btn btn-primary" onclick="openModal('modal-confirm');closeModal('modal-add-person');">确 定</button>
     </div>
   </div>
 </div>
 
-<!-- Remove Modal -->
-<div class="modal-mask" id="removeModal">
-  <div class="modal">
-    <div class="modal-header">
-      <h3>解除绑定</h3>
-      <button class="modal-close" onclick="closeModal('removeModal')">✕</button>
+<!-- Modal: 归属转移二次确认 -->
+<div id="modal-confirm" class="modal-overlay" onclick="if(event.target===this)closeAll()">
+  <div class="confirm-box">
+    <div class="confirm-icon">⚠️</div>
+    <div class="confirm-title">归属转移确认</div>
+    <div class="confirm-text">
+      您本次勾选的店铺中，有 <strong style="color:var(--danger);">2</strong> 个店铺当前由他人负责：
+      <div class="confirm-detail">• <strong>Shopee台湾02店</strong>（原属：菲律宾土组 - 王五）<br>• <strong>Shopee菲律宾2店</strong>（原属：菲律宾土组 - 李四）</div>
+      继续保存，系统将把这些店铺直接转移给当前销售员 <strong style="color:var(--primary);">张三</strong>。是否确认？
     </div>
-    <div class="modal-body" id="removeModalBody"></div>
-    <div class="modal-footer">
-      <button class="btn btn-default" onclick="closeModal('removeModal')">取消</button>
-      <button class="btn btn-danger" onclick="confirmRemove()">确认解除</button>
+    <div class="confirm-actions"><button class="btn" onclick="closeAll()">取 消</button><button class="btn btn-primary" onclick="closeAll();showToast('success','人员配置保存成功，2 个店铺已完成转移')">确认转移并保存</button></div>
+  </div>
+</div>
+
+<!-- Modal: 转岗 -->
+<div id="modal-transfer" class="modal-overlay" onclick="if(event.target===this)closeAll()">
+  <div class="modal" style="width:560px;">
+    <div class="modal-header"><span><i class="fa-solid fa-right-left" style="color:var(--warning); margin-right:8px;"></i>人员转岗</span><span class="modal-close" onclick="closeAll()"><i class="fa-solid fa-xmark"></i></span></div>
+    <div class="modal-body">
+      <div class="form-row"><span class="form-label">转岗人员</span><strong>沈浩楠</strong> (负责人)</div>
+      <div class="form-row"><span class="form-label"><span class="req">*</span>目标单元</span><select class="select" style="width:320px;"><option>请选择目标业务单元...</option><option>工业运营中心 / 速卖通事业部 / 速卖通元器件组</option><option>工业运营中心 / 东南亚项目部 / 深圳东南亚跨境组</option></select></div>
+      <div class="alert alert-warning mt-16"><span class="alert-icon"><i class="fa-solid fa-triangle-exclamation"></i></span><div>当前选中人员共负责 <strong>0</strong> 个店铺。选择「携店铺转岗」将同步变更这些店铺的业务单元归属；选择「仅人员转岗」将释放这些店铺，请及时重新分配。</div></div>
+    </div>
+    <div class="modal-footer"><button class="btn" onclick="closeAll();showToast('success','人员转岗成功（仅人员）')">仅人员转岗</button><button class="btn btn-primary" onclick="closeAll();showToast('success','人员及店铺转岗成功')">携店铺转岗</button></div>
+  </div>
+</div>
+
+<!-- Modal: 移除 -->
+<div id="modal-remove" class="modal-overlay" onclick="if(event.target===this)closeAll()">
+  <div class="confirm-box">
+    <div class="confirm-icon"><i class="fa-solid fa-user-slash" style="color:var(--danger);"></i></div>
+    <div class="confirm-title">确认解除关联</div>
+    <div class="confirm-text">
+      确定要解除 <strong>沈浩楠</strong> 与当前业务单元的关联吗？
+      <div class="alert alert-danger" style="margin-top:12px;"><span class="alert-icon"><i class="fa-solid fa-triangle-exclamation"></i></span><div><strong>注意：</strong>该人员名下还有 <strong>0</strong> 个负责的店铺。解除关联后，这些店铺将失去负责人并进入「待归属订单池」，请谨慎操作！</div></div>
+    </div>
+    <div class="confirm-actions"><button class="btn" onclick="closeAll()">取 消</button><button class="btn btn-danger-fill" onclick="closeAll();showToast('success','已解除关联')">确认解除</button></div>
+  </div>
+</div>
+
+<!-- Modal: 导入年度目标（三阶段流程 Drawer） -->
+<div id="modal-import" class="modal-overlay">
+  <div class="drawer">
+    <div class="drawer-header">
+      <span><i class="fa-solid fa-upload" style="color:var(--primary); margin-right:8px;"></i>导入年度目标 — 四海芯舟</span>
+      <span class="modal-close" onclick="closeAll()"><i class="fa-solid fa-xmark"></i></span>
+    </div>
+    <div class="drawer-body">
+      <!-- 三阶段步骤条 -->
+      <div class="steps">
+        <div class="step active" id="import-step1"><div class="step-num">1</div><div class="step-label">下载模板</div></div>
+        <div class="step" id="import-step2"><div class="step-num">2</div><div class="step-label">上传文件</div></div>
+        <div class="step" id="import-step3"><div class="step-num">3</div><div class="step-label">结果反馈</div></div>
+      </div>
+
+      <!-- 阶段一：下载模板 -->
+      <div id="import-phase1">
+        <div class="card" style="padding:24px; margin-bottom:16px;">
+          <div class="section-title">销售目标批量导入</div>
+          <p style="font-size:13px; color:var(--text-secondary); margin-bottom:20px;">请先下载模板，按照格式填写数据后再上传。模板已预填当前业务单元的人员和店铺结构。</p>
+          <div style="display:flex; align-items:center; justify-content:space-between; padding:20px; background:var(--bg); border-radius:var(--radius); border:1px solid var(--border);">
+            <div>
+              <div style="font-size:15px; font-weight:600; display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-file-excel" style="color:#217346; font-size:20px;"></i> 销售目标导入模板</div>
+              <div class="text-muted mt-8">版本 V1.3 · 更新于 2026-05-01 · 已含当前 BU 人员/店铺结构</div>
+            </div>
+            <button class="btn btn-primary" onclick="showToast('success','模板已开始下载：销售目标_四海芯舟_2026年_V1.3.xlsx');advanceImportStep(2)"><i class="fa-solid fa-download"></i> 下载模板 (V1.3)</button>
+          </div>
+        </div>
+        <div class="alert alert-info"><span class="alert-icon"><i class="fa-solid fa-circle-info"></i></span>
+          <div>
+            <strong>使用提示</strong>
+            <div style="margin-top:6px; line-height:2; font-size:12px;">
+              · 文件大小不超过 10MB，单次导入不超过 1000 行<br>
+              · 请勿修改模板表头，否则将无法识别<br>
+              · 模板中包含「使用说明」工作表，请仔细阅读<br>
+              · 已锁定月份（01~04月）的数据将被系统忽略，只处理未来月份
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 阶段二：上传文件 -->
+      <div id="import-phase2" style="display:none;">
+        <div class="card" style="padding:24px; margin-bottom:16px;">
+          <div class="section-title">上传填写好的文件</div>
+          <div class="upload-area" onclick="advanceImportStep(3)" style="padding:40px;">
+            <i class="fa-solid fa-cloud-arrow-up" style="font-size:40px; margin-bottom:12px; display:block; color:var(--primary);"></i>
+            <div style="font-size:15px; font-weight:500;">点击选择文件或将文件拖拽至此区域</div>
+            <div class="text-muted mt-8">支持 .xlsx, .xls 格式，最大 10MB</div>
+          </div>
+        </div>
+        <div class="alert alert-warning"><span class="alert-icon"><i class="fa-solid fa-triangle-exclamation"></i></span>
+          <div>导入将<strong>覆盖</strong>未来月份的已有目标数据。已锁定月份不受影响。请确认文件内容无误后再上传。</div>
+        </div>
+      </div>
+
+      <!-- 阶段三：结果反馈 -->
+      <div id="import-phase3" style="display:none;">
+        <div class="card" style="padding:24px; margin-bottom:16px;">
+          <div class="section-title">校验与导入结果</div>
+          <div style="display:flex; gap:16px; margin-bottom:20px;">
+            <div style="flex:1; padding:16px; background:var(--success-light); border-radius:var(--radius); border:1px solid #B7EB8F; text-align:center;">
+              <div style="font-size:24px; font-weight:700; color:var(--success);">42</div>
+              <div class="text-muted">成功导入</div>
+            </div>
+            <div style="flex:1; padding:16px; background:var(--danger-light); border-radius:var(--radius); border:1px solid #FFA39E; text-align:center;">
+              <div style="font-size:24px; font-weight:700; color:var(--danger);">3</div>
+              <div class="text-muted">校验失败</div>
+            </div>
+            <div style="flex:1; padding:16px; background:var(--warning-light); border-radius:var(--radius); border:1px solid #FFE58F; text-align:center;">
+              <div style="font-size:24px; font-weight:700; color:var(--warning);">2</div>
+              <div class="text-muted">已跳过（锁定月份）</div>
+            </div>
+          </div>
+        </div>
+        <!-- 失败明细 -->
+        <div class="card" style="padding:24px;">
+          <div class="section-title" style="color:var(--danger);"><i class="fa-solid fa-circle-xmark" style="margin-right:6px;"></i>校验失败明细 — 请修正后重新导入</div>
+          <div style="border:1px solid var(--border); border-radius:var(--radius); overflow:hidden;">
+            <table style="font-size:12px;">
+              <thead><tr><th>行号</th><th>人员/店铺</th><th>月份</th><th>填写值</th><th>失败原因</th></tr></thead>
+              <tbody>
+                <tr><td>第 15 行</td><td>张旭 / SMT100</td><td>06月</td><td>abc</td><td><span class="tag tag-danger" style="font-size:10px;">非数字格式</span></td></tr>
+                <tr><td>第 28 行</td><td>—</td><td>—</td><td>—</td><td><span class="tag tag-danger" style="font-size:10px;">人员「陈明」不存在于当前BU</span></td></tr>
+                <tr><td>第 33 行</td><td>万恩 / SMT999</td><td>07月</td><td>500000</td><td><span class="tag tag-danger" style="font-size:10px;">店铺 SMT999 不属于该人员</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div style="margin-top:12px; display:flex; gap:8px;">
+            <button class="btn btn-sm" onclick="showToast('success','失败记录已导出：导入失败明细_20260514.xlsx')"><i class="fa-solid fa-download"></i> 导出失败记录</button>
+            <span class="text-muted" style="line-height:32px;">修正后可重新上传，成功记录不受影响</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="drawer-footer">
+      <button class="btn" onclick="closeAll();resetImport()">关闭</button>
+      <button class="btn" id="import-prev-btn" style="display:none;" onclick="prevImportStep()"><i class="fa-solid fa-arrow-left"></i> 上一步</button>
     </div>
   </div>
 </div>
 
-<!-- Attribution Confirm Modal -->
-<div class="modal-mask" id="attributionConfirmModal">
-  <div class="modal">
-    <div class="modal-header">
-      <h3>⚠️ 归属转移确认</h3>
-      <button class="modal-close" onclick="closeModal('attributionConfirmModal')">✕</button>
+<!-- Modal: 保存目标 - 强校验阻断 -->
+<div id="modal-save-block" class="modal-overlay" onclick="if(event.target===this)closeAll()">
+  <div class="confirm-box">
+    <div class="confirm-icon"><i class="fa-solid fa-circle-xmark" style="color:var(--danger);"></i></div>
+    <div class="confirm-title">无法保存：店铺拆解不平齐</div>
+    <div class="confirm-text">
+      以下人员的店铺级目标拆解存在差额，请调平后再保存：
+      <div class="confirm-detail">
+        <i class="fa-solid fa-triangle-exclamation" style="color:var(--danger);"></i> <strong>王五</strong> 的 05月 店铺拆解不平，差额 <strong style="color:var(--danger);">¥3,000</strong><br>
+        （个人目标 ¥500,000 ≠ 店铺目标合计 ¥497,000）
+      </div>
+      请前往对应单元格修改后重试。
     </div>
-    <div class="modal-body" id="attributionConfirmBody"></div>
-    <div class="modal-footer">
-      <button class="btn btn-default" onclick="closeModal('attributionConfirmModal')">取消</button>
-      <button class="btn btn-primary" onclick="confirmAttributionTransfer()">确认转移并保存</button>
+    <div class="confirm-actions"><button class="btn btn-primary" onclick="closeAll()">我知道了，去调整</button></div>
+  </div>
+</div>
+
+<!-- Modal: 保存目标 - 弱校验确认 -->
+<div id="modal-save-warn" class="modal-overlay" onclick="if(event.target===this)closeAll()">
+  <div class="confirm-box">
+    <div class="confirm-icon"><i class="fa-solid fa-triangle-exclamation" style="color:var(--warning);"></i></div>
+    <div class="confirm-title">BU 目标存在差额</div>
+    <div class="confirm-text">
+      业务单元总目标还有 <strong style="color:var(--warning);">¥5,000</strong> 未分配给组员，是否继续保存？
+      <div class="confirm-detail">
+        BU 总目标：¥12,000,000<br>
+        组员目标合计：¥11,995,000<br>
+        待分配差额：<strong style="color:var(--warning);">¥5,000</strong>
+      </div>
+    </div>
+    <div class="confirm-actions"><button class="btn" onclick="closeAll()">返回调整</button><button class="btn btn-primary" onclick="closeAll();showToast('success','目标配置保存成功')">确认继续保存</button></div>
+  </div>
+</div>
+
+<!-- Modal: 新建调整任务 (Full Drawer) -->
+<div id="modal-drawer" class="modal-overlay">
+  <div class="drawer">
+    <div class="drawer-header"><span><i class="fa-solid fa-pen-to-square" style="color:var(--primary); margin-right:8px;"></i>新建调整任务</span><span class="modal-close" onclick="closeAll()"><i class="fa-solid fa-xmark"></i></span></div>
+    <div class="drawer-body">
+      <div class="steps">
+        <div class="step done" id="step1"><div class="step-num">1</div><div class="step-label">选择订单圈定方式</div></div>
+        <div class="step done" id="step2"><div class="step-num">2</div><div class="step-label">核对订单明细</div></div>
+        <div class="step active" id="step3"><div class="step-num">3</div><div class="step-label">设定修改规则</div></div>
+      </div>
+      <!-- Step 1 -->
+      <div class="card" style="padding:20px; margin-bottom:16px;">
+        <div class="section-title">Step 1：范围圈定</div>
+        <div class="page-tabs" style="margin-bottom:14px;">
+          <div class="page-tab active" id="tab-by-id" onclick="switchDrawerTab('by-id')">按订单号修改</div>
+          <div class="page-tab" id="tab-by-search" onclick="switchDrawerTab('by-search')">按搜索条件修改</div>
+        </div>
+        <div id="drawer-by-id">
+          <textarea class="input" rows="3" style="width:100%; resize:vertical;" placeholder="请粘贴订单号，支持英文逗号或换行分隔（单次最多 2000 单）">ORD-20260401-055, ORD-20260401-056, ORD-20260401-057, ORD-20260402-001, ORD-20260402-002</textarea>
+        </div>
+        <div id="drawer-by-search" style="display:none;">
+          <div class="form-row">
+            <span class="form-label"><span class="req">*</span>下单时间</span>
+            <span class="date-input-wrap"><input class="input" type="date" value="2026-04-01" style="width:140px;"></span> <span style="color:var(--text-muted);">—</span> <span class="date-input-wrap"><input class="input" type="date" value="2026-04-30" style="width:140px;"></span>
+            <span class="text-muted">(限跨度 3 个月)</span>
+          </div>
+          <div class="form-row">
+            <span class="form-label">所属店铺</span>
+            <select class="select" style="width:260px;"><option value="">可多选搜索店铺...</option><option>Shopee菲律宾1店</option><option>Shopee台湾01店</option><option>Amazon US 1号店</option></select>
+          </div>
+          <div class="form-row">
+            <span class="form-label">原运营</span>
+            <select class="select" style="width:180px;"><option value="">请选择</option><option>张三</option><option>王五</option><option>赵六</option></select>
+            <span class="form-label">原业务单元</span>
+            <select class="select" style="width:180px;"><option value="">请选择</option><option>老北美组</option><option>欧洲Temu组</option><option>Temu全托管组</option></select>
+          </div>
+        </div>
+        <button class="btn btn-primary mt-16"><i class="fa-solid fa-download"></i> 加载相关订单明细</button>
+      </div>
+      <!-- Step 2 -->
+      <div class="card" style="padding:20px; margin-bottom:16px;">
+        <div class="section-title">Step 2：订单明细核对</div>
+        <div class="alert alert-success mb-8"><span class="alert-icon"><i class="fa-solid fa-circle-check"></i></span>已成功加载 <strong>5</strong> 笔符合条件的订单，请在下方设定修改规则。</div>
+        <div style="max-height:180px; overflow-y:auto; border:1px solid var(--border); border-radius:var(--radius);">
+          <table style="font-size:12px;"><thead><tr><th>订单号</th><th>出单时间</th><th>出单店铺</th><th>当前销售员</th><th>当前业务单元</th></tr></thead>
+          <tbody>
+            <tr><td>ORD-20260401-055</td><td>2026-04-01 10:05</td><td>Shopee菲律宾1店</td><td>张三</td><td>老北美组</td></tr>
+            <tr><td>ORD-20260401-056</td><td>2026-04-01 11:20</td><td>Shopee菲律宾2店</td><td>张三</td><td>老北美组</td></tr>
+            <tr><td>ORD-20260401-057</td><td>2026-04-01 14:33</td><td>Amazon US 1号店</td><td>王五</td><td>欧洲Temu组</td></tr>
+            <tr><td>ORD-20260402-001</td><td>2026-04-02 09:15</td><td>Shopee台湾01店</td><td>—</td><td>—</td></tr>
+            <tr><td>ORD-20260402-002</td><td>2026-04-02 10:40</td><td>Temu EU 1号店</td><td>赵六</td><td>Temu全托管组</td></tr>
+          </tbody></table>
+        </div>
+      </div>
+      <!-- Step 3 -->
+      <div class="card" style="padding:20px;">
+        <div class="section-title">Step 3：设定修改规则</div>
+        <div class="form-row">
+          <span class="form-label" style="font-weight:600;">运营</span>
+          <div class="radio-group">
+            <label class="radio-item"><input type="radio" name="rp" class="radio" checked onchange="toggleSpecify('specify-person',false)"> 按当前规则匹配</label>
+            <label class="radio-item"><input type="radio" name="rp" class="radio" onchange="toggleSpecify('specify-person',true)"> 指定运营</label>
+          </div>
+          <select class="select" id="specify-person" disabled style="opacity:.4;"><option>请搜索选择人员...</option><option>李四</option><option>赵六</option></select>
+        </div>
+        <div class="form-row">
+          <span class="form-label" style="font-weight:600;">业务单元</span>
+          <div class="radio-group">
+            <label class="radio-item"><input type="radio" name="rb" class="radio" checked onchange="toggleSpecify('specify-bu',false)"> 按当前规则匹配</label>
+            <label class="radio-item"><input type="radio" name="rb" class="radio" onchange="toggleSpecify('specify-bu',true)"> 指定业务单元</label>
+          </div>
+          <select class="select" id="specify-bu" disabled style="opacity:.4;"><option>请选择业务单元...</option><option>菲律宾本土组</option><option>北美Amazon组</option></select>
+        </div>
+      </div>
+    </div>
+    <div class="drawer-footer">
+      <button class="btn" onclick="closeAll()">取 消</button>
+      <button class="btn btn-danger-fill" onclick="openModal('modal-drawer-confirm');"><i class="fa-solid fa-bolt"></i> 确认修改</button>
     </div>
   </div>
 </div>
 
-<!-- Order Drawer -->
-<div class="drawer-mask" id="orderDrawerMask" onclick="closeOrderDrawer()"></div>
-<div class="drawer" id="orderDrawer"></div>
+<!-- Modal: 调整任务最终确认 -->
+<div id="modal-drawer-confirm" class="modal-overlay" onclick="if(event.target===this)closeAll()">
+  <div class="confirm-box" style="z-index:210;">
+    <div class="confirm-icon"><i class="fa-solid fa-triangle-exclamation" style="color:var(--danger);"></i></div>
+    <div class="confirm-title">确认修改订单归属</div>
+    <div class="confirm-text">
+      确认将这 <strong style="color:var(--danger);">5</strong> 笔订单的归属数据按所设规则进行覆盖？<br>此操作将永久记录审计日志。
+    </div>
+    <div class="confirm-actions">
+      <button class="btn" onclick="closeModal('modal-drawer-confirm')">取 消</button>
+      <button class="btn btn-danger-fill" onclick="closeAll();showToast('success','5 笔订单归属修改成功，已记录审计日志')">确认修改</button>
+    </div>
+  </div>
+</div>
 
-<!-- Store Popover -->
-<div class="store-popover" id="storePopover"></div>
+<!-- Modal: 店铺转移BU -->
+<div id="modal-store-transfer" class="modal-overlay" onclick="if(event.target===this)closeAll()">
+  <div class="modal" style="width:560px;">
+    <div class="modal-header"><span><i class="fa-solid fa-right-left" style="color:var(--warning); margin-right:8px;"></i>店铺转移业务单元</span><span class="modal-close" onclick="closeAll()"><i class="fa-solid fa-xmark"></i></span></div>
+    <div class="modal-body">
+      <div class="form-row"><span class="form-label">转移店铺</span><strong>SMT033</strong> (速卖通)</div>
+      <div class="form-row"><span class="form-label">当前BU</span><span class="tag tag-primary">深圳速卖通工具组</span></div>
+      <div class="form-row"><span class="form-label"><span class="req">*</span>目标BU</span><select class="select" style="width:320px;"><option>请选择目标业务单元...</option><option>工业运营中心 / 速卖通事业部 / 速卖通元器件组</option><option>工业运营中心 / 东南亚项目部 / 深圳东南亚跨境组</option><option>亚马逊工业事业部</option></select></div>
+      <div class="alert alert-warning mt-16"><span class="alert-icon"><i class="fa-solid fa-triangle-exclamation"></i></span><div>该店铺当前销售员 <strong>张赛</strong> 不属于目标BU。转移后将<strong>自动解绑销售员</strong>，店铺进入待分配状态。客服 <strong>赵六</strong> 同理。</div></div>
+    </div>
+    <div class="modal-footer"><button class="btn" onclick="closeAll()">取消</button><button class="btn btn-primary" onclick="closeAll();showToast('success','店铺 SMT033 已转移至目标业务单元，原销售员和客服已自动解绑')">确认转移</button></div>
+  </div>
+</div>
 
-<script src="data.js"></script>
+<!-- Modal: 店铺分配BU + 人员 -->
+<div id="modal-store-assign" class="modal-overlay" onclick="if(event.target===this)closeAll()">
+  <div class="modal" style="width:620px;">
+    <div class="modal-header"><span><i class="fa-solid fa-link" style="color:var(--primary); margin-right:8px;"></i>分配店铺</span><span class="modal-close" onclick="closeAll()"><i class="fa-solid fa-xmark"></i></span></div>
+    <div class="modal-body">
+      <div class="form-row"><span class="form-label">待分配店铺</span><span class="tag tag-danger">SPE055</span> <span class="tag tag-danger">AMZ-US-NEW01</span> <span class="tag tag-danger">TEMU-EU-003</span></div>
+      <div class="divider"></div>
+      <div class="form-row"><span class="form-label"><span class="req">*</span>目标BU</span><select class="select" style="width:320px;"><option>请选择业务单元...</option><option>工业运营中心 / 速卖通事业部 / 深圳速卖通工具组</option><option>工业运营中心 / 东南亚项目部 / 深圳东南亚跨境组</option></select></div>
+      <div class="form-row"><span class="form-label">销售员</span><select class="select" style="width:200px;"><option>请选择销售员（可选）</option><option>张赛</option><option>黄爱纯</option><option>张旭</option><option>万恩</option><option>李洋</option></select></div>
+      <div class="form-row"><span class="form-label">客服</span><select class="select" style="width:200px;"><option>请选择客服（可选）</option><option>赵六</option><option>李洋</option></select></div>
+      <div class="alert alert-info mt-16"><span class="alert-icon"><i class="fa-solid fa-circle-info"></i></span><div>销售员和客服可稍后再分配。分配BU后，店铺将从「未分配」列表中移除。</div></div>
+    </div>
+    <div class="modal-footer"><button class="btn" onclick="closeAll()">取消</button><button class="btn btn-primary" onclick="closeAll();showToast('success','3 家店铺已分配至目标业务单元')">确认分配</button></div>
+  </div>
+</div>
+
+<script>
+// ===== Page / Tab Switching =====
+function showPage(id, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.top-nav .nav-item').forEach(n => n.classList.remove('active'));
+  el.classList.add('active');
+}
+function showBuTab(id, el) {
+  document.querySelectorAll('.bu-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  el.closest('.seg-tabs').querySelectorAll('.seg-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+function showOrderTab(id, el) {
+  document.querySelectorAll('.order-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  el.parentElement.querySelectorAll('.page-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ===== Modal Management =====
+function openModal(id) { document.getElementById(id).classList.add('show'); }
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+function closeAll() { document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('show')); }
+
+// ===== Toast =====
+function showToast(type, msg) {
+  const t = document.getElementById('toast');
+  t.className = 'toast toast-' + type + ' show';
+  t.querySelector('#toast-text').textContent = msg;
+  t.querySelector('i').className = type === 'success' ? 'fa-solid fa-circle-check' : type === 'warning' ? 'fa-solid fa-triangle-exclamation' : 'fa-solid fa-circle-xmark';
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ===== Page Context: 切换店铺管理 / 业务单元视图 =====
+let lastBuName = '深圳速卖通工具组'; // 跟踪最后选中的 BU，供标签页切换时恢复
+
+function setPageContext(type, name, el) {
+  const titleEl = document.getElementById('page-title');
+  const badgeEl = document.getElementById('status-badge');
+  const storeTab = document.querySelector('[data-tab=bu-store]');
+  const personTab = document.querySelector('[data-tab=bu-personnel]');
+
+  if (type === 'store') {
+    // 切换到店铺管理上下文
+    titleEl.textContent = '店铺管理';
+    badgeEl.style.display = 'none';
+    // 取消所有 BU 节点选中
+    document.querySelectorAll('.sidebar-section:last-child .tree-node').forEach(n => n.classList.remove('active'));
+    // 选中店铺节点
+    document.querySelectorAll('[data-store-view]').forEach(n => n.classList.remove('active'));
+    const storeNode = document.querySelector('[data-store-view="' + name + '"]');
+    if (storeNode) storeNode.classList.add('active');
+    // 切换到按店铺 tab
+    showBuTab('bu-store', storeTab);
+    // 过滤店铺视图
+    filterStoreView(name);
+    // 隐藏绑定人员按钮（店铺管理视图不需要）
+    document.querySelector('.page-header-right .btn-primary').style.display = 'none';
+  } else if (type === 'bu') {
+    // 记录当前 BU 名称
+    if (name) lastBuName = name;
+    // 切换到业务单元上下文
+    titleEl.textContent = name || lastBuName;
+    badgeEl.style.display = 'inline-flex';
+    // 取消所有店铺节点选中
+    document.querySelectorAll('[data-store-view]').forEach(n => n.classList.remove('active'));
+    // 选中 BU 节点
+    document.querySelectorAll('.sidebar-section:last-child .tree-node').forEach(n => n.classList.remove('active'));
+    if (el) el.classList.add('active');
+    // 切换到按人员 tab（操作日志 tab 由调用方额外切换）
+    if (!el || el.getAttribute('data-tab') !== 'bu-log') {
+      showBuTab('bu-personnel', personTab);
+    }
+    // 显示绑定人员按钮
+    document.querySelector('.page-header-right .btn-primary').style.display = '';
+  }
+}
+
+// ===== Modal: 移除已选店铺标签 =====
+function removeStoreTag(btn, storeId) {
+  const tag = btn.closest('.sel-tag');
+  if (!tag) return;
+  tag.remove();
+  // 更新已选计数
+  const area = document.getElementById('selected-store-area');
+  const count = area.querySelectorAll('.sel-tag').length;
+  const countEl = document.getElementById('selected-store-count');
+  if (countEl) countEl.textContent = count;
+  showToast('success', '已取消选择');
+}
+
+// ===== Modal: 生效日期校验 — 禁止过往日期 =====
+function validateEffectiveDate(input) {
+  const hint = document.getElementById('date-hint');
+  if (!hint) return;
+  const today = new Date();
+  today.setHours(0,0,0,0);
+  const selected = new Date(input.value + 'T00:00:00');
+  if (selected < today) {
+    hint.style.display = 'inline';
+    hint.style.color = 'var(--danger)';
+    hint.textContent = '⚠️ 不允许选择过往日期';
+    input.style.borderColor = 'var(--danger)';
+  } else {
+    hint.style.display = 'none';
+    input.style.borderColor = '';
+  }
+}
+
+// ===== Batch Selection (Personnel) =====
+function toggleAllCheckbox(master) {
+  document.querySelectorAll('.row-cb').forEach(cb => { cb.checked = master.checked; });
+  updateBatchBar();
+}
+function updateBatchBar() {
+  const checked = document.querySelectorAll('.row-cb:checked').length;
+  document.getElementById('batch-bar').style.display = checked > 0 ? 'flex' : 'none';
+  document.getElementById('batch-count').textContent = checked;
+}
+function clearSelection() {
+  document.querySelectorAll('.row-cb').forEach(cb => cb.checked = false);
+  updateBatchBar();
+}
+
+// ===== Batch Selection (Orders) =====
+function toggleAllOrderCb(master) {
+  document.querySelectorAll('.order-cb').forEach(cb => { cb.checked = master.checked; });
+  updateOrderBatch();
+}
+function updateOrderBatch() {
+  const checked = document.querySelectorAll('.order-cb:checked').length;
+  document.getElementById('order-batch-bar').style.display = checked > 0 ? 'flex' : 'none';
+  document.getElementById('order-batch-count').textContent = checked;
+  document.getElementById('order-batch-num').textContent = checked;
+}
+function clearOrderSelection() {
+  document.querySelectorAll('.order-cb').forEach(cb => cb.checked = false);
+  updateOrderBatch();
+}
+
+// ===== Inline Cell Editing (Sales Target) =====
+function startEdit(el, value) {
+  if (el.querySelector('input')) return;
+  const original = el.textContent;
+  const fontSize = getComputedStyle(el).fontSize;
+  el.innerHTML = '<input class="m-input" type="number" value="' + value + '" style="font-size:' + fontSize + ';">';
+  const inp = el.querySelector('input');
+  inp.focus();
+  inp.select();
+  inp.addEventListener('blur', function() { finishEdit(el, inp, original); });
+  inp.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') { inp.blur(); }
+    if (e.key === 'Escape') { el.innerHTML = original; el.onclick = function() { startEdit(el, value); }; }
+    if (e.key === 'Tab') { e.preventDefault(); inp.blur(); /* could move to next cell */ }
+  });
+}
+function finishEdit(el, inp, original) {
+  const val = parseInt(inp.value) || 0;
+  const formatted = '¥' + val.toLocaleString();
+  el.textContent = formatted;
+  el.onclick = function() { startEdit(el, val); };
+  if (formatted !== original) {
+    changeCount++;
+    document.getElementById('change-count').textContent = changeCount;
+    el.style.background = 'var(--warning-light)';
+    el.style.borderRadius = '3px';
+    showToast('success', '已修改：' + original + ' → ' + formatted);
+  }
+}
+
+// ===== Save Targets (with validation) =====
+function saveTargets() {
+  // Simulate: check for Person-level strong validation failure
+  // In this prototype, 王五 has a diff of ¥3,000
+  openModal('modal-save-block');
+}
+
+// ===== Drawer tab switching =====
+function switchDrawerTab(mode) {
+  document.getElementById('drawer-by-id').style.display = mode === 'by-id' ? 'block' : 'none';
+  document.getElementById('drawer-by-search').style.display = mode === 'by-search' ? 'block' : 'none';
+  document.getElementById('tab-by-id').classList.toggle('active', mode === 'by-id');
+  document.getElementById('tab-by-search').classList.toggle('active', mode === 'by-search');
+}
+
+// ===== Toggle specify select =====
+function toggleSpecify(id, enable) {
+  const el = document.getElementById(id);
+  el.disabled = !enable;
+  el.style.opacity = enable ? '1' : '.4';
+}
+
+// ===== Edit Mode Toggle (Sales Target) =====
+let editModeOn = false;
+let changeCount = 0;
+function toggleEditMode() {
+  editModeOn = !editModeOn;
+  const dot = document.getElementById('edit-toggle-dot');
+  const knob = document.getElementById('edit-toggle-knob');
+  const label = document.getElementById('edit-mode-label');
+  const bar = document.getElementById('edit-changes-bar');
+  const editHint = document.getElementById('edit-hint');
+  const readonlyHint = document.getElementById('readonly-hint');
+  if (editModeOn) {
+    dot.style.background = 'var(--primary)';
+    knob.style.left = '18px';
+    label.textContent = '编辑模式：开启';
+    label.style.color = 'var(--primary)';
+    bar.style.display = 'flex';
+    editHint.style.display = 'flex';
+    readonlyHint.style.display = 'none';
+    // Enable all editable cells
+    document.querySelectorAll('.m-target.editable').forEach(el => {
+      el.style.pointerEvents = 'auto';
+      el.style.opacity = '1';
+    });
+    showToast('success', '已进入编辑模式，点击蓝色数字可修改目标');
+  } else {
+    dot.style.background = 'var(--border)';
+    knob.style.left = '2px';
+    label.textContent = '编辑模式：关闭';
+    label.style.color = 'var(--text-muted)';
+    bar.style.display = 'none';
+    editHint.style.display = 'none';
+    readonlyHint.style.display = 'flex';
+    // Disable all editable cells
+    document.querySelectorAll('.m-target.editable').forEach(el => {
+      el.style.pointerEvents = 'none';
+      el.style.opacity = '.7';
+    });
+  }
+}
+function undoAllChanges() {
+  changeCount = 0;
+  document.getElementById('change-count').textContent = '0';
+  showToast('success', '已撤销全部修改');
+}
+// Init: disable editing by default
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.m-target.editable').forEach(el => {
+    el.style.pointerEvents = 'none';
+    el.style.opacity = '.7';
+  });
+});
+
+// ===== Import Steps =====
+let currentImportStep = 1;
+function advanceImportStep(step) {
+  currentImportStep = step;
+  document.getElementById('import-phase1').style.display = step === 1 ? 'block' : 'none';
+  document.getElementById('import-phase2').style.display = step === 2 ? 'block' : 'none';
+  document.getElementById('import-phase3').style.display = step === 3 ? 'block' : 'none';
+  document.getElementById('import-step1').className = step > 1 ? 'step done' : 'step active';
+  document.getElementById('import-step2').className = step === 2 ? 'step active' : step > 2 ? 'step done' : 'step';
+  document.getElementById('import-step3').className = step === 3 ? 'step active' : 'step';
+  document.getElementById('import-prev-btn').style.display = step > 1 ? 'inline-flex' : 'none';
+}
+function prevImportStep() {
+  if (currentImportStep > 1) advanceImportStep(currentImportStep - 1);
+}
+function resetImport() {
+  currentImportStep = 1;
+  advanceImportStep(1);
+}
+
+// ===== Store View: Batch Selection =====
+function toggleAllStoreCb(master) {
+  document.querySelectorAll('.store-cb').forEach(cb => { cb.checked = master.checked; });
+  updateStoreBatch();
+}
+function updateStoreBatch() {
+  const checked = document.querySelectorAll('.store-cb:checked').length;
+  document.getElementById('store-batch-bar').style.display = checked > 0 ? 'flex' : 'none';
+  document.getElementById('store-batch-count').textContent = checked;
+}
+function clearStoreSelection() {
+  document.querySelectorAll('.store-cb').forEach(cb => cb.checked = false);
+  updateStoreBatch();
+}
+
+// ===== Store View: Filter Chips =====
+function filterStoreChip(el, type) {
+  document.querySelectorAll('.store-filter-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  filterStoreView(type);
+}
+function filterStoreView(type) {
+  document.querySelectorAll('.store-row').forEach(row => {
+    const rowType = row.getAttribute('data-type');
+    if (type === 'all') { row.style.display = ''; }
+    else if (type === 'unassigned') { row.style.display = rowType === 'unassigned' ? '' : 'none'; }
+    else if (type === 'no-sales') { row.style.display = rowType === 'no-sales' ? '' : 'none'; }
+    else if (type === 'no-cs') { row.style.display = (rowType === 'no-cs' || rowType === 'unassigned') ? '' : 'none'; }
+    else { row.style.display = ''; }
+  });
+}
+</script>
 </body>
 </html>

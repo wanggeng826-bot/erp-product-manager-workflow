@@ -97,3 +97,57 @@
 - HTML 原型使用静态 `index.html` + `data.js`，不连接真实接口。
 - 风格遵循中文 B 端 ERP：浅灰背景、白色内容面板、紧凑表格、Ant Design 蓝、4-8px 圆角。
 - 正式页面内没有角色切换器、状态切换器、调试面板或演示控制区。
+
+## 6. Agent 工作流约束 — 问题闭环（2026-05-14）
+
+以下问题在原型走查中发现，已修复并沉淀为长期约束，避免 Agent 生成原型时重现。
+
+### 6.1 下拉选择器必须有模拟数据
+
+**问题**：`modal-add-person` 中销售员下拉仅含占位 `<option>`，无可选数据。
+**根因**：Agent 生成静态原型时，下拉组件只写 placeholder 不填充 mock options。
+**约束**：
+- 所有 `<select>` 必须包含 ≥2 个实际 `<option>`，placeholder 使用 `value=""` 空值首选项。
+- 涉及人员选择的组件需从已知人员列表中选取（沈浩楠、张赛、廖中霞、黄爱纯、张旭、万恩、李洋）。
+
+### 6.2 已选标签必须支持取消
+
+**问题**：`.sel-tag` 中 `×` 按钮无 `onclick` 处理，用户无法取消已选店铺。
+**根因**：Agent 生成标签时只写视觉结构，不绑定交互行为。
+**约束**：
+- 所有 `.sel-tag .x` 必须有 `onclick="removeStoreTag(this, '<storeId>')"` 和 `title="取消选择"`。
+- `removeStoreTag()` 必须：移除 DOM 节点 → 更新计数 → 给出 Toast 反馈。
+- 标签需带 `data-store` 属性与树表 checkbox 建立对应关系。
+
+### 6.3 日期输入必须使用系统风格并禁止过往日期
+
+**问题**：生效日期使用原生 `<input type="date">`，样式与系统 UI 不统一，且允许选择过往日期。
+**根因**：Agent 未查阅项目 UI 库中的日期组件规范，也未施加业务校验。
+**约束**：
+- 日期输入使用 `.date-input-wrap` 包裹的 `<input type="date">`，通过 CSS 日历图标匹配系统风格。
+- 必须设置 `min` 属性为当天日期（`YYYY-MM-DD`），阻止原生日期选择器选中过往日期。
+- 必须绑定 `onchange="validateEffectiveDate(this)"` 做二次校验，输入过往日期时显示红色警告提示。
+- 默认值使用当天日期，不硬编码历史日期。
+
+### 6.4 Agent 自检清单
+
+每次生成/修改原型中 Modal 或表单区域后，Agent 须自查：
+1. 所有 `<select>` 是否有 ≥2 个 `<option>`？
+2. 所有标签/芯片的关闭按钮是否有 `onclick`？
+3. 所有日期输入是否包裹在 `.date-input-wrap` 中并设置了 `min`？
+4. 增量修改后是否刷新浏览器验证交互行为（不仅是视觉）？
+
+### 6.5 自动化检查
+
+交付前必须运行组件一致性检查脚本：
+
+```bash
+bash prototype/salesperson-management/check-consistency.sh
+```
+
+该脚本自动校验：
+- 所有 `type="date"` 是否包裹 `.date-input-wrap`
+- 所有 `<select>` 是否 ≥2 个 `<option>`（豁免分页条数选择器）
+- 所有 `.sel-tag .x` 是否有 `onclick` 处理
+
+三项全部通过才能视为交付完成。Agent 修改原型后必须运行此检查，失败则必须修复。
