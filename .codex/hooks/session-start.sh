@@ -7,6 +7,11 @@ CODEX_ROOT="$(CDPATH= cd -- "$SCRIPT_DIR/.." && pwd)"
 SKILL_DIR="$CODEX_ROOT/skills/planning-with-files"
 PYTHON_BIN="${PYTHON_BIN:-$(command -v python3 || command -v python)}"
 PROJECT_ROOT="$(pwd)"
+ACTIVE_FILE="$PROJECT_ROOT/.codex/planning-active"
+
+if [ ! -f "$ACTIVE_FILE" ]; then
+    exit 0
+fi
 
 if [ -n "$PYTHON_BIN" ] && [ -f "$SKILL_DIR/scripts/session-catchup.py" ]; then
     "$PYTHON_BIN" "$SKILL_DIR/scripts/session-catchup.py" "$(pwd)"

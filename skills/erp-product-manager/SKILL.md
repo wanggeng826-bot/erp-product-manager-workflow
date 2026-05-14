@@ -161,7 +161,9 @@ PRD 已保存 → 用户表达：
       - 读 `../../ui-library/README.md` + `../../ui-library/tokens.css`
       - 按 §10 输入包逐项实现到 `../../prototype/<short-name>/`：
         index.html / styles.css / script.js / prototype-spec.md
-      - 完成后用 binding-checklist 自检
+      - 默认只做草稿级自检：文件可打开、主要结构可读、无明显脚本报错
+      - 明确告知用户：这次生成的是原型初稿，不自动走 UI 审查
+      - 等 PRD 和原型方案确认后，再唤起 `$ui-optimization-master` 做正式 UI 审查和质量门禁
 ```
 
 **判定优先级**：用户显式说"画原型 / 出原型 / 你来做" → 路径 B；否则默认路径 A。
@@ -173,7 +175,9 @@ PRD 已保存 → 用户表达：
 - **Pro v6 Priority Rule:** 任务对齐 Pro v6 / 最新版时，优先选用 `Button v6`、`ListPageTemplate v6`、`ErpShell v6`，页面方案显式标注主题模式（`Default` / `Dark` / `Glass`）；用户未指定时默认 `Default`。
 - **HTML Reuse Rule:** 路径 B 时直接 copy `../../ui-library/components/` 片段 + load `../../ui-library/tokens.css`。组件命名必须与 Figma 库一致。
 - **Source Mapping:** 任何可见的导航、页签、卡片、摘要、按钮必须能映射回 PRD §8 页面清单 + §10 组件映射表。无来源 → 不准画。
-- **Execution Loop:** `Foundation → Components → Page → Spec → Binding → Review → Revision`。
+- **Draft-First Rule:** 首次生成原型默认是草稿交付，只做最小可读性和结构自检，不自动触发 UI 审查、Playwright、完整 review rubric 或长 planning 流程。
+- **Review Trigger Rule:** 只有用户明确说“做最终审查 / UI 审查 / 定稿 QA”，或 PRD 与原型方案已确认，才转交 `$ui-optimization-master` 进入正式 UI 审查。
+- **Execution Loop:** 初稿阶段走 `Foundation → Components → Page → Spec`；确认后再走 `Review → Revision`。
 
 ### Step 6: Asset & Memory Management
 - Keep reusable standards separate from concrete cases.
@@ -189,7 +193,7 @@ PRD 已保存 → 用户表达：
 
 **Example 2: User asks for a prototype from an existing PRD**
 *User:* "这是我写的采购订单 PRD，帮我出个交互原型。"
-*Agent Action:* Read the provided PRD. Read UI references (`./references/ui-interaction-spec.md`, etc.). Verify source mapping, then output the HTML prototype structure without reopening discovery unless the PRD is fundamentally broken.
+*Agent Action:* Read the provided PRD. Read only the minimum UI references needed for generation. Verify source mapping, then output the HTML prototype structure without reopening discovery unless the PRD is fundamentally broken. Tell the user this is a draft prototype and that formal UI review happens later.
 
 **Example 2.5: User asks for a small tweak on an existing prototype**
 *User:* "基于已经生成好的原型，把这里的筛选区和按钮文案调一下。"

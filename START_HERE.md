@@ -1,8 +1,8 @@
 # 产品经理 AI 工作流 - START HERE
 
 这个项目的规则以各自 `SKILL.md` 为准。
-长对话由 `.codex/` hooks 维护任务计划、发现和进度。
-复杂 PM / UI 任务按 `skills/shared/context-memory-workflow.md` 执行。
+只有重任务会由 `.codex/` hooks 维护任务计划、发现和进度。
+复杂 PM / UI 重任务按 `skills/shared/context-memory-workflow.md` 执行。
 长期偏好、公司背景和自研 ERP 信息由 `knowledge/` 维护。
 
 ## 你现在怎么开始
