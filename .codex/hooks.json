@@ -6,8 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "sh .codex/hooks/session-start.sh 2>/dev/null || sh \"$HOME/.codex/hooks/session-start.sh\" 2>/dev/null || true",
-            "statusMessage": "Loading planning context"
+            "command": "sh .codex/hooks/session-start.sh 2>/dev/null || sh \"$HOME/.codex/hooks/session-start.sh\" 2>/dev/null || true"
           }
         ]
       }
@@ -28,8 +27,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 .codex/hooks/pre_tool_use.py 2>/dev/null || python3 \"$HOME/.codex/hooks/pre_tool_use.py\" 2>/dev/null || true",
-            "statusMessage": "Checking plan before Bash"
+            "command": "python3 .codex/hooks/pre_tool_use.py 2>/dev/null || python3 \"$HOME/.codex/hooks/pre_tool_use.py\" 2>/dev/null || true"
           }
         ]
       }
@@ -40,8 +38,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 .codex/hooks/post_tool_use.py 2>/dev/null || python3 \"$HOME/.codex/hooks/post_tool_use.py\" 2>/dev/null || true",
-            "statusMessage": "Reviewing Bash against plan"
+            "command": "python3 .codex/hooks/post_tool_use.py 2>/dev/null || python3 \"$HOME/.codex/hooks/post_tool_use.py\" 2>/dev/null || true"
           }
         ]
       }

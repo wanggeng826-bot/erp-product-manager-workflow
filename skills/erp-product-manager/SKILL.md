@@ -76,15 +76,15 @@ Follow these numbered steps strictly to avoid jumping ahead or missing requireme
 ### Step 1.5: Reference Loading
 
 Load references using **strict relative paths** only when needed:
-- **Fast Path（已有原型微调）:** 仅读取目标目录下直接相关文件，例如 `../../prototype/<name>/index.html`、`styles.css`、`script.js`、`prototype-spec.md`，以及必要的 `git diff`。除非用户要求结构重做或发现来源缺失，否则不要读取 `../../knowledge/README.md`、长 planning 文件、Figma 总说明、AI UI production workflow。
-- **Long-term knowledge & case boundaries:** Read `../../knowledge/README.md`, then relevant files under `../../knowledge/`.
-- **Figma UI Library（权威组件源，必读）:** 任何涉及 UI 设计、原型规划、方案配图、组件选型的任务，开场必读 `../../knowledge/figma-ant-design-ui-library.md`。该文件记录了 Figma 文件 `Ant Design ERP UI Library` 的 fileKey (`KaI3eGyylfiwrPlU3OR08C`)、组件清单、MCP 调用流程。**所有 UI 组件以该 Figma 文件为单一权威源**，HTML 镜像与文字规范文件均为衍生物，不一致时以 Figma 为准。
-- **Pro v6 最新迭代基线（按需必读）:** 用户提到 `latest`、`新版`、`preview.pro.ant.design`、`ant-design-pro v6` 时，必读 `../../knowledge/ant-design-pro-v6-baseline.md`，并将原型规划切换到 v6 语义（cssVar 主题模式、`color + variant` 组件心智、v6 template 优先）。
-- **HTML 镜像库（HTML 原型快速复用）:** 需要直接给出 HTML 原型代码时，读 `../../ui-library/README.md`，从 `../../ui-library/components/` 复制片段，foundation token 用 `../../ui-library/tokens.css`，不要重写 CSS 变量、不要硬编码颜色。
-- **Long-context/multi-step tasks:** Read `../shared/context-memory-workflow.md` and maintain `../../task_plan.md`, `../../findings.md`, and `../../progress.md`.
+- **Fast Path（已有原型微调）:** 仅读取目标目录下直接相关文件，例如 `../../prototype/<name>/index.html`、`styles.css`、`script.js`、`prototype-spec.md`，以及必要的 `git diff`。除非用户要求结构重做、补来源映射，或明确切到正式评审，否则不要读取 `../../knowledge/README.md`、长 planning 文件、Figma 总说明、AI UI production workflow、review rubric。
+- **New requirement / competitor analysis:** 先读当前路由对应的单一 expert reference；只有在业务背景、术语或长期偏好会影响结论时，才补读 `../../knowledge/README.md` 和必要知识文件。
+- **Figma UI Library（按需）:** 只有任务真的涉及 UI 设计、组件选型、原型生成时，才读 `../../knowledge/figma-ant-design-ui-library.md`。如果只是已有 HTML 小改，优先直接看目标原型和 `../../ui-library/`，不要先开 Figma 总说明。
+- **Pro v6 最新迭代基线（按需必读）:** 用户提到 `latest`、`新版`、`preview.pro.ant.design`、`ant-design-pro v6` 时，才读 `../../knowledge/ant-design-pro-v6-baseline.md`。
+- **HTML 镜像库（按需）:** 需要直接给出 HTML 原型代码时，读 `../../ui-library/README.md`，从 `../../ui-library/components/` 复制片段，foundation token 用 `../../ui-library/tokens.css`，不要重写 CSS 变量、不要硬编码颜色。
+- **Long-context/multi-step tasks（重任务专用）:** 只有复杂需求、PRD、长原型任务、正式 UI 评审、跨多轮长对话时，才读 `../shared/context-memory-workflow.md` 并维护 `../../task_plan.md`、`../../findings.md`、`../../progress.md`。轻任务和已有原型微调禁止开启长 planning。
 - **Code/HTML/JS edits:** Read `../karpathy-guidelines/SKILL.md` first.
-- **UI rules & constraints:** Read `./references/chinese-b-end-erp-visual-baseline.md`, `./references/ui-interaction-spec.md`, and `./references/erp-reference-patterns.md`.
-- **AI UI production workflow:** For prototype planning, Figma handoff, or high-completion UI work, read `../ui-optimization-master/references/ai-ui-production-workflow.md`, `../ui-optimization-master/references/erp-ui-pattern-library.md`, and `../ui-optimization-master/references/erp-design-system-checklist.md`.
+- **UI rules & constraints（按需）:** 只有在页面结构设计、UI 方案、PRD 页面定义、正式原型交付时，才读 `./references/chinese-b-end-erp-visual-baseline.md`、`./references/ui-interaction-spec.md`、`./references/erp-reference-patterns.md`。
+- **AI UI production workflow（仅定稿期）:** 只有在高完成度原型交付、Figma handoff、正式 UI 优化、UI 审查 / 定稿 QA 阶段，才读 `../ui-optimization-master/references/ai-ui-production-workflow.md`、`../ui-optimization-master/references/erp-ui-pattern-library.md`、`../ui-optimization-master/references/erp-design-system-checklist.md`。
 - **Competitor analysis sub-agent（带竞品资料时必读）:** Read `./references/competitor-analysis-expert.md`. 这是项目里"竞品拆解 + 产品决策 + PRD 一致性审校"的完整 5 阶段角色提示词。
 - **New requirement sub-agent（纯需求时必读）:** Read `./references/new-requirement-expert.md`. 这是项目里"跨境电商 ERP 新需求接入"的完整提示词，含 9 大输出表格 + Ant Design UI 硬性约束。
 - **PRD writing（必读三件套）:** Read `./references/prd-template.md`（合并版 9+1 节骨架），`../../knowledge/prd-style-anchor.md`（freddy 的 PRD 口味），`../../knowledge/prd-example-order-batch-cancel.md`（一份完整示范 PRD，照这个口味写）。
@@ -183,7 +183,7 @@ PRD 已保存 → 用户表达：
 - Keep reusable standards separate from concrete cases.
 - Put concrete case assets under `../../cases/<case-name>/`.
 - Default new tasks must **not** read `../../cases/**` unless the user explicitly asks to reference a historical case.
-- Keep current-task memory in `../../task_plan.md`, `../../findings.md`, and `../../progress.md`.
+- Root planning files `../../task_plan.md`, `../../findings.md`, and `../../progress.md` are only for the single active heavy task. Archive and reset them after completion; do not accumulate unrelated tasks there.
 
 ## Examples
 

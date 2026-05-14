@@ -38,26 +38,33 @@ If the user asks for direct modification and files are available, inspect the fi
 
 ## Required References
 
-When working inside this project, read references as needed:
+When working inside this project, read references by task tier instead of front-loading everything:
 
-- For long-term user taste, company context, ERP background, case boundaries, and UI preferences: read `knowledge/README.md`, then the relevant files under `knowledge/`.
-- For Ant Design Pro latest design baseline: read `knowledge/ant-design-pro-v6-baseline.md` when user asks for "latest", "新版", "Pro 风格", or preview.pro.ant.design alignment.
-- For long UI review or prototype optimization tasks: read `skills/shared/context-memory-workflow.md` and keep `task_plan.md`, `findings.md`, and `progress.md` current.
-- For any direct code or prototype file edits, apply `skills/karpathy-guidelines/SKILL.md` first.
-- For Chinese B-end ERP visual style: read `references/chinese-b-end-erp-visual-baseline.md`.
-- For interaction behavior, permissions, states, drawers, forms, tables, operation logs: read `references/ui-interaction-spec.md`.
-- For ERP page patterns and shared component behavior: read `references/erp-reference-patterns.md`.
-- **For ANY UI design / review / prototype task in this project (READ FIRST):** read `../../knowledge/figma-ant-design-ui-library.md` and `../../knowledge/figma-component-registry.json`. The markdown file records the authority source and version policy; the JSON registry is the low-token component index. Default to the registry + HTML mirror before calling Figma MCP. **Figma remains the authority source**, but common component selection should not read the full Figma file every time.
-- For Pro v6-aligned tasks, prioritize v6 assets in the same library: `Button v6`, `ListPageTemplate v6`, `ErpShell v6`, and explicit theme mode (`Default`, `Dark`, `Glass`).
-- For HTML prototype review / edit, also load the HTML mirror: `../../ui-library/README.md`, with foundation tokens in `../../ui-library/tokens.css` and reusable HTML snippets in `../../ui-library/components/`. 评审 HTML 原型时优先比对它是否用了镜像里的变量与片段。
-- Only call Figma MCP when writing/updating Figma canvas nodes, the Figma library version changes, a registry nodeId is missing/invalid for a Figma operation, or the user explicitly asks to inspect the current Figma file. Visual screenshot acceptance does not require Figma MCP; use local HTML/browser checks where possible.
-- For AI-assisted UI production and revision workflow: read `references/ai-ui-production-workflow.md`.
-- For user-referenced video workflow, 90% completion, Figma/MCP/component-library method, or TD Design to Ant Design transfer: read `references/ant-design-video-workflow.md`.
-- For reusable ERP components and page patterns: read `references/erp-ui-pattern-library.md`.
-- For recurring ERP UI failures and concrete fixes: read `references/erp-ui-anti-pattern-catalog.md`.
-- For tokens, accessibility, component binding, and final consistency checks: read `references/erp-design-system-checklist.md`.
-- For formal prototype gates: read `references/prototype-quality-gate.md`.
-- For Ant Design review details: read `references/ant-design-erp-review-rules.md`.
+- **Fast Path: existing HTML / screenshot small tweak**
+  - Read only the target files or screenshot plus the directly related spec.
+  - Apply `skills/karpathy-guidelines/SKILL.md` for file edits.
+  - Add `references/chinese-b-end-erp-visual-baseline.md` only if style judgment is needed.
+  - Do not automatically read planning files, Figma authority docs, component registry, AI UI workflow, or formal review rubrics.
+
+- **Standard Path: scoped UI optimization**
+  - Read the target files plus the minimum needed references from:
+    - `references/chinese-b-end-erp-visual-baseline.md`
+    - `references/ui-interaction-spec.md`
+    - `references/erp-reference-patterns.md`
+  - Read `knowledge/README.md` only when long-term user taste or company context affects the recommendation.
+  - Read `../../ui-library/README.md`, `../../ui-library/tokens.css`, and reusable snippets only when the task involves direct HTML prototype implementation or component reuse.
+
+- **Formal UI Review / Final QA**
+  - Read `skills/shared/context-memory-workflow.md` and maintain root planning files only for this single active heavy task.
+  - Read `../../knowledge/figma-ant-design-ui-library.md` and `../../knowledge/figma-component-registry.json` when formal component mapping or library validation matters.
+  - Add `references/ai-ui-production-workflow.md`, `references/erp-ui-pattern-library.md`, `references/erp-ui-anti-pattern-catalog.md`, `references/erp-design-system-checklist.md`, `references/prototype-quality-gate.md`, and `references/ant-design-erp-review-rules.md` only at this stage.
+
+- **Pro v6 baseline (only when requested)**
+  - Read `knowledge/ant-design-pro-v6-baseline.md` when the user asks for `latest`, `新版`, `Pro 风格`, or preview.pro.ant.design alignment.
+
+- **Figma usage boundary**
+  - Prefer the low-token registry + HTML mirror before Figma MCP.
+  - Only call Figma MCP when writing/updating Figma canvas nodes, validating library version changes, fixing a missing registry nodeId, or when the user explicitly asks to inspect the current Figma file.
 
 ## Core Review Principles
 
@@ -65,7 +72,7 @@ Always review against these principles:
 
 - Respect confirmed long-term knowledge from `knowledge/` when it applies.
 - Do not read historical `cases/**` prototype or PRD files unless the user asks to review that specific case.
-- Keep review findings, source mapping, file changes, and verification notes in planning files during long tasks.
+- Keep review findings, source mapping, file changes, and verification notes in planning files only during the single active heavy task. Do not append light tasks into root planning files.
 - Easy to understand within 3 seconds.
 - Fewer page jumps.
 - Stable Chinese B-end ERP admin shell.
