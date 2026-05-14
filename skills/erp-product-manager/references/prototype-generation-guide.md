@@ -12,16 +12,20 @@
 
 ## 2. 固定文件与目录
 
-生成原型前优先读取：
+生成原型前按 router 决定读取范围：
 
+- `skills/workflow-strategy-router/SKILL.md`（必先读）
+- `references/prototype-template.md`
 - `references/chinese-b-end-erp-visual-baseline.md`
 - `references/ui-interaction-spec.md`
 - `references/erp-reference-patterns.md`
+
+只有 router 判定为 `prototype-final` 或 `ui-review` 时，才额外读取：
+
 - `skills/ui-optimization-master/references/ai-ui-production-workflow.md`
 - `skills/ui-optimization-master/references/erp-ui-pattern-library.md`
 - `skills/ui-optimization-master/references/erp-design-system-checklist.md`
 - `skills/ui-optimization-master/references/erp-ui-anti-pattern-catalog.md`
-- `references/prototype-template.md`
 
 默认输出到：
 
@@ -31,29 +35,32 @@
 
 每次新对话中，默认按以下顺序执行：
 
-1. 读取 UI 主规范
-2. 读取 ERP 补充规范
-3. 读取 PRD 文件
-4. 先确认页面清单、主任务与交付边界，并生成页面来源映射
+1. 先运行 router，锁定 `prototype-draft` 或 `prototype-final`
+2. 读取最小必需规范和 PRD 文件
+3. 先确认页面清单、主任务、交付边界，并生成原型任务单
+4. 生成页面来源映射
 5. 建立设计基础映射：颜色、字体、间距、圆角、边框、阴影、状态语义
 6. 建立组件映射：壳层、标题区、筛选区、表格区、批量操作、抽屉、弹窗、状态、权限、日志
 7. 拆解主流程、弹窗、抽屉、状态与权限差异
 8. 校验每个可见元素是否能回指到 PRD 或已确认需求
 9. 生成 HTML 可交互原型
-10. 按反模式清单和质量门禁做二次修正
-11. 将原型文件输出到固定目录
+10. 若为 `prototype-draft`，只做忠实性检查和最小自检
+11. 若为 `prototype-final`，再按反模式清单和质量门禁做正式修正
+12. 将原型文件输出到固定目录
 
 补充规则：
 
 - 如果没有正式 PRD，先生成 PRD，再生成原型。
 - 未经 PRD 或用户明确确认，不得自行扩展页面数量或模块结构。
 - 未经页面来源映射确认，不得加入新的导航项、页签、摘要卡、快捷操作或模块标题。
-- 默认输出必须是正式交付版，不要带调试控件。
+- 默认首次输出是原型初稿，不要自动进入正式 UI 审查。
+- 正式交付版必须由 router 明确判定为 `prototype-final`。
 
 ## 4. 新对话的标准提示词
 
 ```text
-请先读取当前项目中的 UI 设计规范文件：
+请先读取当前项目中的 router 和最小 UI 设计规范文件：
+0. skills/workflow-strategy-router/SKILL.md
 1. references/chinese-b-end-erp-visual-baseline.md
 2. references/ui-interaction-spec.md
 3. references/erp-reference-patterns.md
@@ -65,8 +72,8 @@
 要求：
 1. 使用 Ant Design + 中文 B 端 ERP 后台风格
 2. 严格遵循现有 UI 规范和操作日志规范
-3. 先输出页面来源映射和组件映射，再生成页面
-4. 遵循 Foundation -> Components -> Page -> Spec -> Binding -> Review -> Revision
+3. 先输出原型任务单、页面来源映射和组件映射，再生成页面
+4. draft 阶段只做忠实交付和最小自检，不进入正式 UI 审查
 5. 尽量少跳转，查看优先抽屉，字段少新建用弹窗，字段多用抽屉
 6. 原型需要可点击
 7. 输出到 prototype/
@@ -85,6 +92,8 @@
 - 边界情况
 
 如果 PRD 里没写完整，我会优先按现有 UI 规范补齐默认交互。
+
+但补齐默认交互不等于允许擅自扩展正式页面结构。没有来源的新增模块、说明文案、快捷操作、摘要卡和导航，不得进入交付物。
 
 ## 6. 我默认会遵守的交互规则
 

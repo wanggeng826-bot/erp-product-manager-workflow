@@ -7,7 +7,11 @@ description: UI optimization and review workflow for Chinese B-end ERP pages, An
 
 Use this skill to review, diagnose, and improve Chinese B-end ERP UI designs, especially Ant Design based pages and HTML interactive prototypes.
 
+This skill is a domain executor. Before formal UI review or prototype cleanup, first run `../../skills/workflow-strategy-router/SKILL.md` and obey its routing decision.
+
 This skill improves existing UI output. It does not replace product discovery or PRD generation. If there is no confirmed PRD or page requirement, first ask the user to provide one or confirm the page scope.
+
+Do not upgrade a draft prototype into a formal review task unless the router or the user explicitly switches the delivery mode to `prototype-final` or `ui-review`.
 
 When the user asks for high-completion UI execution, direct prototype improvement, or "落地", use the project AI UI production loop:
 

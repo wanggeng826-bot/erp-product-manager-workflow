@@ -7,6 +7,8 @@ description: Product Manager AI workflow for cross-border ecommerce ERP requirem
 
 Use this skill for product manager AI workflow work, especially cross-border ecommerce internal ERP product work.
 
+This skill is a domain executor. Before substantial PM / PRD / prototype work, first run `../../skills/workflow-strategy-router/SKILL.md` and obey its routing decision.
+
 It is the main workflow entry for:
 - 新需求澄清
 - 方案设计
@@ -44,6 +46,17 @@ Do not behave like a passive requirement recorder. Translate rough user input in
 ## Execution Flow
 
 Follow these numbered steps strictly to avoid jumping ahead or missing requirements.
+
+### Step 0: Router Gate
+
+Before discovery, PRD writing, prototype generation, or formal review handoff:
+
+1. Run the project router at `../../skills/workflow-strategy-router/SKILL.md`.
+2. Output the router decision pack first.
+3. Obey the router's `Task Tier`, `Delivery Mode`, `Allowed References`, `Blocked Actions`, and `Validation Mode`.
+4. If router says `light`, stay narrow and do not reopen broad PM context.
+5. If router says `prototype-draft`, generate draft only and block formal UI review.
+6. If router says `prototype-final` or `ui-review`, formal quality gates may be used.
 
 ### Step 1: Intent Recognition & Agent Routing
 
@@ -174,10 +187,31 @@ PRD 已保存 → 用户表达：
 - **Figma Reuse Rule (必做):** Components/templates 必须从 `Ant Design ERP UI Library` (fileKey: `KaI3eGyylfiwrPlU3OR08C`) 取。按 `../../knowledge/figma-ant-design-ui-library.md` 的 MCP 调用流程抓库元信息；**不要凭空发明组件**。
 - **Pro v6 Priority Rule:** 任务对齐 Pro v6 / 最新版时，优先选用 `Button v6`、`ListPageTemplate v6`、`ErpShell v6`，页面方案显式标注主题模式（`Default` / `Dark` / `Glass`）；用户未指定时默认 `Default`。
 - **HTML Reuse Rule:** 路径 B 时直接 copy `../../ui-library/components/` 片段 + load `../../ui-library/tokens.css`。组件命名必须与 Figma 库一致。
+- **Prototype Task Sheet (必做):** 开始生成原型前，先锁定本次页面清单、每页主任务、明确要求、明确不做项、保守假设。没有任务单，不准开始画。
 - **Source Mapping:** 任何可见的导航、页签、卡片、摘要、按钮必须能映射回 PRD §8 页面清单 + §10 组件映射表。无来源 → 不准画。
+- **Prototype Fidelity Gate (必做):** 原型交付前必须自检：
+  - 有没有漏掉用户明确要求
+  - 有没有加入用户未要求且无来源的模块
+  - 有没有把分析备注、产品思考、设计原则渲染成正式 UI
+  - 有没有用模型偏好替换用户已确认方案
+  任一项失败，都先修正，不准直接交付。
 - **Draft-First Rule:** 首次生成原型默认是草稿交付，只做最小可读性和结构自检，不自动触发 UI 审查、Playwright、完整 review rubric 或长 planning 流程。
 - **Review Trigger Rule:** 只有用户明确说“做最终审查 / UI 审查 / 定稿 QA”，或 PRD 与原型方案已确认，才转交 `$ui-optimization-master` 进入正式 UI 审查。
 - **Execution Loop:** 初稿阶段走 `Foundation → Components → Page → Spec`；确认后再走 `Review → Revision`。
+
+### Step 5.1: Prototype Task Sheet（原型任务单）
+
+Before prototype generation, output a short task sheet:
+
+| Item | Required content |
+|---|---|
+| 页面清单 | 本次只做哪些页面 |
+| 每页主任务 | 每页只保留一个最高优先级任务 |
+| 明确要求 | 来自用户 / 方案 / PRD 的硬要求 |
+| 明确不做 | 本轮禁止扩展的页面、模块、控件 |
+| 假设项 | 仅允许保守假设，且必须显式标注 |
+
+If the task sheet cannot be completed from confirmed input, stop and ask for missing inputs instead of inventing structure.
 
 ### Step 6: Asset & Memory Management
 - Keep reusable standards separate from concrete cases.

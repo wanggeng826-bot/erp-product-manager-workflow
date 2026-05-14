@@ -57,3 +57,33 @@ Verification:
 Rollback:
 - 查看记录：`git log --oneline -n 10`
 - 回退本次提交：`git revert <commit>`
+
+## 2026-05-14 20:05
+
+Mode: local-git
+Branch: `codex/workflow-lean-refactor`
+Checkpoint: pending local commit
+Remote: not-pushed
+
+Purpose:
+- 新增前置调度器 `workflow-strategy-router`
+- 强制 PM / 原型 / UI 任务先路由，再执行
+- 给原型生成补上任务单、来源映射、忠实性交付门
+- 让 PRD §10 更像页面契约，而不只是原型附件
+
+Files:
+- `AGENTS.md`
+- `skills/workflow-strategy-router/SKILL.md`
+- `skills/workflow-strategy-router/agents/openai.yaml`
+- `skills/erp-product-manager/SKILL.md`
+- `skills/erp-product-manager/references/prototype-generation-guide.md`
+- `skills/erp-product-manager/references/prd-template.md`
+- `skills/ui-optimization-master/SKILL.md`
+
+Verification:
+- targeted `rg` checks for router, `prototype-draft`, task sheet, fidelity gate, page contract, and source mapping rules
+- `git diff --stat`
+
+Rollback:
+- 查看记录：`git log --oneline -n 10`
+- 回退本次提交：`git revert <commit>`
