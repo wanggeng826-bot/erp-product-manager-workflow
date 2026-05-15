@@ -137,6 +137,28 @@
 - `prototype/<module-name>/`
 - `prototype/inventory-management/`
 
+### 7.1 原型发布到 GitHub Pages（必做）
+
+**每次生成原型后，必须同步发布到 GitHub Pages，提供可访问的在线地址。**
+
+发布流程：
+
+1. 确保原型目录包含 `index.html`，且所有资源路径为相对路径（如 `./styles.css`、`./ui-library/tokens.css`）。
+2. 切到 `gh-pages` 分支：`git checkout gh-pages`
+3. 将原型文件复制或移动到 `prototype/<module-name>/` 目录
+4. 如果原型引用了 `../../ui-library/tokens.css`，需复制一份 `tokens.css` 到原型目录内，并修正路径为 `./ui-library/tokens.css`
+5. 提交并推送：`git add . && git commit -m "add prototype: <module-name>" && git push origin gh-pages`
+6. 等待 1-2 分钟自动部署
+7. 向用户返回访问地址：
+   ```
+   https://wanggeng826-bot.github.io/erp-product-manager-workflow/prototype/<module-name>/
+   ```
+
+**注意**：
+- `gh-pages` 分支只用于托管静态页面，不要在上面做开发
+- 如果 `ui-library/tokens.css` 有更新，需要同步复制到各原型目录
+- 所有原型必须能通过上述 URL 直接访问，不能只提供本地文件路径
+
 ## 8. 原型命名建议
 
 建议按功能模块命名原型目录：
@@ -183,6 +205,8 @@
 - 是否符合中文 B 端 ERP 后台风格，而不是欧美 SaaS 或营销看板风格
 - 是否有 foundation token 一致性：颜色、字体、间距、圆角、边框、阴影、状态语义
 - 是否有组件复用一致性：同类筛选、表格、抽屉、弹窗、按钮、标签、反馈不应各自为政
+- **是否已发布到 GitHub Pages 并提供在线访问地址**
+- **在线地址是否能正常打开，资源（CSS/JS/图片）是否加载正常**
 
 如任一项不满足，应先修正再交付。
 
