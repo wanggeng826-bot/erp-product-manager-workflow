@@ -4,7 +4,7 @@ set -euo pipefail
 usage() {
   cat <<'EOF'
 Usage:
-  scripts/deploy-prototype-oss.sh <local_prototype_dir> <oss_prefix>
+  scripts/deploy-prototype-oss.sh <local_html_or_dir> <oss_prefix>
 
 Required environment:
   OSS_BUCKET  Target OSS bucket name. Example: erp-prototypes
@@ -39,30 +39,30 @@ if ! command -v ossutil >/dev/null 2>&1; then
   exit 1
 fi
 
-LOCAL_DIR="${1%/}"
+LOCAL_PATH="${1%/}"
 OSS_PREFIX="${2#/}"
 OSS_PREFIX="${OSS_PREFIX%/}"
 
-if [ ! -d "$LOCAL_DIR" ]; then
-  echo "Local prototype directory does not exist: $LOCAL_DIR" >&2
+if [ ! -e "$LOCAL_PATH" ]; then
+  echo "Local HTML file or directory does not exist: $LOCAL_PATH" >&2
   exit 1
 fi
 
-if [ ! -f "$LOCAL_DIR/index.html" ]; then
-  echo "Prototype directory must contain index.html: $LOCAL_DIR" >&2
+if [ -d "$LOCAL_PATH" ] && [ ! -f "$LOCAL_PATH/index.html" ]; then
+  echo "Prototype directory must contain index.html: $LOCAL_PATH" >&2
   exit 1
 fi
 
 TARGET="oss://${OSS_BUCKET}/${OSS_PREFIX}/"
 
 echo "Uploading prototype:"
-echo "  local: $LOCAL_DIR/"
+echo "  local: $LOCAL_PATH"
 echo "  target: $TARGET"
 
-ossutil cp -r "$LOCAL_DIR/" "$TARGET" --update
-
-if [ -f "ops/oss-static-site/error.html" ]; then
-  ossutil cp "ops/oss-static-site/error.html" "oss://${OSS_BUCKET}/error.html" --update
+if [ -d "$LOCAL_PATH" ]; then
+  ossutil cp -r "$LOCAL_PATH/" "$TARGET" --update
+else
+  ossutil cp "$LOCAL_PATH" "${TARGET}index.html" --update
 fi
 
 if [ -n "${OSS_DOMAIN:-}" ]; then
@@ -75,10 +75,6 @@ cat <<EOF
 
 Deploy completed.
 
-Yunxiao prototype link:
+Prototype URL:
 ${PUBLIC_URL}
-
-Yunxiao note:
-- 原型地址：${PUBLIC_URL}
-- 设计基线：Ant Design ERP UI Library v0.2.1
 EOF
