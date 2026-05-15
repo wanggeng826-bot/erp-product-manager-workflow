@@ -8,9 +8,23 @@
 - 具体案例原型必须输出到对应 `cases/<case-name>/prototype/`
 - 可按功能模块创建子目录
 - 同一功能如有多版，可增加版本后缀
+- 云效需求中不直接嵌 HTML 原型；原型发布到 OSS 静态站点后，在云效正文里填写链接和关键截图
 
 示例：
 
 - `prototype/order-management/`
 - `prototype/<module-name>/`
 - `prototype/product-import-prototype-v1/`
+
+## 发布到 OSS
+
+发布说明见：
+
+- `ops/oss-static-site/README.md`
+
+示例：
+
+```bash
+OSS_BUCKET=erp-prototypes OSS_DOMAIN=https://prototype.example.com \
+  scripts/deploy-prototype-oss.sh prototype/oms-system prototypes/oms-system
+```
