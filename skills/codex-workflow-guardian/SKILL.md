@@ -42,20 +42,17 @@ If the user's immediate intent is simply `守护一下` or `存档`, route to `$
 
 If the user only wants a small adjustment to an existing generated prototype, doc, or page, prefer a lightweight guard path instead of the full workflow path.
 
-## Work Modes
+## Router Relationship
 
-Choose one mode before loading references:
+`$workflow-strategy-router` is the single source of truth for task tier and delivery mode.
 
-1. **Micro Edit**
-   - existing prototype/content tweak
-   - read only branch status, the target files, and `prototype-spec.md` or equivalent local spec if it exists
-   - skip README, broad knowledge indexes, long planning files, and unrelated workflow references
-2. **Normal Task**
-   - one coherent PM/UI workflow task
-   - use the usual task classification and minimum references
-3. **Heavy Task**
-   - new requirement, broad redesign, mixed goals, or long-thread recovery
-   - use planning files, handoff, source map, and full guardrails
+This skill must not create a second task classification layer such as `Micro Edit / Normal Task / Heavy Task`.
+
+Instead:
+
+- read the router decision if one exists
+- use it to decide whether this is lightweight guard behavior or full workflow governance
+- focus only on branch hygiene, checkpoint advice, context risk, handoff need, and traceability
 
 ## Start Gate
 
@@ -64,8 +61,8 @@ Before substantial work:
 1. Run `git status --short --branch`.
 2. Run `git diff --stat` when there are local changes.
 3. If useful, run `git log --oneline --decorate -n 8`.
-4. Decide `Micro Edit` / `Normal Task` / `Heavy Task` before loading more context.
-5. Read `task_plan.md`, `findings.md`, and `progress.md` only for `Heavy Task` or true continuation recovery.
+4. Read the router decision first if available; do not invent a second tier model.
+5. Read `task_plan.md`, `findings.md`, and `progress.md` only when the router says the task is heavy, or when true continuation recovery is needed.
 6. Classify the work:
    - **Workflow capability**: belongs in `skills/`, `knowledge/`, `ui-library/`, or main docs.
    - **Specific case**: belongs in `cases/<case-name>/`.
@@ -75,7 +72,7 @@ Before substantial work:
 
 If the worktree has many unrelated changes, do not hide it. State the risk and either isolate the new work or propose checkpoint commits.
 
-For `Micro Edit`, do not escalate into broad project reading unless:
+For lightweight guard behavior, do not escalate into broad project reading unless:
 - the target file lacks a local spec or source map
 - the user asks for structural redesign rather than adjustment
 - the diff shows unrelated risk

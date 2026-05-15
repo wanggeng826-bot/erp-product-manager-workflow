@@ -28,20 +28,17 @@ After useful work:
 - record what was saved and how to roll back
 - push/share only when the user asks or the workflow requires it
 
-## Execution Tiers
+## Router Relationship
 
-Choose the lightest tier that is still safe:
+`$workflow-strategy-router` owns task tier and delivery mode for PM / PRD / prototype / UI work.
 
-1. **Fast Path: existing-file tweak**
-   - use when the user wants a small adjustment to an existing prototype, doc, or code file
-   - read only `git status --short --branch`, the current diff when useful, and the directly related target files
-   - do not read README, broad knowledge files, long planning files, or unrelated skill references unless the change expands scope
-2. **Standard Path: scoped task**
-   - use when the task touches one coherent area but may involve several files
-   - run normal preflight and only the minimum domain references for that area
-3. **Full Guard Path: risky or mixed task**
-   - use when the branch is dirty, the task is broad, the user wants cloud backup, or rollback risk is high
-   - run full branch, checkpoint, and record workflow
+This skill should not create a second task-classification system. When a router decision exists:
+
+- trust the router's task tier
+- apply the lightest checkpoint behavior that matches that tier
+- focus on save mode, dirty files, checkpoint completeness, rollback, and push/share safety
+
+If the user directly says `守护一下` or `存档` outside a routed PM/UI task, this skill may still run its own minimal Git preflight because the goal is checkpoint safety, not domain routing.
 
 ## Save Modes
 
@@ -67,7 +64,7 @@ For `守护一下` or any substantial file-editing task:
    - risky dirty files
    - whether to continue, checkpoint, clean, or switch branch
 
-For Fast Path, stop after step 1 and direct-file inspection unless a risk signal appears.
+For router-identified light work, stop after step 1 and direct-file inspection unless a risk signal appears.
 
 Stop instead of editing when the new task is unrelated to existing dirty changes.
 

@@ -58,29 +58,21 @@ Before discovery, PRD writing, prototype generation, or formal review handoff:
 5. If router says `prototype-draft`, generate draft only and block formal UI review.
 6. If router says `prototype-final` or `ui-review`, formal quality gates may be used.
 
-### Step 1: Intent Recognition & Agent Routing
+### Step 1: Execution Track Selection
 
-**首要动作**：判定任务类型并路由到对应 sub-agent 提示词。
+This skill does not reclassify task weight. It only selects the execution track that matches the router decision.
 
-```
-用户输入 → 判定分支：
-├─ 已有原型的小范围调整（"基于这个原型改一下" / "调文案" / "调按钮" / "调布局细节"）
-│   → 走 Fast Path
-│     - 只读当前目标原型目录、相关 `prototype-spec.md`、必要的 `styles.css` / `script.js`
-│     - 只看当前 diff 和直接相关文件
-│     - 不重开需求澄清，不重读广泛知识库，不重跑完整原型规划流程
-│
-├─ 携带竞品资料（URL / 截图 / "参考 XX" / "拆解 XX 的某模块"）
-│   → 走 `./references/competitor-analysis-expert.md` 的 5 阶段流程
-│     (资料盘点 → 竞品拆解 → 业务反推 → 方案 A/B/C → 研发级 PRD)
-│
-├─ 纯需求描述（"做一个 X 功能" / "想优化 X 流程"）
-│   → 走 `./references/new-requirement-expert.md` 的 6 阶段流程
-│     (需求澄清 → 冻结事实 → 方案设计 → 分段 PRD)
-│
-└─ 已有 PRD 要出原型
-    → 读 `./references/prototype-generation-guide.md` + Step 5
-```
+Use this mapping:
+
+| Router decision | This skill should do |
+|---|---|
+| `Task Tier: light` + existing prototype/doc tweak | Stay on Fast Path; read only target files, local spec, and current diff |
+| `Delivery Mode: prd` | Use `./references/new-requirement-expert.md` or `./references/competitor-analysis-expert.md` based on the confirmed input type |
+| `Delivery Mode: prototype-draft` | Read `./references/prototype-generation-guide.md` and Step 5; generate draft only |
+| `Delivery Mode: prototype-final` | Read `./references/prototype-generation-guide.md` and Step 5; allow final-quality path |
+| `Delivery Mode: discussion` | Clarify, align, and stop before artifact generation |
+
+If the router decision is missing or contradictory, stop and ask for the router decision first instead of creating a second classification layer.
 
 **UI 框架 Override（重要）**：两份 sub-agent 提示词原版引用了 Element Plus，但**本项目内 UI 一律以 Ant Design 为准**。提示词里凡涉及"组件库 / UI 框架"的指令，请按 `../../knowledge/figma-ant-design-ui-library.md` 和 `../../ui-library/` 执行。这是项目层 override，不需要修改提示词原文。
 
