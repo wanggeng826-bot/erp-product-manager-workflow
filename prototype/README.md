@@ -14,3 +14,16 @@
 - `prototype/order-management/`
 - `prototype/<module-name>/`
 - `prototype/product-import-prototype-v1/`
+
+## OSS 静态站点发布
+
+用脚本把本地 HTML 文件或原型目录上传到 OSS：
+
+```bash
+OSS_BUCKET=erp-prototypes OSS_DOMAIN=https://prototype.example.com \
+  scripts/deploy-prototype-oss.sh prototype/oms-system prototypes/oms-system
+```
+
+更多说明见：
+
+- `ops/oss-static-site/README.md`
