@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>可维护枚举值选择器 · 交互体验</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #f0f2f5;
+      padding: 40px 20px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      color: #1f1f1f;
+      line-height: 1.5;
+    }
+    .wrapper { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 32px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
+    }
+    .title { font-size: 20px; font-weight: 600; margin-bottom: 8px; }
+    .subtitle { font-size: 14px; color: #8c8c8c; margin-bottom: 24px; }
+    .alert {
+      background: #e6f4ff;
+      border: 1px solid #91caff;
+      border-radius: 6px;
+      padding: 12px 16px;
+      margin-bottom: 24px;
+      font-size: 14px;
+      color: #0958d9;
+    }
+    .alert strong { color: #0958d9; }
+    .section { margin-bottom: 24px; }
+    .section-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #595959;
+      margin-bottom: 16px;
+    }
+    .form-item { margin-bottom: 20px; }
+    .form-label {
+      display: block;
+      font-size: 14px;
+      color: #1f1f1f;
+      margin-bottom: 8px;
+    }
+    .form-label .required { color: #ff4d4f; margin-right: 4px; }
+    .form-extra {
+      font-size: 13px;
+      color: #8c8c8c;
+      margin-top: 4px;
+    }
+
+    /* Select */
+    .select-wrap { position: relative; }
+    .select-trigger {
+      width: 100%;
+      height: 36px;
+      padding: 0 28px 0 12px;
+      border: 1px solid #d9d9d9;
+      border-radius: 6px;
+      background: #fff;
+      font-size: 14px;
+      color: #1f1f1f;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: border-color 0.2s;
+    }
+    .select-trigger:hover { border-color: #4096ff; }
+    .select-trigger.open { border-color: #4096ff; box-shadow: 0 0 0 2px rgba(5,145,255,0.1); }
+    .select-trigger .placeholder { color: #bfbfbf; }
+    .select-trigger .arrow {
+      position: absolute;
+      right: 10px;
+      transition: transform 0.2s;
+      font-size: 12px;
+      color: #8c8c8c;
+    }
+    .select-trigger.open .arrow { transform: rotate(180deg); }
+
+    .dropdown {
+      position: absolute;
+      top: 40px;
+      left: 0;
+      right: 0;
+      background: #fff;
+      border: 1px solid #d9d9d9;
+      border-radius: 6px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+      z-index: 100;
+      max-height: 320px;
+      overflow-y: auto;
+      display: none;
+    }
+    .dropdown.show { display: block; }
+
+    .option {
+      padding: 8px 12px;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .option:hover { background: #f5f5f5; }
+    .option.selected { background: #e6f4ff; font-weight: 500; }
+    .option-delete {
+      color: #ff4d4f;
+      font-size: 12px;
+      opacity: 0;
+      transition: opacity 0.2s;
+      cursor: pointer;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .option:hover .option-delete { opacity: 1; }
+    .option-delete:hover { background: #fff2f0; }
+
+    .add-btn {
+      padding: 10px 12px;
+      color: #1677ff;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border-top: 1px solid #f0f0f0;
+    }
+    .add-btn:hover { background: #f6ffed; }
+
+    .tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      background: #e6f4ff;
+      color: #0958d9;
+      border: 1px solid #91caff;
+    }
+    .tag.default {
+      background: #f5f5f5;
+      color: #8c8c8c;
+      border-color: #d9d9d9;
+    }
+
+    .hint {
+      font-size: 13px;
+      color: #8c8c8c;
+      margin-top: 12px;
+      line-height: 1.8;
+      background: #fafafa;
+      padding: 12px;
+      border-radius: 6px;
+    }
+    .hint code {
+      background: #f6ffed;
+      color: #389e0d;
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-size: 12px;
+      font-family: Consolas, monospace;
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    .modal-overlay.show { display: flex; }
+    .modal {
+      background: #fff;
+      border-radius: 8px;
+      width: 420px;
+      max-width: 90vw;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      overflow: hidden;
+    }
+    .modal-header {
+      padding: 16px 24px;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .modal-body { padding: 20px 24px; }
+    .modal-footer {
+      padding: 12px 24px;
+      border-top: 1px solid #f0f0f0;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+    .btn {
+      padding: 6px 16px;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      border: 1px solid #d9d9d9;
+      background: #fff;
+      transition: all 0.2s;
+    }
+    .btn:hover { border-color: #4096ff; color: #4096ff; }
+    .btn-primary {
+      background: #1677ff;
+      color: #fff;
+      border-color: #1677ff;
+    }
+    .btn-primary:hover { background: #4096ff; border-color: #4096ff; color: #fff; }
+    .btn-danger {
+      background: #ff4d4f;
+      color: #fff;
+      border-color: #ff4d4f;
+    }
+    .btn-danger:hover { background: #ff7875; border-color: #ff7875; }
+
+    .input {
+      width: 100%;
+      height: 36px;
+      padding: 0 12px;
+      border: 1px solid #d9d9d9;
+      border-radius: 6px;
+      font-size: 14px;
+      transition: border-color 0.2s;
+    }
+    .input:focus {
+      outline: none;
+      border-color: #4096ff;
+      box-shadow: 0 0 0 2px rgba(5,145,255,0.1);
+    }
+    .input.error { border-color: #ff4d4f; }
+    .error-text {
+      font-size: 13px;
+      color: #ff4d4f;
+      margin-top: 4px;
+    }
+
+    .usage-list { display: flex; flex-direction: column; gap: 10px; }
+    .usage-item {
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .usage-tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      min-width: 56px;
+      text-align: center;
+    }
+    .usage-tag.ok { background: #f6ffed; color: #389e0d; border: 1px solid #b7eb8f; }
+    .usage-tag.no { background: #fff2f0; color: #cf1322; border: 1px solid #ffa39e; }
+
+    .changelog {
+      margin-top: 24px;
+      padding: 16px;
+      background: #fff7e6;
+      border-radius: 6px;
+      border: 1px solid #ffd8bf;
+    }
+    .changelog-title { font-size: 13px; font-weight: 600; color: #d46b08; margin-bottom: 8px; }
+    .changelog-item { font-size: 13px; color: #595959; line-height: 1.8; }
+
+    .divider {
+      height: 1px;
+      background: #f0f0f0;
+      margin: 12px 0;
+    }
+
+    .toast {
+      position: fixed;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-100px);
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-size: 14px;
+      color: #fff;
+      z-index: 2000;
+      opacity: 0;
+      transition: all 0.3s;
+      pointer-events: none;
+    }
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+    .toast.success { background: #52c41a; }
+    .toast.error { background: #ff4d4f; }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="card">
+      <div class="title">可维护枚举值选择器 · 交互体验</div>
+      <div class="subtitle">资金收款平台字段演示 —— 基于店铺管理 PRD §4.3.1</div>
+
+      <div class="alert">
+        <strong>适用场景：</strong>枚举值不经常变更、变更记录重要性较低的业务字段，统一采用此交互模式维护，避免单独建列表页。
+      </div>
+
+      <div class="section">
+        <div class="section-title">交互演示区</div>
+        <div class="form-item">
+          <label class="form-label">资金收款平台</label>
+          <div class="select-wrap" id="selectWrap">
+            <div class="select-trigger" id="selectTrigger">
+              <span id="selectText" class="placeholder">请选择资金收款平台</span>
+              <span class="arrow">▼</span>
+            </div>
+            <div class="dropdown" id="dropdown">
+              <div id="optionsList"></div>
+              <div class="add-btn" id="addBtn">
+                <span>+</span>
+                <span>添加资金平台</span>
+              </div>
+            </div>
+          </div>
+          <div class="form-extra">点击下拉框，体验「选择 / 删除 / 新增」完整交互</div>
+        </div>
+
+        <div class="form-item">
+          <label class="form-label">当前选中值</label>
+          <span class="tag default" id="selectedTag">未选择</span>
+        </div>
+
+        <div class="hint">
+          <strong>交互说明：</strong><br>
+          1. 点击下拉框 → 展开选项列表，每个选项右侧出现 <code>删除</code> 按钮（hover 显示）<br>
+          2. 列表底部有 <code>+ 添加资金平台</code> 按钮<br>
+          3. 点击新增 → 弹出输入框 → 校验唯一性 → 保存后自动选中新值
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">设计判断标准（PRD 中统一使用此模式的条件）</div>
+        <div class="usage-list">
+          <div class="usage-item"><span class="usage-tag ok">✓ 使用</span>枚举值低频变更（如资金平台、浏览器名称）</div>
+          <div class="usage-item"><span class="usage-tag ok">✓ 使用</span>变更记录不需要审计追溯</div>
+          <div class="usage-item"><span class="usage-tag ok">✓ 使用</span>枚举值数量 ≤ 20 个，且增删操作简单</div>
+          <div class="divider"></div>
+          <div class="usage-item"><span class="usage-tag no">✗ 不用</span>枚举值高频变更（如商品类目）</div>
+          <div class="usage-item"><span class="usage-tag no">✗ 不用</span>变更需要审批/日志追溯（如状态机）</div>
+          <div class="usage-item"><span class="usage-tag no">✗ 不用</span>枚举值需要批量导入/导出管理</div>
+        </div>
+      </div>
+
+      <div class="changelog">
+        <div class="changelog-title">操作日志</div>
+        <div class="changelog-item" id="logText">暂无操作 —— 尝试添加或删除一个选项以查看实时反馈。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 新增弹窗 -->
+  <div class="modal-overlay" id="addModal">
+    <div class="modal">
+      <div class="modal-header">添加资金平台</div>
+      <div class="modal-body">
+        <label style="display:block;font-size:14px;margin-bottom:8px;">平台名称 <span style="color:#ff4d4f">*</span></label>
+        <input class="input" id="newInput" placeholder="请输入新的资金平台名称" autocomplete="off">
+        <div class="error-text" id="inputError" style="display:none">该平台已存在</div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" id="cancelAdd">取消</button>
+        <button class="btn btn-primary" id="confirmAdd">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 删除确认弹窗 -->
+  <div class="modal-overlay" id="deleteModal">
+    <div class="modal">
+      <div class="modal-header">确认删除</div>
+      <div class="modal-body">
+        <p>确定删除 <strong id="deleteLabel" style="color:#1677ff;"></strong> 吗？</p>
+        <p style="font-size:13px;color:#8c8c8c;margin-top:8px;">删除后该选项将从下拉列表中移除。</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" id="cancelDelete">取消</button>
+        <button class="btn btn-danger" id="confirmDelete">删除</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // 初始数据
+    let platforms = [
+      { value: 'Payoneer', label: 'Payoneer' },
+      { value: 'WorldFirst', label: 'WorldFirst' },
+      { value: 'ShopeePay', label: 'ShopeePay' },
+      { value: 'Lazada Wallet', label: 'Lazada Wallet' },
+      { value: '支付宝', label: '支付宝' },
+      { value: 'PingPong', label: 'PingPong' },
+      { value: '连连支付', label: '连连支付' },
+    ];
+    let selected = null;
+    let deleteTarget = null;
+
+    const selectTrigger = document.getElementById('selectTrigger');
+    const dropdown = document.getElementById('dropdown');
+    const optionsList = document.getElementById('optionsList');
+    const selectText = document.getElementById('selectText');
+    const selectedTag = document.getElementById('selectedTag');
+    const addModal = document.getElementById('addModal');
+    const deleteModal = document.getElementById('deleteModal');
+    const newInput = document.getElementById('newInput');
+    const inputError = document.getElementById('inputError');
+    const toast = document.getElementById('toast');
+    const logText = document.getElementById('logText');
+
+    function renderOptions() {
+      optionsList.innerHTML = '';
+      platforms.forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'option' + (selected === p.value ? ' selected' : '');
+        div.innerHTML = `
+          <span>${p.label}</span>
+          <span class="option-delete" data-value="${p.value}">删除</span>
+        `;
+        div.addEventListener('click', (e) => {
+          if (e.target.classList.contains('option-delete')) return;
+          selected = p.value;
+          updateSelect();
+          toggleDropdown(false);
+          showToast('已选择：' + p.label, 'success');
+        });
+        optionsList.appendChild(div);
+      });
+
+      // 绑定删除按钮
+      document.querySelectorAll('.option-delete').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const val = btn.dataset.value;
+          const item = platforms.find(p => p.value === val);
+          deleteTarget = val;
+          document.getElementById('deleteLabel').textContent = item?.label || val;
+          deleteModal.classList.add('show');
+        });
+      });
+    }
+
+    function updateSelect() {
+      if (selected) {
+        const item = platforms.find(p => p.value === selected);
+        selectText.textContent = item?.label || selected;
+        selectText.classList.remove('placeholder');
+        selectedTag.textContent = item?.label || selected;
+        selectedTag.classList.remove('default');
+      } else {
+        selectText.textContent = '请选择资金收款平台';
+        selectText.classList.add('placeholder');
+        selectedTag.textContent = '未选择';
+        selectedTag.classList.add('default');
+      }
+      renderOptions();
+      updateLog();
+    }
+
+    function toggleDropdown(show) {
+      if (show) {
+        dropdown.classList.add('show');
+        selectTrigger.classList.add('open');
+      } else {
+        dropdown.classList.remove('show');
+        selectTrigger.classList.remove('open');
+      }
+    }
+
+    function showToast(msg, type) {
+      toast.textContent = msg;
+      toast.className = 'toast ' + type + ' show';
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    function updateLog() {
+      const count = platforms.length;
+      if (count === 7) {
+        logText.textContent = '暂无操作 —— 尝试添加或删除一个选项以查看实时反馈。';
+      } else {
+        logText.textContent = `当前列表共 ${count} 个选项（初始 7 个）。${count > 7 ? '新增了 ' + (count - 7) + ' 个。' : ''}`;
+      }
+    }
+
+    selectTrigger.addEventListener('click', () => {
+      const isOpen = dropdown.classList.contains('show');
+      toggleDropdown(!isOpen);
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!document.getElementById('selectWrap').contains(e.target)) {
+        toggleDropdown(false);
+      }
+    });
+
+    document.getElementById('addBtn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      newInput.value = '';
+      inputError.style.display = 'none';
+      newInput.classList.remove('error');
+      addModal.classList.add('show');
+      setTimeout(() => newInput.focus(), 100);
+    });
+
+    document.getElementById('cancelAdd').addEventListener('click', () => {
+      addModal.classList.remove('show');
+    });
+
+    document.getElementById('confirmAdd').addEventListener('click', () => {
+      const val = newInput.value.trim();
+      if (!val) {
+        showToast('请输入平台名称', 'error');
+        return;
+      }
+      if (platforms.some(p => p.value === val)) {
+        inputError.style.display = 'block';
+        newInput.classList.add('error');
+        return;
+      }
+      platforms.push({ value: val, label: val });
+      selected = val;
+      updateSelect();
+      addModal.classList.remove('show');
+      showToast('添加成功', 'success');
+    });
+
+    newInput.addEventListener('input', () => {
+      inputError.style.display = 'none';
+      newInput.classList.remove('error');
+    });
+
+    newInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') document.getElementById('confirmAdd').click();
+    });
+
+    document.getElementById('cancelDelete').addEventListener('click', () => {
+      deleteModal.classList.remove('show');
+      deleteTarget = null;
+    });
+
+    document.getElementById('confirmDelete').addEventListener('click', () => {
+      if (deleteTarget) {
+        platforms = platforms.filter(p => p.value !== deleteTarget);
+        if (selected === deleteTarget) selected = null;
+        updateSelect();
+        showToast('删除成功', 'success');
+      }
+      deleteModal.classList.remove('show');
+      deleteTarget = null;
+    });
+
+    // 点击 overlay 关闭
+    [addModal, deleteModal].forEach(modal => {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) modal.classList.remove('show');
+      });
+    });
+
+    renderOptions();
+  </script>
+</body>
+</html>
