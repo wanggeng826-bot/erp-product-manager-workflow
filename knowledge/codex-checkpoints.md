@@ -1,89 +1,18 @@
 # Codex Checkpoints
 
-这个文件记录通过 `$codex-checkpoint-guardian` 生成的重要存档。
+## 2026-05-14 01:53 CST - 销售人员管理原型闭环
 
-新手只需要记住：
-
-- `守护一下`：开始前检查分支、脏文件和风险。
-- `存档`：把当前可用成果保存成 checkpoint。
-
-## Record Format
-
-```markdown
-## YYYY-MM-DD HH:mm
-
-Mode: local-git | github-cloud | local-snapshot
-Branch: <branch-or-none>
-Checkpoint: <commit-or-snapshot-path>
-Remote: pushed | not-pushed | none
-
-Purpose:
-- ...
-
-Files:
-- ...
-
-Verification:
-- ...
-
-Rollback:
-- ...
-```
-
-## 2026-05-14 19:40
-
-Mode: local-git
-Branch: `codex/workflow-lean-refactor`
-Checkpoint: pending local commit
-Remote: not-pushed
-
-Purpose:
-- 收紧轻任务的引用范围和执行路径
-- 降低 planning hook 的可见噪音
-- 归档旧的根目录 planning 历史，避免新任务继续串味
-
-Files:
-- `.codex/hooks.json`
-- `skills/erp-product-manager/SKILL.md`
-- `skills/ui-optimization-master/SKILL.md`
-- `skills/shared/context-memory-workflow.md`
-- `cases/_workflow-history/2026-05-14-root-planning-archive/*`
-
-Verification:
-- `python3 -m json.tool .codex/hooks.json`
-- `wc -l task_plan.md progress.md findings.md`
-- targeted `rg` checks for fast-path and single-active-heavy-task rules
-
-Rollback:
-- 查看记录：`git log --oneline -n 10`
-- 回退本次提交：`git revert <commit>`
-
-## 2026-05-14 20:05
-
-Mode: local-git
-Branch: `codex/workflow-lean-refactor`
-Checkpoint: pending local commit
-Remote: not-pushed
-
-Purpose:
-- 新增前置调度器 `workflow-strategy-router`
-- 强制 PM / 原型 / UI 任务先路由，再执行
-- 给原型生成补上任务单、来源映射、忠实性交付门
-- 让 PRD §10 更像页面契约，而不只是原型附件
-
-Files:
-- `AGENTS.md`
-- `skills/workflow-strategy-router/SKILL.md`
-- `skills/workflow-strategy-router/agents/openai.yaml`
-- `skills/erp-product-manager/SKILL.md`
-- `skills/erp-product-manager/references/prototype-generation-guide.md`
-- `skills/erp-product-manager/references/prd-template.md`
-- `skills/ui-optimization-master/SKILL.md`
-
-Verification:
-- targeted `rg` checks for router, `prototype-draft`, task sheet, fidelity gate, page contract, and source mapping rules
-- `git diff --stat`
-
-Rollback:
-- 查看记录：`git log --oneline -n 10`
-- 回退本次提交：`git revert <commit>`
+- Mode: Local Git checkpoint
+- Branch: `codex/销售人员管理`
+- Scope: `prototype/salesperson-management/`
+- Saved:
+  - 销售人员管理 HTML 原型页面
+  - 业务单元配置、订单归属处理、销售目标三个模块
+  - 销售目标树表格、强弱校验、年度目标导入三阶段方案
+  - 原型规格与上下文压缩记录
+- Verification:
+  - `node --check prototype/salesperson-management/data.js`
+  - in-app browser checked sales target summary, tree expand/collapse, import drawer flow
+- Rollback:
+  - 查看记录：`git log --oneline -n 10`
+  - 回退本次提交：`git revert <commit>`

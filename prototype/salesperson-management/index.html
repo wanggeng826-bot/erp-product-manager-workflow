@@ -336,55 +336,83 @@
 <div class="top-nav">
   <div class="logo"><i class="fa-solid fa-chart-line"></i> 报表系统</div>
   <div class="nav-items">
-    <div class="nav-item active" onclick="showPage('page-store',this)">店铺运营管理</div>
-    <div class="nav-item" onclick="showPage('page-bu',this)">业务单元管理</div>
+    <div class="nav-item active" onclick="showPage('page-bu',this)">销售人员管理</div>
     <div class="nav-item" onclick="showPage('page-order',this)">订单归属处理</div>
     <div class="nav-item" onclick="showPage('page-target',this)">销售目标制定</div>
   </div>
 </div>
 
 <!-- ============================================================ -->
-<!-- PAGE 1: 店铺运营管理页                                        -->
+<!-- PAGE 1: 业务单元配置页                                        -->
 <!-- ============================================================ -->
-<div id="page-store" class="page active">
+<div id="page-bu" class="page active">
   <div class="app-container">
     <div class="sidebar">
       <div class="sidebar-header">
-        <div class="sidebar-title"><i class="fa-solid fa-store"></i> 店铺管理</div>
+        <div class="sidebar-title"><i class="fa-solid fa-sitemap"></i> 架构导航</div>
       </div>
       <div style="padding:0 14px 10px;">
-        <input class="sidebar-search" placeholder="搜索店铺名称或编号...">
+        <input class="sidebar-search" placeholder="搜索业务单元或店铺...">
       </div>
       <div class="sidebar-tree">
+        <!-- ===== 区块一：店铺管理 ===== -->
         <div class="sidebar-section">
-          <div class="sidebar-section-header"><i class="fa-solid fa-filter"></i> 店铺状态</div>
-          <div class="tree-node danger" onclick="filterStoreView('unassigned')">
+          <div class="sidebar-section-header"><i class="fa-solid fa-store"></i> 店铺管理</div>
+          <!-- 未分配店铺 -->
+          <div class="tree-node danger" data-store-view="unassigned" onclick="setPageContext('store','unassigned')">
             <span class="status-dot"></span>
             <i class="fa-solid fa-store folder-icon"></i>
             <span class="node-text"><span class="node-name">未分配店铺</span></span>
             <span class="count-badge">3</span>
           </div>
-          <div class="tree-node active" data-store-view="all" onclick="filterStoreView('all')">
+          <!-- 全部店铺 -->
+          <div class="tree-node" data-store-view="all" onclick="setPageContext('store','all')">
             <span class="expand"><i class="fa-solid fa-globe" style="font-size:10px; color:var(--text-muted);"></i></span>
             <i class="fa-solid fa-store folder-icon"></i>
             <span class="node-text"><span class="node-name">全部店铺</span></span>
             <span class="count-badge">32</span>
           </div>
         </div>
+
         <div class="sidebar-section-divider"></div>
+
+        <!-- ===== 区块二：业务单元架构 ===== -->
+        <div class="sidebar-section">
+          <div class="sidebar-section-header"><i class="fa-solid fa-diagram-project"></i> 业务单元架构</div>
+          <!-- BU 树 -->
+          <div class="tree-node" data-bu-name="四海芯舟" onclick="setPageContext('bu','四海芯舟',this)"><span class="expand">▾</span><i class="fa-regular fa-folder-open folder-icon"></i><span class="node-text"><span class="node-name">四海芯舟</span><span class="node-path">四海芯舟</span></span><span class="count-badge">76</span></div>
+          <div class="tree-node l2" data-bu-name="工业运营中心" onclick="setPageContext('bu','工业运营中心',this)"><span class="expand">▾</span><i class="fa-regular fa-folder-open folder-icon"></i><span class="node-text"><span class="node-name">工业运营中心</span><span class="node-path">四海芯舟-工业运营中心</span></span><span class="count-badge">65</span></div>
+          <div class="tree-node l3" data-bu-name="速卖通事业部" onclick="setPageContext('bu','速卖通事业部',this)"><span class="expand">▾</span><i class="fa-regular fa-folder-open folder-icon"></i><span class="node-text"><span class="node-name">速卖通事业部</span><span class="node-path">四海芯舟-工业运营中心-速...</span></span><span class="count-badge">19</span></div>
+          <div class="tree-node l4 active" data-bu-name="深圳速卖通工具组" onclick="setPageContext('bu','深圳速卖通工具组',this)"><span class="expand">▸</span><i class="fa-regular fa-folder folder-icon"></i><span class="node-text"><span class="node-name">深圳速卖通工具组</span><span class="node-path">四海芯舟-工业运营中心-速卖通事业...</span></span><span class="count-badge">7</span></div>
+          <div class="tree-node l4" data-bu-name="深圳速卖通元器件组" onclick="setPageContext('bu','深圳速卖通元器件组',this)"><span class="expand">▸</span><i class="fa-regular fa-folder folder-icon"></i><span class="node-text"><span class="node-name">深圳速卖通元器件组</span><span class="node-path">四海芯舟-工业运营中心-速...</span></span><span class="count-badge">6</span></div>
+          <div class="tree-node l4" data-bu-name="深圳速卖通全托管组" onclick="setPageContext('bu','深圳速卖通全托管组',this)"><span class="expand">▸</span><i class="fa-regular fa-folder folder-icon"></i><span class="node-text"><span class="node-name">深圳速卖通全托管组</span><span class="node-path">四海芯舟-工业运营中心-速...</span></span><span class="count-badge">12</span></div>
+          <div class="tree-node l3" data-bu-name="东南亚项目部" onclick="setPageContext('bu','东南亚项目部',this)"><span class="expand">▾</span><i class="fa-regular fa-folder-open folder-icon"></i><span class="node-text"><span class="node-name">东南亚项目部</span><span class="node-path">四海芯舟-工业运营中心-东...</span></span><span class="count-badge">9</span></div>
+          <div class="tree-node l4" data-bu-name="深圳东南亚跨境组" onclick="setPageContext('bu','深圳东南亚跨境组',this)"><span class="expand">▸</span><i class="fa-regular fa-folder folder-icon"></i><span class="node-text"><span class="node-name">深圳东南亚跨境组</span></span><span class="count-badge">3</span></div>
+          <div class="tree-node l4" data-bu-name="深圳东南亚本土组" onclick="setPageContext('bu','深圳东南亚本土组',this)"><span class="expand">▸</span><i class="fa-regular fa-folder folder-icon"></i><span class="node-text"><span class="node-name">深圳东南亚本土组</span></span><span class="count-badge">6</span></div>
+          <div class="tree-node l2" data-bu-name="亚马逊工业事业部" onclick="setPageContext('bu','亚马逊工业事业部',this)"><span class="expand">▸</span><i class="fa-regular fa-folder folder-icon"></i><span class="node-text"><span class="node-name">亚马逊工业事业部</span></span><span class="count-badge">9</span></div>
+        </div>
       </div>
     </div>
 
     <div class="main-content">
       <div class="page-header">
         <div class="page-header-left">
-          <h1>店铺运营管理</h1>
+          <h1 id="page-title">深圳速卖通工具组</h1>
+          <div class="status-badge" id="status-badge"><i class="fa-solid fa-circle"></i> 管理权限生效中</div>
         </div>
         <div class="page-header-right">
-          <button class="btn btn-primary" onclick="openModal('modal-store-assign')"><i class="fa-solid fa-link"></i> 批量分配</button>
+          <div class="seg-tabs">
+            <div class="seg-tab" data-tab="bu-store" onclick="setPageContext('store','all')"><i class="fa-solid fa-store"></i> 按店铺</div>
+            <div class="seg-tab active" data-tab="bu-personnel" onclick="setPageContext('bu', lastBuName)"><i class="fa-solid fa-users"></i> 按人员</div>
+            <div class="seg-tab" onclick="setPageContext('bu', lastBuName);showBuTab('bu-log',this)"><i class="fa-solid fa-clock-rotate-left"></i> 操作日志</div>
+          </div>
+          <button class="btn btn-primary" onclick="openModal('modal-add-person')"><i class="fa-solid fa-user-plus"></i> 绑定人员</button>
         </div>
       </div>
-      <!-- 未分配店铺通知条 -->
+
+      <!-- Tab: 按店铺（仅在点击"未分配店铺"或"全部店铺"时激活） -->
+      <div id="bu-store" class="bu-tab">
+        <!-- 未分配店铺通知条 -->
         <div class="alert alert-warning mb-16" id="unassigned-alert">
           <span class="alert-icon"><i class="fa-solid fa-triangle-exclamation"></i></span>
           <div style="flex:1;">有 <strong>3</strong> 家新录入店铺尚未分配业务单元，请及时处理。<a href="#" onclick="filterStoreView('unassigned');return false;" style="color:var(--primary); margin-left:8px;">查看未分配店铺 →</a></div>
@@ -395,7 +423,6 @@
           <div class="card-header">
             <div class="card-title"><i class="fa-solid fa-store"></i> 店铺管理</div>
             <div style="display:flex; gap:10px; align-items:center;">
-              <select class="select" style="min-width:100px;"><option>全部平台</option><option>Shopee</option><option>Amazon</option><option>速卖通</option><option>Temu</option></select>
               <input class="input input-search" placeholder="跨BU搜索店铺名称/编号..." style="width:240px;" id="store-global-search">
               <div style="display:flex; gap:2px; background:var(--bg); border-radius:20px; padding:2px;">
                 <span class="store-filter-chip active" onclick="filterStoreChip(this,'all')">全部</span>
@@ -452,7 +479,7 @@
                   </td>
                 </tr>
                 <!-- 已分配店铺 -->
-                <tr class="store-row" data-type="normal" data-bu="深圳速卖通工具组">
+                <tr class="store-row" data-type="normal">
                   <td><input type="checkbox" class="checkbox store-cb" onchange="updateStoreBatch()"></td>
                   <td class="person-cell"><strong>SMT033</strong></td>
                   <td>速卖通</td>
@@ -464,7 +491,7 @@
                     <button class="icon-btn transfer" title="转移BU" onclick="openModal('modal-store-transfer')"><i class="fa-solid fa-right-left"></i></button>
                   </td>
                 </tr>
-                <tr class="store-row" data-type="no-cs" data-bu="深圳速卖通工具组">
+                <tr class="store-row" data-type="no-cs">
                   <td><input type="checkbox" class="checkbox store-cb" onchange="updateStoreBatch()"></td>
                   <td class="person-cell"><strong>SMT008</strong></td>
                   <td>速卖通</td>
@@ -476,7 +503,7 @@
                     <button class="icon-btn transfer" title="转移BU" onclick="openModal('modal-store-transfer')"><i class="fa-solid fa-right-left"></i></button>
                   </td>
                 </tr>
-                <tr class="store-row" data-type="normal" data-bu="深圳速卖通工具组">
+                <tr class="store-row" data-type="normal">
                   <td><input type="checkbox" class="checkbox store-cb" onchange="updateStoreBatch()"></td>
                   <td class="person-cell"><strong>SMT072</strong></td>
                   <td>速卖通</td>
@@ -488,7 +515,7 @@
                     <button class="icon-btn transfer" title="转移BU" onclick="openModal('modal-store-transfer')"><i class="fa-solid fa-right-left"></i></button>
                   </td>
                 </tr>
-                <tr class="store-row" data-type="normal" data-bu="深圳速卖通工具组">
+                <tr class="store-row" data-type="normal">
                   <td><input type="checkbox" class="checkbox store-cb" onchange="updateStoreBatch()"></td>
                   <td class="person-cell"><strong>SMT100</strong></td>
                   <td>速卖通</td>
@@ -500,7 +527,7 @@
                     <button class="icon-btn transfer" title="转移BU" onclick="openModal('modal-store-transfer')"><i class="fa-solid fa-right-left"></i></button>
                   </td>
                 </tr>
-                <tr class="store-row" data-type="no-cs" data-bu="深圳速卖通工具组">
+                <tr class="store-row" data-type="no-cs">
                   <td><input type="checkbox" class="checkbox store-cb" onchange="updateStoreBatch()"></td>
                   <td class="person-cell"><strong>SMT048</strong></td>
                   <td>速卖通</td>
@@ -512,7 +539,7 @@
                     <button class="icon-btn transfer" title="转移BU" onclick="openModal('modal-store-transfer')"><i class="fa-solid fa-right-left"></i></button>
                   </td>
                 </tr>
-                <tr class="store-row" data-type="normal" data-bu="深圳速卖通工具组">
+                <tr class="store-row" data-type="normal">
                   <td><input type="checkbox" class="checkbox store-cb" onchange="updateStoreBatch()"></td>
                   <td class="person-cell"><strong>SMT085</strong></td>
                   <td>速卖通</td>
@@ -541,109 +568,8 @@
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</div>
 
-<!-- ============================================================ -->
-<!-- PAGE 2: 业务单元管理页                                        -->
-<!-- ============================================================ -->
-<div id="page-bu" class="page">
-  <div class="app-container">
-    <div class="sidebar">
-      <div class="sidebar-header">
-        <div class="sidebar-title"><i class="fa-solid fa-sitemap"></i> 业务单元</div>
-      </div>
-      <div style="padding:0 14px 10px;">
-        <input class="sidebar-search" placeholder="搜索业务单元...">
-      </div>
-      <div class="sidebar-tree">
-        <div class="sidebar-section">
-          <div class="sidebar-section-header"><i class="fa-solid fa-diagram-project"></i> 组织架构</div>
-          <div class="tree-node" data-bu-name="四海芯舟" onclick="setPageContext('bu','四海芯舟',this)"><span class="expand">▾</span><i class="fa-regular fa-folder-open folder-icon"></i><span class="node-text"><span class="node-name">四海芯舟</span><span class="node-path">四海芯舟</span></span><span class="count-badge">76</span></div>
-          <div class="tree-node l2" data-bu-name="工业运营中心" onclick="setPageContext('bu','工业运营中心',this)"><span class="expand">▾</span><i class="fa-regular fa-folder-open folder-icon"></i><span class="node-text"><span class="node-name">工业运营中心</span><span class="node-path">四海芯舟-工业运营中心</span></span><span class="count-badge">65</span></div>
-          <div class="tree-node l3" data-bu-name="速卖通事业部" onclick="setPageContext('bu','速卖通事业部',this)"><span class="expand">▾</span><i class="fa-regular fa-folder-open folder-icon"></i><span class="node-text"><span class="node-name">速卖通事业部</span><span class="node-path">四海芯舟-工业运营中心-速...</span></span><span class="count-badge">19</span></div>
-          <div class="tree-node l4 active" data-bu-name="深圳速卖通工具组" onclick="setPageContext('bu','深圳速卖通工具组',this)"><span class="expand">▸</span><i class="fa-regular fa-folder folder-icon"></i><span class="node-text"><span class="node-name">深圳速卖通工具组</span><span class="node-path">四海芯舟-工业运营中心-速卖通事业...</span></span><span class="count-badge">7</span></div>
-          <div class="tree-node l4" data-bu-name="深圳速卖通元器件组" onclick="setPageContext('bu','深圳速卖通元器件组',this)"><span class="expand">▸</span><i class="fa-regular fa-folder folder-icon"></i><span class="node-text"><span class="node-name">深圳速卖通元器件组</span><span class="node-path">四海芯舟-工业运营中心-速...</span></span><span class="count-badge">6</span></div>
-          <div class="tree-node l4" data-bu-name="深圳速卖通全托管组" onclick="setPageContext('bu','深圳速卖通全托管组',this)"><span class="expand">▸</span><i class="fa-regular fa-folder folder-icon"></i><span class="node-text"><span class="node-name">深圳速卖通全托管组</span><span class="node-path">四海芯舟-工业运营中心-速...</span></span><span class="count-badge">12</span></div>
-          <div class="tree-node l3" data-bu-name="东南亚项目部" onclick="setPageContext('bu','东南亚项目部',this)"><span class="expand">▾</span><i class="fa-regular fa-folder-open folder-icon"></i><span class="node-text"><span class="node-name">东南亚项目部</span><span class="node-path">四海芯舟-工业运营中心-东...</span></span><span class="count-badge">9</span></div>
-          <div class="tree-node l4" data-bu-name="深圳东南亚跨境组" onclick="setPageContext('bu','深圳东南亚跨境组',this)"><span class="expand">▸</span><i class="fa-regular fa-folder folder-icon"></i><span class="node-text"><span class="node-name">深圳东南亚跨境组</span></span><span class="count-badge">3</span></div>
-          <div class="tree-node l4" data-bu-name="深圳东南亚本土组" onclick="setPageContext('bu','深圳东南亚本土组',this)"><span class="expand">▸</span><i class="fa-regular fa-folder folder-icon"></i><span class="node-text"><span class="node-name">深圳东南亚本土组</span></span><span class="count-badge">6</span></div>
-          <div class="tree-node l2" data-bu-name="亚马逊工业事业部" onclick="setPageContext('bu','亚马逊工业事业部',this)"><span class="expand">▸</span><i class="fa-regular fa-folder folder-icon"></i><span class="node-text"><span class="node-name">亚马逊工业事业部</span></span><span class="count-badge">9</span></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="main-content">
-      <div class="page-header">
-        <div class="page-header-left">
-          <h1 id="page-title">深圳速卖通工具组</h1>
-          <div class="status-badge" id="status-badge"><i class="fa-solid fa-circle"></i> 管理权限生效中</div>
-        </div>
-        <div class="page-header-right">
-          <div class="seg-tabs">
-            <div class="seg-tab" data-tab="bu-store" onclick="setPageContext('store','all')"><i class="fa-solid fa-store"></i> 按店铺</div>
-            <div class="seg-tab active" data-tab="bu-personnel" onclick="setPageContext('bu', currentBuName)"><i class="fa-solid fa-users"></i> 按人员</div>
-            <div class="seg-tab" onclick="setPageContext('bu', currentBuName);showBuTab('bu-log',this)"><i class="fa-solid fa-clock-rotate-left"></i> 操作日志</div>
-          </div>
-          <button class="btn btn-primary" onclick="openModal('modal-add-person')"><i class="fa-solid fa-user-plus"></i> 绑定人员</button>
-        </div>
-      </div>
-
-      <!-- Tab: 按店铺（BU 维度 — 仅展示该 BU 下的店铺） -->
-      <div id="bu-store" class="bu-tab">
-        <!-- 当前仅展示 BU 下的店铺 -->
-        <div class="alert alert-info mb-16">
-          <span class="alert-icon"><i class="fa-solid fa-circle-info"></i></span>
-          <div style="flex:1;">当前展示 <strong id="bu-store-hint">深圳速卖通工具组</strong> 下的店铺数据。查看全部店铺请前往 <a href="#" onclick="showPage('page-store',document.querySelector('.nav-item:nth-child(1)'));return false;" style="color:var(--primary);">店铺运营管理</a></div>
-        </div>
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title"><i class="fa-solid fa-store"></i> <span id="bu-store-title">深圳速卖通工具组</span> · 店铺</div>
-            <div style="display:flex; gap:10px; align-items:center;">
-              <input class="input input-search" placeholder="搜索店铺名称..." style="width:200px;">
-            </div>
-          </div>
-          <div class="card-body">
-            <table id="bu-store-table">
-              <thead><tr>
-                <th style="text-align:left;">店铺名称</th>
-                <th>所属平台</th>
-                <th>销售员</th>
-                <th>客服</th>
-                <th>业务单元</th>
-                <th>操作</th>
-              </tr></thead>
-              <tbody>
-                <tr class="store-row" data-type="normal" data-bu="深圳速卖通工具组">
-                  <td class="person-cell"><strong>SMT033</strong></td>
-                  <td>速卖通</td>
-                  <td><span class="tag tag-primary" style="font-size:11px;">张赛</span></td>
-                  <td><span class="tag tag-success" style="font-size:11px;">赵六</span></td>
-                  <td style="font-size:12px; color:var(--text-secondary);">深圳速卖通工具组</td>
-                  <td>
-                    <button class="icon-btn edit" title="编辑" onclick="openModal('modal-add-person')"><i class="fa-solid fa-pen"></i></button>
-                    <button class="icon-btn transfer" title="转移BU" onclick="openModal('modal-store-transfer')"><i class="fa-solid fa-right-left"></i></button>
-                  </td>
-                </tr>
-                <tr class="store-row" data-type="no-cs" data-bu="深圳速卖通工具组">
-                  <td class="person-cell"><strong>SMT008</strong></td>
-                  <td>速卖通</td>
-                  <td><span class="tag tag-primary" style="font-size:11px;">张赛</span></td>
-                  <td><span class="tag" style="font-size:11px; color:var(--warning); background:var(--warning-light); border-color:#FFE58F;">缺客服</span></td>
-                  <td style="font-size:12px; color:var(--text-secondary);">深圳速卖通工具组</td>
-                  <td>
-                    <button class="icon-btn edit" title="编辑" onclick="openModal('modal-add-person')"><i class="fa-solid fa-pen"></i></button>
-                    <button class="icon-btn transfer" title="转移BU" onclick="openModal('modal-store-transfer')"><i class="fa-solid fa-right-left"></i></button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- Tab: 按人员 -->
+      <!-- Tab: 按人员（BU节点的默认视图） -->
       <div id="bu-personnel" class="bu-tab active">
         <!-- Batch action bar (shown when items checked) -->
         <div id="batch-bar" class="batch-bar" style="display:none;">
@@ -1537,8 +1463,8 @@ function showToast(type, msg) {
   setTimeout(() => t.classList.remove('show'), 3000);
 }
 
-// ===== Page Context: BU 视图内按人员/按店铺切换 =====
-let currentBuName = '深圳速卖通工具组'; // 当前选中的 BU
+// ===== Page Context: 切换店铺管理 / 业务单元视图 =====
+let lastBuName = '深圳速卖通工具组'; // 跟踪最后选中的 BU，供标签页切换时恢复
 
 function setPageContext(type, name, el) {
   const titleEl = document.getElementById('page-title');
@@ -1546,55 +1472,40 @@ function setPageContext(type, name, el) {
   const storeTab = document.querySelector('[data-tab=bu-store]');
   const personTab = document.querySelector('[data-tab=bu-personnel]');
 
-  if (type === 'bu') {
-    // 选中 BU 节点
-    if (name) currentBuName = name;
-    titleEl.textContent = currentBuName;
+  if (type === 'store') {
+    // 切换到店铺管理上下文
+    titleEl.textContent = '店铺管理';
+    badgeEl.style.display = 'none';
+    // 取消所有 BU 节点选中
+    document.querySelectorAll('.sidebar-section:last-child .tree-node').forEach(n => n.classList.remove('active'));
+    // 选中店铺节点
+    document.querySelectorAll('[data-store-view]').forEach(n => n.classList.remove('active'));
+    const storeNode = document.querySelector('[data-store-view="' + name + '"]');
+    if (storeNode) storeNode.classList.add('active');
+    // 切换到按店铺 tab
+    showBuTab('bu-store', storeTab);
+    // 过滤店铺视图
+    filterStoreView(name);
+    // 隐藏绑定人员按钮（店铺管理视图不需要）
+    document.querySelector('.page-header-right .btn-primary').style.display = 'none';
+  } else if (type === 'bu') {
+    // 记录当前 BU 名称
+    if (name) lastBuName = name;
+    // 切换到业务单元上下文
+    titleEl.textContent = name || lastBuName;
     badgeEl.style.display = 'inline-flex';
-    // 取消所有 BU 节点选中再选中当前
-    document.querySelectorAll('[data-bu-name]').forEach(n => n.classList.remove('active'));
+    // 取消所有店铺节点选中
+    document.querySelectorAll('[data-store-view]').forEach(n => n.classList.remove('active'));
+    // 选中 BU 节点
+    document.querySelectorAll('.sidebar-section:last-child .tree-node').forEach(n => n.classList.remove('active'));
     if (el) el.classList.add('active');
-    // 默认切到按人员
-    if (!el || !el.classList.contains('seg-tab')) {
+    // 切换到按人员 tab（操作日志 tab 由调用方额外切换）
+    if (!el || el.getAttribute('data-tab') !== 'bu-log') {
       showBuTab('bu-personnel', personTab);
     }
     // 显示绑定人员按钮
-    const btn = document.querySelector('.page-header-right .btn-primary');
-    if (btn) btn.style.display = '';
-  } else if (type === 'store') {
-    // BU 维度下点击"按店铺"标签页 — 只展示该 BU 的店铺
-    titleEl.textContent = currentBuName;
-    badgeEl.style.display = 'inline-flex';
-    // 更新提示文字
-    const hint = document.getElementById('bu-store-hint');
-    const title = document.getElementById('bu-store-title');
-    if (hint) hint.textContent = currentBuName;
-    if (title) title.textContent = currentBuName + ' · 店铺';
-    // 激活按店铺 tab
-    showBuTab('bu-store', storeTab);
-    // 过滤：只显示当前 BU 的店铺
-    filterStoreByBu(currentBuName);
-    const btn = document.querySelector('.page-header-right .btn-primary');
-    if (btn) btn.style.display = '';
+    document.querySelector('.page-header-right .btn-primary').style.display = '';
   }
-}
-
-// ===== BU 维度店铺过滤 — 仅展示当前 BU 的店铺 =====
-function filterStoreByBu(buName) {
-  document.querySelectorAll('.store-row').forEach(row => {
-    const rowBu = row.getAttribute('data-bu');
-    const rowType = row.getAttribute('data-type');
-    if (rowType === 'unassigned') {
-      row.style.display = ''; // 未分配店铺始终展示
-    } else if (rowBu === buName) {
-      row.style.display = '';
-    } else {
-      row.style.display = 'none';
-    }
-  });
-  // 显示通知条，提示用户当前视图是 BU 维度的店铺
-  const alert = document.getElementById('unassigned-alert');
-  if (alert) { alert.style.display = ''; alert.querySelector('strong').textContent = '当前仅展示'; }
 }
 
 // ===== Modal: 移除已选店铺标签 =====

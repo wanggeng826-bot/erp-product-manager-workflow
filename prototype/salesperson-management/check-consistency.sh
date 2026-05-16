@@ -1,4 +1,5 @@
 #!/bin/bash
+# 销售人员管理原型 · 组件一致性检查
 set -euo pipefail
 TARGET="index.html"
 PASS=0; FAIL=0
@@ -13,6 +14,7 @@ awk '/type="date"/{d[NR]=1} /date-input-wrap/{w[NR]=1} END{for(i in d) if(!w[i]&
 
 echo ""
 echo "━━━ 2. <select> 选项数 ━━━"
+# 跨行合并 <select>...</select> 块再统计 <option 数量
 awk '
 /<select/ && !/条\/页/ { inSel=1; buf="" }
 inSel { buf=buf $0 }

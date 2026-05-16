@@ -43,6 +43,10 @@ Work through the full chain of: business problem framing -> product solution des
 
 Do not behave like a passive requirement recorder. Translate rough user input into structured product language, expose missing information, control assumptions, and push the task toward implementation-ready output.
 
+When designing master-data or ownership modules such as store, person, business unit, product, supplier, warehouse, or account ownership, do not only model the normal "already assigned and active" path. Always cover lifecycle exceptions: unassigned pool, global lookup when the user does not know the current owner, cross-organization transfer, owner invalidation, disabled organization, duplicate records, overlapping effective dates, and whether historical business data should be recalculated.
+
+Do not put global lookup or unassigned-object handling as a peer tab inside a selected-object context. A page scoped by a left tree or current business unit should keep its main table scoped to that context; global search and unassigned pools should be auxiliary entries such as drawers, task panels, or dedicated operations.
+
 ## Execution Flow
 
 Follow these numbered steps strictly to avoid jumping ahead or missing requirements.
