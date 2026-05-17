@@ -274,6 +274,15 @@ function sendChat() {
   if (!text) return;
   input.value = '';
   input.rows = 1;
+  
+  // Hide welcome page on first message
+  const welcomePage = document.getElementById('welcomePage');
+  if (welcomePage && welcomePage.style.display !== 'none') {
+    welcomePage.style.display = 'none';
+    document.getElementById('chatMessages').style.display = 'flex';
+    document.getElementById('chatQuick').style.display = 'flex';
+  }
+  
   appendMessage(text, 'user');
   showTyping();
 
@@ -928,9 +937,55 @@ const style = document.createElement('style');
 style.textContent = `@keyframes spin { to { transform: rotate(360deg); } }`;
 document.head.appendChild(style);
 
+// ===== ANT-STYLE SELECT =====
+function toggleAntSelect(trigger) {
+  const dropdown = trigger.nextElementSibling;
+  const isOpen = dropdown.classList.contains('ant-select-dropdown--open');
+  // Close all others
+  document.querySelectorAll('.ant-select-dropdown--open').forEach(d => {
+    d.classList.remove('ant-select-dropdown--open');
+  });
+  document.querySelectorAll('.ant-select-trigger--open').forEach(t => {
+    t.classList.remove('ant-select-trigger--open');
+  });
+  if (!isOpen) {
+    dropdown.classList.add('ant-select-dropdown--open');
+    trigger.classList.add('ant-select-trigger--open');
+  }
+}
+
+function selectAntOption(option, value) {
+  const select = option.closest('.ant-select');
+  const triggerSpan = select.querySelector('.ant-select-trigger span:first-child');
+  if (triggerSpan) triggerSpan.textContent = value;
+  select.dataset.value = value;
+  select.querySelectorAll('.ant-select-option').forEach(o => o.classList.remove('ant-select-option--active'));
+  option.classList.add('ant-select-option--active');
+  const dropdown = select.querySelector('.ant-select-dropdown');
+  const trigger = select.querySelector('.ant-select-trigger');
+  if (dropdown) dropdown.classList.remove('ant-select-dropdown--open');
+  if (trigger) trigger.classList.remove('ant-select-trigger--open');
+}
+
+// Close ant-select dropdowns when clicking outside
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.ant-select')) {
+    document.querySelectorAll('.ant-select-dropdown--open').forEach(d => d.classList.remove('ant-select-dropdown--open'));
+    document.querySelectorAll('.ant-select-trigger--open').forEach(t => t.classList.remove('ant-select-trigger--open'));
+  }
+});
+
+window.toggleAntSelect = toggleAntSelect;
+window.selectAntOption = selectAntOption;
+
 // Render on load
 renderAgentMarket();
 renderHistory();
 renderMyAgents();
 renderTasks();
 renderWelcomeAgents();
+
+// Default to welcome page on first load
+document.getElementById('welcomePage').style.display = 'flex';
+document.getElementById('chatMessages').style.display = 'none';
+document.getElementById('chatQuick').style.display = 'none';

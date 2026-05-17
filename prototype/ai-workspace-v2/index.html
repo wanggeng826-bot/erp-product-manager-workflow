@@ -381,18 +381,24 @@
       <div class="ws-panel active" id="panel-history">
         <div style="display:flex;gap:var(--space-3);margin-bottom:var(--space-4);">
           <input class="input" placeholder="搜索对话内容…" style="max-width:320px;" />
-          <select class="select">
-            <option>全部 Agent</option>
-            <option>Listing 优化专家</option>
-            <option>图片生成助手</option>
-            <option>广告诊断师</option>
-          </select>
-          <select class="select">
-            <option>全部时间</option>
-            <option>今天</option>
-            <option>7 天内</option>
-            <option>30 天内</option>
-          </select>
+          <div class="ant-select" data-value="全部 Agent" style="min-width:140px;">
+            <div class="ant-select-trigger" onclick="toggleAntSelect(this)"><span>全部 Agent</span><span>▼</span></div>
+            <div class="ant-select-dropdown">
+              <div class="ant-select-option ant-select-option--active" onclick="selectAntOption(this,'全部 Agent')">全部 Agent</div>
+              <div class="ant-select-option" onclick="selectAntOption(this,'Listing 优化专家')">Listing 优化专家</div>
+              <div class="ant-select-option" onclick="selectAntOption(this,'图片生成助手')">图片生成助手</div>
+              <div class="ant-select-option" onclick="selectAntOption(this,'广告诊断师')">广告诊断师</div>
+            </div>
+          </div>
+          <div class="ant-select" data-value="全部时间" style="min-width:120px;">
+            <div class="ant-select-trigger" onclick="toggleAntSelect(this)"><span>全部时间</span><span>▼</span></div>
+            <div class="ant-select-dropdown">
+              <div class="ant-select-option ant-select-option--active" onclick="selectAntOption(this,'全部时间')">全部时间</div>
+              <div class="ant-select-option" onclick="selectAntOption(this,'今天')">今天</div>
+              <div class="ant-select-option" onclick="selectAntOption(this,'7 天内')">7 天内</div>
+              <div class="ant-select-option" onclick="selectAntOption(this,'30 天内')">30 天内</div>
+            </div>
+          </div>
         </div>
         <div class="conv-list" id="historyList">
           <!-- JS rendered -->
@@ -415,8 +421,24 @@
       <!-- Tab: Tasks -->
       <div class="ws-panel" id="panel-tasks">
         <div style="display:flex;gap:var(--space-3);margin-bottom:var(--space-4);">
-          <select class="select"><option>全部类型</option><option>Listing 优化</option><option>图片生成</option><option>广告诊断</option></select>
-          <select class="select"><option>全部状态</option><option>已完成</option><option>进行中</option><option>失败</option></select>
+          <div class="ant-select" data-value="全部类型" style="min-width:120px;">
+            <div class="ant-select-trigger" onclick="toggleAntSelect(this)"><span>全部类型</span><span>▼</span></div>
+            <div class="ant-select-dropdown">
+              <div class="ant-select-option ant-select-option--active" onclick="selectAntOption(this,'全部类型')">全部类型</div>
+              <div class="ant-select-option" onclick="selectAntOption(this,'Listing 优化')">Listing 优化</div>
+              <div class="ant-select-option" onclick="selectAntOption(this,'图片生成')">图片生成</div>
+              <div class="ant-select-option" onclick="selectAntOption(this,'广告诊断')">广告诊断</div>
+            </div>
+          </div>
+          <div class="ant-select" data-value="全部状态" style="min-width:120px;">
+            <div class="ant-select-trigger" onclick="toggleAntSelect(this)"><span>全部状态</span><span>▼</span></div>
+            <div class="ant-select-dropdown">
+              <div class="ant-select-option ant-select-option--active" onclick="selectAntOption(this,'全部状态')">全部状态</div>
+              <div class="ant-select-option" onclick="selectAntOption(this,'已完成')">已完成</div>
+              <div class="ant-select-option" onclick="selectAntOption(this,'进行中')">进行中</div>
+              <div class="ant-select-option" onclick="selectAntOption(this,'失败')">失败</div>
+            </div>
+          </div>
         </div>
         <div class="surface-panel" style="overflow:hidden;">
           <table style="width:100%;border-collapse:collapse;font-size:var(--font-size-sm);">
@@ -537,11 +559,24 @@
             <div style="display:flex;gap:var(--space-2);margin-top:var(--space-3);">
               <div style="flex:1;">
                 <label style="font-size:var(--font-size-xs);color:var(--color-text-secondary);display:block;margin-bottom:var(--space-1);">尺寸</label>
-                <select class="select" style="width:100%;"><option>1:1 主图</option><option>3:4 服饰</option><option>16:9 广告</option></select>
+                <div class="ant-select" data-value="1:1 主图" style="width:100%;">
+                  <div class="ant-select-trigger" onclick="toggleAntSelect(this)"><span>1:1 主图</span><span>▼</span></div>
+                  <div class="ant-select-dropdown">
+                    <div class="ant-select-option ant-select-option--active" onclick="selectAntOption(this,'1:1 主图')">1:1 主图</div>
+                    <div class="ant-select-option" onclick="selectAntOption(this,'3:4 服饰')">3:4 服饰</div>
+                    <div class="ant-select-option" onclick="selectAntOption(this,'16:9 广告')">16:9 广告</div>
+                  </div>
+                </div>
               </div>
               <div style="flex:1;">
                 <label style="font-size:var(--font-size-xs);color:var(--color-text-secondary);display:block;margin-bottom:var(--space-1);">数量</label>
-                <select class="select" style="width:100%;"><option>1</option><option selected>4</option></select>
+                <div class="ant-select" data-value="4" style="width:100%;">
+                  <div class="ant-select-trigger" onclick="toggleAntSelect(this)"><span>4</span><span>▼</span></div>
+                  <div class="ant-select-dropdown">
+                    <div class="ant-select-option" onclick="selectAntOption(this,'1')">1</div>
+                    <div class="ant-select-option ant-select-option--active" onclick="selectAntOption(this,'4')">4</div>
+                  </div>
+                </div>
               </div>
             </div>
             <button class="btn btn--primary" style="width:100%;margin-top:var(--space-3);" onclick="generateImages()">✨ AI 生成</button>
@@ -604,12 +639,15 @@
     </div>
     <div class="c-field">
       <label>默认模型</label>
-      <select class="select">
-        <option>Claude 4</option>
-        <option>GPT-4o</option>
-        <option>Gemini 2.5</option>
-        <option>DeepSeek V3</option>
-      </select>
+      <div class="ant-select" data-value="Claude 4" style="width:100%;">
+        <div class="ant-select-trigger" onclick="toggleAntSelect(this)"><span>Claude 4</span><span>▼</span></div>
+        <div class="ant-select-dropdown">
+          <div class="ant-select-option ant-select-option--active" onclick="selectAntOption(this,'Claude 4')">Claude 4</div>
+          <div class="ant-select-option" onclick="selectAntOption(this,'GPT-4o')">GPT-4o</div>
+          <div class="ant-select-option" onclick="selectAntOption(this,'Gemini 2.5')">Gemini 2.5</div>
+          <div class="ant-select-option" onclick="selectAntOption(this,'DeepSeek V3')">DeepSeek V3</div>
+        </div>
+      </div>
     </div>
     <div class="c-field">
       <label>知识库</label>
