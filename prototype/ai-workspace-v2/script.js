@@ -6,6 +6,8 @@
 let currentPage = 'ai-workspace';
 let currentModel = 'claude';
 let currentConversation = 1;
+let currentAgent = 1;  // Track current agent
+let agentSelectorOpen = false;  // Track if agent selector is open
 let chatOpen = true;
 let isOptimizing = false;
 let isGenerating = false;
@@ -91,6 +93,9 @@ function switchConversation(id) {
   const conv = conversations.find(c => c.id === id);
   if (conv) {
     document.getElementById('chatTitle').textContent = conv.title;
+    // Hide welcome page and show messages
+    document.getElementById('welcomePage').style.display = 'none';
+    document.getElementById('chatMessages').style.display = 'flex';
     // Clear and load mock messages
     const msgs = document.getElementById('chatMessages');
     msgs.innerHTML = `
@@ -105,9 +110,82 @@ function switchConversation(id) {
   }
 }
 
+// ===== AGENT SWITCHING =====
+function toggleAgentSelector() {
+  const dd = document.getElementById('agentSelectorDropdown');
+  agentSelectorOpen = !agentSelectorOpen;
+  dd.style.display = agentSelectorOpen ? 'block' : 'none';
+  if (agentSelectorOpen) {
+    renderAgentSelectorList();
+  }
+}
+
+function closeAgentSelector() {
+  agentSelectorOpen = false;
+  document.getElementById('agentSelectorDropdown').style.display = 'none';
+}
+
+function renderAgentSelectorList() {
+  const list = document.getElementById('agentSelectorList');
+  if (!list) return;
+  list.innerHTML = agents.slice(0, 6).map(a => `
+    <div class="agent-option ${a.id === currentAgent ? 'agent-option--active' : ''}" onclick="switchAgent(${a.id})">
+      <div class="agent-option__emoji">${a.emoji}</div>
+      <div class="agent-option__info">
+        <div class="agent-option__name">${escapeHtml(a.name)}</div>
+        <div class="agent-option__meta">${escapeHtml(a.author)}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function switchAgent(agentId) {
+  const agent = agents.find(a => a.id === agentId);
+  if (!agent) return;
+  
+  currentAgent = agentId;
+  document.getElementById('agentSwitchLabel').textContent = `${agent.emoji} ${agent.name}`;
+  document.getElementById('chatTitle').textContent = `与 ${agent.name} 对话`;
+  
+  // Update right panel
+  document.querySelector('.aws-right__agent-avatar').textContent = agent.emoji;
+  document.querySelector('.aws-right__agent-name').textContent = agent.name;
+  document.querySelector('.aws-right__agent-desc').textContent = `${agent.official ? '官方内置' : agent.author} · ${agent.desc}`;
+  
+  // Hide welcome page and show messages
+  document.getElementById('welcomePage').style.display = 'none';
+  document.getElementById('chatMessages').style.display = 'flex';
+  document.getElementById('chatQuick').style.display = 'flex';
+  
+  closeAgentSelector();
+  showToast(`已切换至 ${agent.name}`);
+}
+
+function renderWelcomeAgents() {
+  const welcome = document.getElementById('welcomeAgentsList');
+  if (!welcome) return;
+  
+  // Show top 6 agents
+  const topAgents = agents.slice(0, 6);
+  welcome.innerHTML = topAgents.map(a => `
+    <div class="welcome-agent-item" onclick="switchAgent(${a.id})">
+      <div class="welcome-agent-item__emoji">${a.emoji}</div>
+      <div class="welcome-agent-item__name">${escapeHtml(a.name)}</div>
+      <div class="welcome-agent-item__desc">${escapeHtml(a.desc)}</div>
+    </div>
+  `).join('');
+}
+
 function newConversation() {
   const newId = conversations.length + 1;
-  const newConv = { id: newId, title: '新对话', agent: '通用助手', time: '刚刚', emoji: '💬' };
+  const agent = agents.find(a => a.id === currentAgent);
+  const newConv = { 
+    id: newId, 
+    title: '新对话', 
+    agent: agent ? agent.name : '通用助手', 
+    time: '刚刚', 
+    emoji: agent ? agent.emoji : '💬' 
+  };
   conversations.unshift(newConv);
 
   const list = document.getElementById('conversationList');
@@ -128,34 +206,51 @@ function newConversation() {
 
   currentConversation = newId;
   document.getElementById('chatTitle').textContent = '新对话';
-  document.getElementById('chatMessages').innerHTML = `
-    <div class="chat-msg chat-msg--bot">
-      <div class="chat-msg__avatar chat-msg__avatar--bot">🤖</div>
-      <div>
-        <div class="chat-msg__bubble">👋 你好！有什么可以帮你的？\n\n你可以：\n• 直接描述你的需求\n• 使用 @ 唤起特定 Agent\n• 点击下方的快捷操作</div>
-        <div class="chat-msg__time">刚刚</div>
-      </div>
-    </div>
-  `;
+  
+  // Show welcome page
+  document.getElementById('welcomePage').style.display = 'flex';
+  document.getElementById('chatMessages').style.display = 'none';
+  document.getElementById('chatQuick').style.display = 'none';
+  
+  renderWelcomeAgents();
   document.getElementById('chatInput').focus();
 }
 
 // ===== CHAT =====
+let msgIdCounter = 100; // unique id for each message DOM node
+
 function appendMessage(text, role) {
   const m = document.getElementById('chatMessages');
   const time = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
   const avatar = role === 'user' ? '张' : '🤖';
   const avatarClass = role === 'user' ? 'chat-msg__avatar--user' : 'chat-msg__avatar--bot';
+  const msgId = msgIdCounter++;
   m.innerHTML += `
-    <div class="chat-msg chat-msg--${role}">
+    <div class="chat-msg chat-msg--${role}" id="msg-${msgId}">
       <div class="chat-msg__avatar ${avatarClass}">${avatar}</div>
-      <div>
+      <div class="chat-msg__body">
         <div class="chat-msg__bubble">${escapeHtml(text)}</div>
         <div class="chat-msg__time">${time}</div>
       </div>
+      <button class="chat-msg__delete" title="删除此消息" onclick="deleteChatMsg(${msgId})">×</button>
     </div>
   `;
   m.scrollTop = m.scrollHeight;
+}
+
+// Delete a single chat message from the dialog
+function deleteChatMsg(msgId) {
+  const el = document.getElementById('msg-' + msgId);
+  if (el) {
+    el.style.animation = 'fadeOut .3s ease forwards';
+    setTimeout(() => {
+      el.remove();
+      updateContextStats();
+      // If context panel is open, refresh its list too
+      if (contextPanelOpen) syncContextModalFromChat();
+      showToast('已删除消息');
+    }, 300);
+  }
 }
 
 function showTyping() {
@@ -179,6 +274,15 @@ function sendChat() {
   if (!text) return;
   input.value = '';
   input.rows = 1;
+  
+  // Hide welcome page on first message
+  const welcomePage = document.getElementById('welcomePage');
+  if (welcomePage && welcomePage.style.display !== 'none') {
+    welcomePage.style.display = 'none';
+    document.getElementById('chatMessages').style.display = 'flex';
+    document.getElementById('chatQuick').style.display = 'flex';
+  }
+  
   appendMessage(text, 'user');
   showTyping();
 
@@ -244,6 +348,9 @@ function selectModel(model) {
 }
 
 document.addEventListener('click', (e) => {
+  if (!e.target.closest('#agentSwitchBtn') && !e.target.closest('#agentSelectorDropdown')) {
+    closeAgentSelector();
+  }
   if (!e.target.closest('#modelSelector') && !e.target.closest('#modelDropdown')) {
     closeModelDropdown();
   }
@@ -525,14 +632,276 @@ function showToast(msg, type) {
   setTimeout(() => t.classList.remove('show'), 2500);
 }
 
-// ===== INIT =====
-window.switchPage = switchPage;
+// ===== @ COMMAND PANEL =====
+let atPanelOpen = false;
+
+function toggleAtCommandPanel() {
+  atPanelOpen ? closeAtCommandPanel() : openAtCommandPanel();
+}
+
+function openAtCommandPanel() {
+  atPanelOpen = true;
+  const panel = document.getElementById('atCommandPanel');
+  panel.dataset.open = 'true';
+  renderAtAgentList();
+}
+
+function closeAtCommandPanel() {
+  atPanelOpen = false;
+  document.getElementById('atCommandPanel').dataset.open = 'false';
+}
+
+function renderAtAgentList() {
+  const list = document.getElementById('atAgentList');
+  if (!list) return;
+  list.innerHTML = agents.map(a => `
+    <div class="at-command-item" onclick="switchAgent(${a.id});closeAtCommandPanel();">
+      <span class="at-command-item__icon">${a.emoji}</span>
+      <div class="at-command-item__info">
+        <div class="at-command-item__name">${escapeHtml(a.name)}</div>
+        <div class="at-command-item__desc">${escapeHtml(a.desc.slice(0, 20))}...</div>
+      </div>
+      ${a.official ? '<span class="tag tag--processing" style="font-size:10px;height:18px;padding:0 6px;margin-left:auto;">官方</span>' : ''}
+    </div>
+  `).join('');
+}
+
+function atInsertCommand(command) {
+  closeAtCommandPanel();
+  if (command === '/clear') {
+    clearAllContext();
+    return;
+  }
+  const input = document.getElementById('chatInput');
+  input.value = command;
+  input.focus();
+  // Auto-resize
+  input.rows = 1;
+  const rows = Math.min(5, Math.ceil(input.scrollHeight / 24));
+  input.rows = Math.max(1, rows);
+}
+
+// Close @ panel when clicking outside
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('#atBtn') && !e.target.closest('#atCommandPanel')) {
+    closeAtCommandPanel();
+  }
+});
+
+// ===== KNOWLEDGE BASE & CONTEXT MANAGEMENT =====
+function deleteKBFile(fileId) {
+  const el = document.getElementById(`kbFile${fileId}`);
+  if (el) {
+    el.style.animation = 'fadeOut .3s ease';
+    setTimeout(() => {
+      el.remove();
+      showToast('已删除知识库文件');
+    }, 300);
+  }
+}
+
+let contextPanelOpen = false;
+
+function toggleContextPanel() {
+  contextPanelOpen ? closeContextPanel() : openContextPanel();
+}
+
+function openContextPanel() {
+  contextPanelOpen = true;
+  document.getElementById('contextMask').dataset.open = 'true';
+  document.getElementById('contextModal').dataset.open = 'true';
+  updateContextStats();
+  syncContextModalFromChat();
+}
+
+/** Render context modal message list from the real chat messages */
+function syncContextModalFromChat() {
+  const list = document.getElementById('contextMsgList');
+  if (!list) return;
+  const msgs = document.querySelectorAll('#chatMessages .chat-msg');
+  if (msgs.length === 0) {
+    list.innerHTML = '<div style="padding:var(--space-3);text-align:center;color:var(--color-text-tertiary);font-size:var(--font-size-sm);">暂无对话消息</div>';
+    return;
+  }
+  list.innerHTML = Array.from(msgs).map((msg, i) => {
+    const bubble = msg.querySelector('.chat-msg__bubble');
+    const isUser = msg.classList.contains('chat-msg--user');
+    const text = bubble ? bubble.textContent.slice(0, 60) + (bubble.textContent.length > 60 ? '...' : '') : '';
+    const role = isUser ? '用户' : '助手';
+    const match = msg.id.match(/msg-(\d+)/);
+    const msgId = match ? match[1] : i;
+    return `
+      <div style="padding:var(--space-2);border-radius:var(--radius-sm);background:var(--color-bg-container);border:1px solid var(--color-border-secondary);font-size:var(--font-size-sm);display:flex;justify-content:space-between;align-items:center;">
+        <span style="color:${isUser ? 'var(--color-primary-6)' : 'var(--color-text-secondary)'};">${role}: ${escapeHtml(text)}</span>
+        <button class="ctx-msg-delete" onclick="deleteChatMsg(${msgId}); syncContextModalFromChat();" title="删除">✕</button>
+      </div>`;
+  }).join('');
+}
+
+function closeContextPanel() {
+  contextPanelOpen = false;
+  document.getElementById('contextMask').dataset.open = 'false';
+  document.getElementById('contextModal').dataset.open = 'false';
+}
+
+function updateContextStats() {
+  const msgCount = document.querySelectorAll('.chat-msg').length;
+  const estimatedTokens = Math.round(msgCount * 150);
+  
+  document.getElementById('contextMsgCount').textContent = msgCount;
+  document.getElementById('contextTokens').textContent = estimatedTokens.toLocaleString();
+  document.getElementById('modalMsgCount').textContent = msgCount;
+  document.getElementById('modalTokens').textContent = estimatedTokens.toLocaleString();
+}
+
+function compressContext() {
+  if (confirm('确定要压缩上下文吗？这会删除早期的消息以减少 Token 使用。')) {
+    const msgs = document.querySelectorAll('#chatMessages .chat-msg');
+    if (msgs.length > 5) {
+      msgs[0].style.animation = 'fadeOut .3s ease forwards';
+      msgs[1].style.animation = 'fadeOut .3s ease forwards';
+      setTimeout(() => {
+        msgs[0].remove();
+        msgs[1].remove();
+        updateContextStats();
+        if (contextPanelOpen) syncContextModalFromChat();
+        showToast('已压缩上下文 ↓40%');
+      }, 300);
+    } else {
+      showToast('对话太短，无需压缩', 'warning');
+    }
+  }
+}
+
+function deleteContextMsg(msgId) {
+  if (confirm('确定要删除此消息吗？')) {
+    const msgList = document.getElementById('contextMsgList');
+    const items = msgList.querySelectorAll('[style*="padding"]');
+    if (items[msgId - 1]) {
+      items[msgId - 1].style.animation = 'fadeOut .3s ease';
+      setTimeout(() => {
+        items[msgId - 1].remove();
+        updateContextStats();
+        showToast('已删除消息');
+      }, 300);
+    }
+  }
+}
+
+function startFromMessage() {
+  closeContextPanel();
+  showToast('已重置对话，从此处开始');
+  const msgs = document.getElementById('chatMessages');
+  msgs.innerHTML = `
+    <div class="chat-msg chat-msg--bot" id="msg-${msgIdCounter++}">
+      <div class="chat-msg__avatar chat-msg__avatar--bot">🤖</div>
+      <div class="chat-msg__body">
+        <div class="chat-msg__bubble">已清除之前的对话记录。让我们从这里开始吧！</div>
+        <div class="chat-msg__time">刚刚</div>
+      </div>
+      <button class="chat-msg__delete" title="删除此消息" onclick="deleteChatMsg(${msgIdCounter - 1})">×</button>
+    </div>
+  `;
+  updateContextStats();
+}
+
+function clearAllContext() {
+  if (confirm('确定要清空所有对话上下文吗？此操作无法撤销。')) {
+    document.getElementById('chatMessages').innerHTML = `
+      <div class="chat-msg chat-msg--bot" id="msg-${msgIdCounter++}">
+        <div class="chat-msg__avatar chat-msg__avatar--bot">🤖</div>
+        <div class="chat-msg__body">
+          <div class="chat-msg__bubble">👋 对话已重置。请重新开始对话。</div>
+          <div class="chat-msg__time">刚刚</div>
+        </div>
+        <button class="chat-msg__delete" title="删除此消息" onclick="deleteChatMsg(${msgIdCounter - 1})">×</button>
+      </div>
+    `;
+    closeContextPanel();
+    updateContextStats();
+    showToast('已清空对话上下文');
+  }
+}
+
+// ===== GLOBAL CHAT WIDGET =====
+let chatWindowOpen = false;
+let widgetSettingsOpen = false;
+
+const chatWidgetFloat = document.getElementById('chatWidgetFloat');
+if (chatWidgetFloat) {
+  chatWidgetFloat.addEventListener('click', () => {
+    chatWindowOpen ? closeChatWindow() : openChatWindow();
+  });
+}
+
+function openChatWindow() {
+  chatWindowOpen = true;
+  document.getElementById('chatWindowMask').dataset.open = 'true';
+  document.getElementById('chatWindowWidget').dataset.open = 'true';
+}
+
+function closeChatWindow() {
+  chatWindowOpen = false;
+  document.getElementById('chatWindowMask').dataset.open = 'false';
+  document.getElementById('chatWindowWidget').dataset.open = 'false';
+  document.getElementById('widgetSettings').style.display = 'none';
+  widgetSettingsOpen = false;
+}
+
+function toggleWidgetSettings() {
+  widgetSettingsOpen = !widgetSettingsOpen;
+  const settings = document.getElementById('widgetSettings');
+  settings.style.display = widgetSettingsOpen ? 'block' : 'none';
+}
+
+function sendWidgetChat() {
+  const input = document.getElementById('widgetChatInput');
+  const text = input.value.trim();
+  if (!text) return;
+  
+  input.value = '';
+  input.rows = 1;
+  
+  // Add user message
+  const msgs = document.getElementById('widgetMessages');
+  const userDiv = document.createElement('div');
+  userDiv.className = 'widget-msg widget-msg--user';
+  userDiv.innerHTML = `<div class="widget-msg__bubble">${escapeHtml(text)}</div>`;
+  msgs.appendChild(userDiv);
+  msgs.scrollTop = msgs.scrollHeight;
+  
+  // Simulate bot response
+  setTimeout(() => {
+    const botDiv = document.createElement('div');
+    botDiv.className = 'widget-msg widget-msg--bot';
+    botDiv.innerHTML = `<div class="widget-msg__bubble">正在处理您的请求…</div>`;
+    msgs.appendChild(botDiv);
+    msgs.scrollTop = msgs.scrollHeight;
+  }, 300);
+}
+
+// Auto-resize widget textarea
+const widgetInput = document.getElementById('widgetChatInput');
+if (widgetInput) {
+  widgetInput.addEventListener('input', function() {
+    this.rows = 1;
+    const rows = Math.min(4, Math.ceil(this.scrollHeight / 20));
+    this.rows = Math.max(1, rows);
+  });
+}
+
+// Add fadeOut animation
+const animStyle = document.createElement('style');
+animStyle.textContent = `@keyframes fadeOut { to { opacity: 0; transform: translateX(-10px); } }`;
+document.head.appendChild(animStyle);
 window.switchConversation = switchConversation;
 window.newConversation = newConversation;
 window.sendChat = sendChat;
 window.quickChat = quickChat;
 window.toggleModelDropdown = toggleModelDropdown;
 window.selectModel = selectModel;
+window.toggleAgentSelector = toggleAgentSelector;
+window.switchAgent = switchAgent;
 window.toggleRightPanel = toggleRightPanel;
 window.openAgentBuilder = openAgentBuilder;
 window.closeAgentBuilder = closeAgentBuilder;
@@ -543,14 +912,80 @@ window.fetchListing = fetchListing;
 window.runOptimization = runOptimization;
 window.generateImages = generateImages;
 window.showToast = showToast;
+// New functions
+window.deleteKBFile = deleteKBFile;
+window.toggleContextPanel = toggleContextPanel;
+window.openContextPanel = openContextPanel;
+window.closeContextPanel = closeContextPanel;
+window.compressContext = compressContext;
+window.deleteContextMsg = deleteContextMsg;
+window.startFromMessage = startFromMessage;
+window.clearAllContext = clearAllContext;
+window.openChatWindow = openChatWindow;
+window.closeChatWindow = closeChatWindow;
+window.toggleWidgetSettings = toggleWidgetSettings;
+window.sendWidgetChat = sendWidgetChat;
+// @ Command Panel
+window.toggleAtCommandPanel = toggleAtCommandPanel;
+window.closeAtCommandPanel = closeAtCommandPanel;
+window.atInsertCommand = atInsertCommand;
+// Chat message delete
+window.deleteChatMsg = deleteChatMsg;
 
 // Add spin keyframes
 const style = document.createElement('style');
 style.textContent = `@keyframes spin { to { transform: rotate(360deg); } }`;
 document.head.appendChild(style);
 
+// ===== ANT-STYLE SELECT =====
+function toggleAntSelect(trigger) {
+  const dropdown = trigger.nextElementSibling;
+  const isOpen = dropdown.classList.contains('ant-select-dropdown--open');
+  // Close all others
+  document.querySelectorAll('.ant-select-dropdown--open').forEach(d => {
+    d.classList.remove('ant-select-dropdown--open');
+  });
+  document.querySelectorAll('.ant-select-trigger--open').forEach(t => {
+    t.classList.remove('ant-select-trigger--open');
+  });
+  if (!isOpen) {
+    dropdown.classList.add('ant-select-dropdown--open');
+    trigger.classList.add('ant-select-trigger--open');
+  }
+}
+
+function selectAntOption(option, value) {
+  const select = option.closest('.ant-select');
+  const triggerSpan = select.querySelector('.ant-select-trigger span:first-child');
+  if (triggerSpan) triggerSpan.textContent = value;
+  select.dataset.value = value;
+  select.querySelectorAll('.ant-select-option').forEach(o => o.classList.remove('ant-select-option--active'));
+  option.classList.add('ant-select-option--active');
+  const dropdown = select.querySelector('.ant-select-dropdown');
+  const trigger = select.querySelector('.ant-select-trigger');
+  if (dropdown) dropdown.classList.remove('ant-select-dropdown--open');
+  if (trigger) trigger.classList.remove('ant-select-trigger--open');
+}
+
+// Close ant-select dropdowns when clicking outside
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.ant-select')) {
+    document.querySelectorAll('.ant-select-dropdown--open').forEach(d => d.classList.remove('ant-select-dropdown--open'));
+    document.querySelectorAll('.ant-select-trigger--open').forEach(t => t.classList.remove('ant-select-trigger--open'));
+  }
+});
+
+window.toggleAntSelect = toggleAntSelect;
+window.selectAntOption = selectAntOption;
+
 // Render on load
 renderAgentMarket();
 renderHistory();
 renderMyAgents();
 renderTasks();
+renderWelcomeAgents();
+
+// Default to welcome page on first load
+document.getElementById('welcomePage').style.display = 'flex';
+document.getElementById('chatMessages').style.display = 'none';
+document.getElementById('chatQuick').style.display = 'none';
