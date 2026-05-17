@@ -44,9 +44,10 @@
 7. 拆解主流程、弹窗、抽屉、状态与权限差异
 8. 校验每个可见元素是否能回指到 PRD 或已确认需求
 9. 生成 HTML 可交互原型
-10. 若为 `prototype-draft`，只做忠实性检查和最小自检
-11. 若为 `prototype-final`，再按反模式清单和质量门禁做正式修正
-12. 将原型文件输出到固定目录
+10. **风格守门检查**：运行 `node scripts/prototype-style-guard.js prototype/<name>/`，确保无禁止颜色、已引入 tokens.css、壳层组件复用正确
+11. 若为 `prototype-draft`，只做忠实性检查和最小自检
+12. 若为 `prototype-final`，再按反模式清单和质量门禁做正式修正
+13. 将原型文件输出到固定目录
 
 补充规则：
 
@@ -77,6 +78,13 @@
 5. 尽量少跳转，查看优先抽屉，字段少新建用弹窗，字段多用抽屉
 6. 原型需要可点击
 7. 输出到 prototype/
+8. **风格硬约束（禁止模型自行发明颜色/间距/壳层）**：
+   - 必须引入 `<link rel="stylesheet" href="../../ui-library/tokens.css">`，禁止自行定义 `:root` 颜色/间距/圆角/阴影变量
+   - 壳层（ErpShell）必须从 `ui-library/components/erp-shell.html` 复制，禁止手写 `.top-nav`、`.erp-shell` 等新类名
+   - 主色必须使用 `#1677ff`（`var(--color-primary-6)`），禁止 `#3B82F6`、`#6366F1` 等 Tailwind/Indigo 色系
+   - 布局背景必须使用 `#f5f7fa`（`var(--color-bg-layout)`），禁止 `#F8FAFC`
+   - 类名前缀统一：`c-shell__*`（壳层）、`c-page-header__*`（标题区）、`btn` / `btn--primary`（按钮）
+   - 交付前自检：运行 `node scripts/prototype-style-guard.js prototype/<name>/`
 ```
 
 ## 5. 你给我的输入建议
@@ -121,6 +129,8 @@
 - HTML 原型不得使用可见原生 `<select>` 作为正式筛选控件；需要用 Ant 风格 Select 触发器和下拉面板，避免截图出现浏览器默认下拉样式
 - 批量搜索必须支持点击展开矩形 textarea，按换行、英文逗号、中文逗号识别输入，输入时展示识别数量，应用后用 chip 回显已生效条件
 - 状态与权限差异要体现在真实业务界面本身，不通过显式切换器暴露给业务用户
+- **风格一致性**：禁止自行定义 CSS 颜色/间距/圆角/阴影变量，统一使用 `tokens.css`；禁止 invent 新壳层类名，统一使用 `c-shell__*` 前缀
+- **风格守门**：交付前运行 `node scripts/prototype-style-guard.js prototype/<name>/`，修复所有 ERROR 后再发布
 - 如需做演示版，必须单独输出，与正式版原型分开
 
 ## 7. 原型输出建议
