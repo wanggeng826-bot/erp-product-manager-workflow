@@ -13,6 +13,7 @@
 > - 验收必须 BDD（Given / When / Then），不许罗列文字
 > - 禁用"等"、"类似逻辑"等敷衍词汇——所有枚举穷尽
 > - UI 组件必须用 Ant Design（参考 `knowledge/figma-ant-design-ui-library.md`）
+> - 需要生成原型的 PRD，必须在第 10 节写清楚 UI 设计契约；不要只写"Ant Design 风格"或"专业后台风格"
 
 ---
 
@@ -242,13 +243,15 @@ specs:
 
 ### 10.3 组件映射表
 
-| 页面 | 区域 | Figma 组件 | HTML 镜像 | Notes |
-|---|---|---|---|---|
-| P1 | 壳层 | ErpShell | components/erp-shell.html | |
-| P1 | 标题区 | PageHeaderBar | components/page-header-bar.html | |
-| P1 | 筛选区 | QueryFilterBar | components/query-filter-bar.html | |
-| P1 | 结果区 | DataTablePanel | components/data-table-panel.html | |
-| P1 | 详情 | DetailDrawer | components/detail-drawer.html | |
+| 页面 | 区域 | Figma 组件 | HTML 镜像 | Ant Design 组件 | 交互语义 | Notes |
+|---|---|---|---|---|---|---|
+| P1 | 壳层 | ErpShell | components/erp-shell.html | Layout / Sider / Header / Breadcrumb | 后台壳层 | |
+| P1 | 标题区 | PageHeaderBar | components/page-header-bar.html | Typography / Space / Button | 页面标题 + 一级主操作 | |
+| P1 | 筛选区 | QueryFilterBar | components/query-filter-bar.html | Form / Input / Select / DatePicker / Button | 查询条件收敛 | |
+| P1 | 结果区 | DataTablePanel | components/data-table-panel.html | Table / Tag / Pagination / Dropdown | 高频扫描与批量操作 | |
+| P1 | 详情 | DetailDrawer | components/detail-drawer.html | Drawer / Descriptions / Tabs / Timeline | 查看优先抽屉 | |
+
+> 组件映射表必须写到"区域"级别。任何控件如果无法映射到 Figma 组件、HTML 镜像或 Ant Design 组件，默认不得进入正式原型。
 
 ### 10.3A 页面元素来源映射（必填）
 
@@ -257,6 +260,31 @@ specs:
 | P1 | 标题 / 页签 / 摘要卡 / 按钮 / 区块标题 | 用户指令 / 方案 / PRD | | |
 
 > 没有来源映射的导航、页签、摘要卡、快捷操作、说明文案、模块标题，不得进入交付物。
+
+### 10.3B UI 设计契约（必填，用于控制跨模型输出差异）
+
+| 页面 | 区域 | 控件 / 元素 | 必用组件 | 状态语义 | 尺寸 / 密度 | 颜色 / Token | 禁止实现 |
+|---|---|---|---|---|---|---|---|
+| P1 | 平台切换 | Amazon / Shopee / Lazada / TikTok | Segmented / Radio.Group / Tag group（三选一，需明确） | selected / default / hover / disabled | 高度 24-32px，紧凑间距 8px | `var(--color-primary-6)` / `var(--color-primary-bg)` / `var(--color-border-secondary)` | 禁止裸 `button`、浏览器默认按钮、只写 `tag--*` 不写 `.tag` |
+| P1 | 主操作 | 查询 / 新建 / 保存 | Button | primary / default / disabled / loading | `--control-height` | `btn btn--primary` 或 v6 `color+variant` 语义 | 禁止自定义蓝色按钮 |
+| P1 | 状态展示 | 订单状态 / 任务状态 | Tag | success / processing / warning / error / default | 高度 22px | 使用 `.tag` + `.tag--*` | 禁止只写颜色文字 |
+| P1 | 表单输入 | 文本 / 枚举 / 日期 | Input / Select / DatePicker | default / focus / error / disabled | 32px 控件高 | 使用 `.input` / Ant-style select | 禁止可见原生 `<select>` |
+
+> 写 PRD 时不要把 UI 契约写成审美描述。必须落到：控件选择、状态语义、尺寸密度、token、禁止实现。  
+> 示例：不要写"平台选项做得高级一点"；应写"平台切换使用 Segmented，选中态使用 primary token，禁止裸 button 和浏览器默认样式"。
+
+### 10.3C 原型实现约束（必填）
+
+| 约束项 | 规则 |
+|---|---|
+| Token | 必须引入 `ui-library/tokens.css`；禁止在业务原型里重新定义 `:root` 颜色、间距、圆角、阴影变量 |
+| 颜色 | 主色使用 `var(--color-primary-6)`；布局背景使用 `var(--color-bg-layout)`；状态色使用 success / warning / error token |
+| 组件基础类 | Tag 必须同时具备 `.tag` 和 `.tag--*`；按钮必须使用 `.btn` / Ant Button 语义；输入框必须使用 `.input` / Ant Input 语义 |
+| 原生控件 | 正式原型禁止可见原生 `<select>`；裸 `<button>` 只能作为语义节点，必须绑定项目组件类或 Ant 风格类 |
+| 布局 | 壳层必须复用 `ErpShell`；列表页默认为标题区、筛选区、结果区；查看优先抽屉 |
+| 密度 | ERP 后台默认中高信息密度；禁止营销页式大留白、超大标题、装饰性卡片堆叠 |
+| Demo 控件 | 正式原型禁止角色切换器、状态切换器、debug panel、重置演示按钮 |
+| 守门脚本 | HTML 原型交付前运行 `node scripts/prototype-style-guard.js prototype/<name>/`；ERROR 必须修复后再交付 |
 
 ### 10.4 状态覆盖矩阵
 
