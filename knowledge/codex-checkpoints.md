@@ -41,3 +41,31 @@
   - 查看记录：`git log --oneline -n 10`
   - 回退本次提交：`git revert 59b1a8c`
   - 强制回退到前版本：`git reset --hard ec2762d`
+
+## 2026-05-18 CST - UI 原型输出可控性规范
+
+- Mode: GitHub Cloud
+- Branch: `AI-工作台`
+- Commit: `139508f chore: enforce UI prototype contract`
+- Scope:
+  - `skills/erp-product-manager/`
+  - `skills/ui-optimization-master/`
+  - `knowledge/prototype-style-guard.md`
+  - `scripts/prototype-style-guard.js`
+  - `prototype/ai-workspace-v2/`
+- Saved:
+  - PRD §10 新增 `UI 设计契约` 与 `原型实现约束`，要求明确控件选择、状态语义、尺寸密度、颜色 token 和禁止实现方式。
+  - 原型生成指南要求先消费 PRD §10 的 UI 契约，再生成 HTML/CSS，避免不同模型自由决定平台切换、状态标签、按钮层级和颜色语义。
+  - UI 正式质量门禁新增阻断项：缺少 UI 契约、控件无法映射、裸浏览器控件、`tag--*` 缺少 `.tag` 基础类。
+  - 原型风格守门脚本升级：原生 `<select>` 从 warning 改为 error；新增 `TAG_BASE_MISSING` 检查。
+  - 修复 `prototype/ai-workspace-v2` Listing 优化页平台选项，补齐 `.tag` 基础类并清理按钮默认外观。
+- Verification:
+  - `node --check scripts/prototype-style-guard.js`
+  - `node scripts/prototype-style-guard.js prototype/ai-workspace-v2/`
+  - 使用临时错误样例验证 `platform-tag tag--processing` 会触发 `TAG_BASE_MISSING`
+- GitHub:
+  - 已推送到 `origin/AI-工作台`
+  - PR 创建依赖 GitHub CLI 授权；当前本机 `gh` token 显示 invalid，需要重新授权后继续。
+- Rollback:
+  - 查看记录：`git log --oneline -n 10`
+  - 回退本次规范改造：`git revert 139508f`
