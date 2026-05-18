@@ -69,3 +69,18 @@
 - Rollback:
   - 查看记录：`git log --oneline -n 10`
   - 回退本次规范改造：`git revert 139508f`
+
+## 2026-05-18 14:36 CST - GitHub 一键发布流程
+
+- Mode: GitHub Cloud
+- Branch: `AI-工作台`
+- Commit: `1192fe9 chore: GitHub 一键发布流程`
+- Scope:
+  - `README.md`
+  - `START_HERE.md`
+  - `scripts/publish-github.sh`
+- Saved:
+  - 新增单指令发布脚本与文档口令，自动补 checkpoint 日志并推送
+- Rollback:
+  - 查看记录：`git log --oneline -n 10`
+  - 回退本次代码提交：`git revert 1192fe9`
