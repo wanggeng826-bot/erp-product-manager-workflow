@@ -92,10 +92,26 @@ function scanFile(filePath) {
     if (selectMatches) {
       const formalSelects = selectMatches.filter(s => !s.includes('demo') && !s.includes('debug'));
       if (formalSelects.length > 0) {
-        warnings.push({
-          level: 'WARN',
+        issues.push({
+          level: 'ERROR',
           code: 'NATIVE_SELECT',
           message: `发现 ${formalSelects.length} 个原生 <select> 标签。正式控件应使用 Ant-style Select 触发器 + 下拉面板`,
+        });
+      }
+    }
+
+    // 6. 检查 Tag 状态类是否缺少基础类
+    const tagModifierMatches = content.match(/class="[^"]*tag--(?:default|processing|success|warning|error)[^"]*"/gi);
+    if (tagModifierMatches) {
+      const missingBaseTag = tagModifierMatches.filter(cls => {
+        const classValue = cls.match(/class="([^"]*)"/i)?.[1] || '';
+        return !classValue.split(/\s+/).includes('tag');
+      });
+      if (missingBaseTag.length > 0) {
+        issues.push({
+          level: 'ERROR',
+          code: 'TAG_BASE_MISSING',
+          message: `发现 ${missingBaseTag.length} 个状态标签缺少 .tag 基础类。必须使用 "tag tag--*"，避免浏览器默认控件样式泄露`,
         });
       }
     }

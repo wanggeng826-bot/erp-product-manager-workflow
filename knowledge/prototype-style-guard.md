@@ -14,6 +14,7 @@
 | 圆角值 | `12px` vs `8px` | 🟡 中 |
 | 壳层组件 | `.top-nav + .sidebar` vs `.c-shell` vs `.erp-shell` | 🟡 中 |
 | 字体栈 | 缺失 `BlinkMacSystemFont` 或顺序不同 | 🟢 低 |
+| 控件基础类 | `tag--processing` 没有 `.tag`，裸 `button` 显示浏览器默认样式 | 🔴 高 |
 
 ## 根因分析
 
@@ -106,12 +107,15 @@
    - 页面标题：c-page-header__*
    - 按钮：btn, btn--primary, btn--sm
    - 禁止 invent 新前缀如 .erp-shell、.top-nav
+   - 状态标签必须使用 `.tag + .tag--*`，禁止只写 `tag--processing` / `tag--default`
+   - 平台、渠道、状态等短枚举切换必须映射为 `Segmented` / `Radio.Group` / 明确的 tag group，禁止裸 button 默认样式
 
 5. 检查项（交付前自检）：
    - [ ] tokens.css 已引入
    - [ ] 无禁止颜色值硬编码
    - [ ] 壳层来自 erp-shell.html
    - [ ] 无原生 <select> 作为正式控件
+   - [ ] 无 `tag--*` 缺少 `.tag` 基础类
 ```
 
 ### 第二层：自动化检查
@@ -127,13 +131,16 @@ node scripts/prototype-style-guard.js prototype/ai-workspace-v2/
 1. **颜色守门**：扫描 CSS/内嵌 style，发现禁止颜色值则报错
 2. **Token 引入检查**：确认 HTML 中引用了 tokens.css
 3. **类名一致性**：检查壳层类名是否符合规范
-4. **原生 select 检查**：发现正式页面中的 `<select>` 标签则警告
+4. **原生 select 检查**：发现正式页面中的 `<select>` 标签则报错
+5. **Tag 基础类检查**：发现 `tag--default`、`tag--processing` 等状态类缺少 `.tag` 基础类则报错
 
 ### 第三层：人工审查
 
 `$ui-optimization-master` 正式 UI 审查时，增加"跨原型一致性"检查项：
 
 - 同一项目内的不同原型，壳层结构、颜色、间距、圆角是否一致
+- 同类控件是否都能映射到 PRD §10 UI 设计契约和组件映射表
+- 是否存在裸控件、浏览器默认控件外观、缺失基础类的状态标签
 - 若不一致，标记为「明显偏离」级别，必须统一后才能定稿
 
 ---
