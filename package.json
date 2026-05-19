@@ -1,4 +1,9 @@
 {
+  "scripts": {
+    "prototype:publish": "node scripts/prototype-publish.js",
+    "prototype:delete": "node scripts/prototype-delete.js",
+    "prototype:doctor": "node scripts/prototype-doctor.js"
+  },
   "dependencies": {
     "playwright": "^1.59.1"
   }
