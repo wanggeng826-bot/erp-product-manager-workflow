@@ -17,7 +17,9 @@
 8. 独立案例只放到 `cases/<case-name>/`。
 9. 新任务默认不读取历史 `cases/**`，除非明确继续或参考某个案例。
 10. 在开始 PRD 或原型前，先确认页面来源映射，避免把无来源的导航、页签、摘要或测试控件带进正式产出。
-11. 每完成 2 次重要读取、搜索、浏览、截图或评审，就把关键发现写入 `findings.md`。
+11. 这里说的原型默认是 HTML 可交互原型，输出到 `prototype/<name>/index.html`；Figma 设计稿只有你明确要求时才生成。
+12. 默认只生成本地 HTML；需要发给别人时说 `分享原型`，再让 Codex 执行 `npm run prototype:publish -- --source prototype/<name> --title <原型名> --business-system <系统名>`。
+13. 每完成 2 次重要读取、搜索、浏览、截图或评审，就把关键发现写入 `findings.md`。
 
 ## 推荐的第一句话
 

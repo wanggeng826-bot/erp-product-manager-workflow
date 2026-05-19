@@ -19,13 +19,28 @@ It does not produce the final artifact. It decides:
 - blocked actions
 - validation mode
 
+## Artifact Meaning
+
+In this project, `prototype`, `原型`, `原型图`, `交互原型`, and `生成原型` mean an HTML interactive prototype by default:
+
+- output directory: `prototype/<name>/`
+- required entry: `index.html`
+- optional assets: `styles.css`, `script.js`, images, local component assets
+- local output by default: `prototype/<name>/index.html`
+- share command: `分享原型`
+- publish target only when sharing: the team hosting platform through `npm run prototype:publish -- --source prototype/<name> --title <title> --business-system <system>`
+
+They do not mean a Figma canvas or UI design draft unless the user explicitly says `Figma`, `UI 设计稿`, `写入 Figma`, `生成 Figma`, or provides a Figma URL.
+
+After delivering an HTML prototype, you may tell the user that a Figma design draft can be generated separately if needed. Do not call Figma tools automatically.
+
 ## Required Output
 
 Before domain execution, produce a short decision pack:
 
 ```text
 Task Tier: light | standard | heavy
-Delivery Mode: discussion | prd | prototype-draft | prototype-final | ui-review | workflow-governance
+Delivery Mode: discussion | prd | prototype-draft | prototype-final | prototype-publish | ui-review | workflow-governance
 Risk: low | medium | high
 Allowed Skills:
 - ...
@@ -151,6 +166,14 @@ Block:
 - formal UI review
 - full quality gate
 - Playwright smoke checks
+- Figma generation unless the user explicitly requested Figma
+
+Require publish handling:
+
+- Generate the HTML prototype under `prototype/<name>/`.
+- Do not publish after normal prototype generation. Return the local HTML path only.
+- If the user says `分享原型`, `发布原型`, `上线预览`, `给我在线地址`, or asks to share it, run `npm run prototype:publish -- --source prototype/<name> --title <title> --business-system <system>` after local generation.
+- If hosting config is missing, stop with the exact missing setup (`gh auth login`, `PROTOTYPE_HOSTING_REPO`, repository write permission, Pages config, or credentials). Do not substitute a zip package or Figma draft as the final publish result.
 
 Must tell the user:
 
@@ -169,6 +192,40 @@ Allow:
 - full prototype quality gate
 - component mapping validation
 - final browser checks
+- HTML prototype publishing through `npm run prototype:publish -- --source prototype/<name> --title <title> --business-system <system>`
+
+Block:
+
+- Figma generation unless the user explicitly requested a Figma design draft
+
+### prototype-publish
+
+Use when the user asks to:
+
+- 分享原型
+- 发布原型
+- 上线预览
+- 给在线地址
+- share or host an existing HTML prototype
+
+Require:
+
+- target prototype directory or HTML file
+- `index.html` when the target is a directory
+- configured static hosting environment
+
+Allow:
+
+- `npm run prototype:publish -- --source prototype/<name> --title <title> --business-system <system>`
+- `npm run prototype:doctor -- --url <url>` for diagnosing 404 or missing hosted files
+
+Block:
+
+- Figma generation
+- zip-only delivery as a substitute for publishing
+- publishing to unrelated GitHub repositories unless the user explicitly chooses that hosting route
+
+If publish fails, report the exact missing prerequisite and stop.
 
 ### ui-review
 
@@ -217,6 +274,7 @@ Always force router output first when:
 - user starts a new requirement
 - user asks for PRD
 - user asks for prototype generation
+- user asks to publish a prototype
 - user asks for UI review
 - user asks to continue a long task
 - user asks to modify workflow, skills, or hooks

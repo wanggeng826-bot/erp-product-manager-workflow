@@ -20,6 +20,10 @@ const {
 async function main() {
   const rootDir = process.cwd();
   const args = parseArgs(process.argv.slice(2));
+  if (args.help) {
+    printUsage();
+    return;
+  }
   const config = requireConfig();
   const owner = requireGhUser();
   const candidates = findPrototypeDirs(rootDir);
@@ -113,7 +117,9 @@ function parseArgs(argv) {
   for (let index = 0; index < argv.length; index += 1) {
     const arg = argv[index];
     const value = argv[index + 1];
-    if (arg === "--source") {
+    if (arg === "-h" || arg === "--help") {
+      args.help = true;
+    } else if (arg === "--source") {
       args.source = requireValue(arg, value);
       index += 1;
     } else if (arg === "--title") {
@@ -127,6 +133,23 @@ function parseArgs(argv) {
     }
   }
   return args;
+}
+
+function printUsage() {
+  console.log(`Usage:
+  npm run prototype:publish -- --source prototype/<name> --title <title> --business-system <system>
+
+Required environment:
+  PROTOTYPE_HOSTING_REPO  Example: seabost/seabost-prototype-hosting
+
+Optional environment:
+  PROTOTYPE_HOSTING_BRANCH  Default: main
+  PROTOTYPE_BASE_URL        Default: https://prototype.seabost.com
+  PROTOTYPE_PUBLISH_ROOT    Default: prototypes
+
+Notes:
+  Use this only when the user says 分享原型 or explicitly asks for an online link.
+  Normal prototype generation should return the local HTML path only.`);
 }
 
 function requireValue(option, value) {

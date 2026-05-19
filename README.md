@@ -75,6 +75,10 @@
 - 如果已有 PRD：先读 PRD，再做页面来源映射，再生成原型。
 - 如果没有 PRD：先完成需求澄清和 PRD。
 - formal prototype 里的每个导航、页签、按钮、摘要卡都必须能回指到 PRD 或用户确认需求。
+- 本项目里“原型 / 原型图 / 交互原型”默认是 `prototype/<name>/index.html` 形式的 HTML 可交互原型。
+- Figma UI 设计稿只在用户明确要求时生成；HTML 原型交付后可以作为后续可选项提示。
+- 默认只生成本地 HTML 原型文件；用户说 `分享原型`，或明确要求发布/在线地址时，才执行 `npm run prototype:publish -- --source prototype/<name> --title <原型名> --business-system <系统名>`，发布到团队统一托管平台并返回在线地址。
+- 如果本机缺少 GitHub CLI 授权、`PROTOTYPE_HOSTING_REPO`、托管仓库写权限或 Pages 配置，Codex 必须明确说明配置缺口，不能用 zip 包或 Figma 链接替代发布。
 
 ### 4. UI 优化流程
 

@@ -23,6 +23,10 @@
 - 未经 `$workflow-strategy-router` 分流，不允许直接进入 PM / PRD / prototype / UI review 全流程
 - 原型初稿默认是 `prototype-draft`，只做忠实交付和最小自检，不自动进入正式 UI 审查
 - 只有 router 判定为 `prototype-final` 或 `ui-review`，才允许正式质量门禁、组件映射校验和自动化审查
+- 本项目中用户说“原型 / 原型图 / 生成原型”时，默认指 `prototype/<name>/index.html` 形式的 HTML 可交互原型，不是 Figma 设计稿
+- 只有用户明确说“生成 Figma / 写入 Figma / UI 设计稿 / Figma 画面”时，才允许调用 Figma；HTML 原型交付完成后可以提示“如需 Figma 设计稿可再生成”，但不能自动执行
+- 口令 `分享原型` 才发布在线链接；除此以外，生成原型默认只产出本地 HTML 文件并返回本地路径
+- 用户说“分享原型 / 发布原型 / 上线预览 / 给我在线地址”时，发布 HTML 原型到团队统一托管平台，优先使用 `npm run prototype:publish -- --source prototype/<name> --title <原型名> --business-system <系统名>`；缺少 GitHub CLI 授权、`PROTOTYPE_HOSTING_REPO`、托管仓库写权限或 Pages 配置时必须明确指出缺什么，不能改成只打包 zip 或生成 Figma
 - 轻任务禁止开启 root planning files；重任务才允许 `.codex/planning-active`
 
 如需更细的执行规则，统一以对应 Skill 的 `SKILL.md` 和 `references/` 为准。

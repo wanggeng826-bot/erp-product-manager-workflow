@@ -4,6 +4,10 @@
 *.tmp
 node_modules/
 backups/
+.env
+.env.*
+!.env.example
+!.env.prototype.example
 task_plan.md
 findings.md
 progress.md
