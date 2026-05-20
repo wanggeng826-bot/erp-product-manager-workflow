@@ -12,6 +12,8 @@
 - 希望所有原型统一输出到固定目录
 - 希望后续每次新对话都能稳定复用同一套提示方式
 
+本项目里的“原型 / 原型图 / 交互原型”默认指 HTML 可交互原型，而不是 Figma UI 设计稿。只有用户明确要求 Figma、UI 设计稿、写入 Figma 或提供 Figma URL，才进入 Figma 输出。
+
 ## 2. 固定文件与目录
 
 生成原型前按 router 决定读取范围：
@@ -41,14 +43,18 @@
 2. 读取最小必需规范和 PRD 文件
 3. 先确认页面清单、主任务、交付边界，并生成原型任务单
 4. 生成页面来源映射
-5. 建立设计基础映射：颜色、字体、间距、圆角、边框、阴影、状态语义
-6. 建立组件映射：壳层、标题区、筛选区、表格区、批量操作、抽屉、弹窗、状态、权限、日志
-7. 拆解主流程、弹窗、抽屉、状态与权限差异
-8. 校验每个可见元素是否能回指到 PRD 或已确认需求
-9. 生成 HTML 可交互原型
-10. 若为 `prototype-draft`，只做忠实性检查和最小自检
-11. 若为 `prototype-final`，再按反模式清单和质量门禁做正式修正
-12. 将原型文件输出到固定目录
+5. 读取 PRD §10 的 `UI 设计契约` 与 `原型实现约束`；如果缺失，先补齐保守假设并标注，不得直接自由发挥
+6. 建立设计基础映射：颜色、字体、间距、圆角、边框、阴影、状态语义
+7. 建立组件映射：壳层、标题区、筛选区、表格区、批量操作、抽屉、弹窗、状态、权限、日志
+8. 拆解主流程、弹窗、抽屉、状态与权限差异
+9. 校验每个可见元素是否能回指到 PRD 或已确认需求
+10. 校验每个控件是否能回指到组件映射和 UI 设计契约
+11. 生成 HTML 可交互原型
+12. **风格守门检查**：运行 `node scripts/prototype-style-guard.js prototype/<name>/`，确保无禁止颜色、已引入 tokens.css、壳层组件复用正确、Tag 基础类完整
+13. 若为 `prototype-draft`，只做忠实性检查和最小自检
+14. 若为 `prototype-final`，再按反模式清单和质量门禁做正式修正
+15. 将原型文件输出到固定目录
+16. 默认只返回本地 HTML 路径；如果用户说 `分享原型` 或明确要求在线地址，执行 `npm run prototype:publish -- --source prototype/<module-name> --title <原型名> --business-system <系统名>`，返回在线地址
 
 补充规则：
 
@@ -57,8 +63,12 @@
 - 未经用户确认 HTML 原型无误，并明确要求生成 Figma/UI 设计稿，不得创建 Figma 文件或写入 Figma 画布。
 - 未经 PRD 或用户明确确认，不得自行扩展页面数量或模块结构。
 - 未经页面来源映射确认，不得加入新的导航项、页签、摘要卡、快捷操作或模块标题。
+- 未经 UI 设计契约确认，不得自行决定枚举控件、平台切换、状态标签、按钮层级、表单控件和颜色语义。
 - 默认首次输出是原型初稿，不要自动进入正式 UI 审查。
 - 正式交付版必须由 router 明确判定为 `prototype-final`。
+- 初稿阶段可以快速交付，但不能牺牲来源映射和用户要求忠实度。
+- Figma 设计稿是 HTML 原型后的可选后续动作，不是原型生成默认动作。
+- 默认只生成本地 HTML 原型；用户说 `分享原型`，或明确要求在线地址时，才发布到托管平台。
 
 ## 4. 新对话的标准提示词
 
@@ -76,12 +86,21 @@
 要求：
 1. 使用 Ant Design + 中文 B 端 ERP 后台风格
 2. 严格遵循现有 UI 规范和操作日志规范
-3. 先输出原型任务单、页面来源映射和组件映射，再生成页面
+3. 先输出原型任务单、页面来源映射、组件映射、UI 设计契约复述，再生成页面
 4. draft 阶段只做忠实交付和最小自检，不进入正式 UI 审查
 5. 尽量少跳转，查看优先抽屉，字段少新建用弹窗，字段多用抽屉
 6. 原型需要可点击
 7. 输出到 prototype/
-8. 不创建 Figma UI 设计稿；等我确认 HTML 后，再根据我的明确指令进入 Figma
+8. **风格硬约束（禁止模型自行发明颜色/间距/壳层）**：
+   - 必须引入 `<link rel="stylesheet" href="../../ui-library/tokens.css">`，禁止自行定义 `:root` 颜色/间距/圆角/阴影变量
+   - 壳层（ErpShell）必须从 `ui-library/components/erp-shell.html` 复制，禁止手写 `.top-nav`、`.erp-shell` 等新类名
+   - 主色必须使用 `#1677ff`（`var(--color-primary-6)`），禁止 `#3B82F6`、`#6366F1` 等 Tailwind/Indigo 色系
+   - 布局背景必须使用 `#f5f7fa`（`var(--color-bg-layout)`），禁止 `#F8FAFC`
+   - 类名前缀统一：`c-shell__*`（壳层）、`c-page-header__*`（标题区）、`btn` / `btn--primary`（按钮）
+   - 状态标签必须同时使用 `.tag` 和 `.tag--*`；平台/枚举切换必须映射为 Segmented / Radio.Group / 明确的 tag group，禁止裸 button 默认样式
+   - 交付前自检：运行 `node scripts/prototype-style-guard.js prototype/<name>/`
+9. 默认只生成本地 HTML；如我说“分享原型”，请发布到团队统一托管平台并返回在线地址
+10. 不创建 Figma UI 设计稿；等我确认 HTML 后，再根据我的明确指令进入 Figma
 ```
 
 ## 5. 你给我的输入建议
@@ -95,6 +114,7 @@
 - 角色与权限差异
 - 状态说明
 - 边界情况
+- UI 设计契约：每类控件用什么 Ant Design 组件、状态语义、尺寸密度、颜色 token、禁止实现方式
 
 如果 PRD 里没写完整，我会优先按现有 UI 规范补齐默认交互。
 
@@ -125,9 +145,13 @@
 - 正式页面中不得出现演示控制区、角色切换器、页面状态切换器、重置演示按钮或其他调试面板
 - 正式列表页不要把“样例流程”“运行下一步”“重置流程”等演示模块放在表格前；确需演示流程时，应独立 demo、折叠、下沉，或设计成真实业务进度组件
 - HTML 原型不得使用可见原生 `<select>` 作为正式筛选控件；需要用 Ant 风格 Select 触发器和下拉面板，避免截图出现浏览器默认下拉样式
-- 交付前必须运行 `npm run check:prototype`。该检查是硬门禁：若存在可见原生 `<select>`、页面级横向滚动、宽表未限制在 `.table-wrap` 内滚动、店铺别名列未固定，则不得交付原型。
+- HTML 原型不得让原生 `<button>` 外观泄露到正式控件。按钮、标签、分段选择必须绑定项目基础类：`.btn` / `.tag` / `c-*` 或明确 Ant 风格类。
+- 使用 `tag--default`、`tag--processing`、`tag--success`、`tag--warning`、`tag--error` 时，必须同时使用 `.tag` 基础类。
+- 平台、渠道、状态等短枚举切换必须在 PRD §10 UI 设计契约中明确组件：优先 `Segmented`、`Radio.Group` 或受控 `Tag group`，不得由模型临时用裸控件替代。
 - 批量搜索必须支持点击展开矩形 textarea，按换行、英文逗号、中文逗号识别输入，输入时展示识别数量，应用后用 chip 回显已生效条件
 - 状态与权限差异要体现在真实业务界面本身，不通过显式切换器暴露给业务用户
+- **风格一致性**：禁止自行定义 CSS 颜色/间距/圆角/阴影变量，统一使用 `tokens.css`；禁止 invent 新壳层类名，统一使用 `c-shell__*` 前缀
+- **风格守门**：交付前运行 `node scripts/prototype-style-guard.js prototype/<name>/`，修复所有 ERROR 后再发布
 - 如需做演示版，必须单独输出，与正式版原型分开
 
 ## 6.1 Figma 设计稿创建门禁
@@ -159,27 +183,29 @@
 - `prototype/<module-name>/`
 - `prototype/inventory-management/`
 
-### 7.1 原型发布到 GitHub Pages（必做）
+### 7.1 原型发布到团队统一托管平台
 
-**每次生成原型后，必须同步发布到 GitHub Pages，提供可访问的在线地址。**
+用户说 `分享原型`，或明确要求“发布原型 / 上线预览 / 给我在线地址”时，才发布 HTML 原型到团队统一 GitHub Pages 托管平台。默认入口是：
+
+```bash
+npm run prototype:publish -- --source prototype/<module-name> --title <原型名> --business-system <系统名>
+```
+
+这条命令会调用 `scripts/prototype-publish.js`，把本地 `prototype/<module-name>/index.html` 发布到 `PROTOTYPE_HOSTING_REPO` 指向的 GitHub Pages 托管仓库。
 
 发布流程：
 
 1. 确保原型目录包含 `index.html`，且所有资源路径为相对路径（如 `./styles.css`、`./ui-library/tokens.css`）。
-2. 切到 `gh-pages` 分支：`git checkout gh-pages`
-3. 将原型文件复制或移动到 `prototype/<module-name>/` 目录
-4. 如果原型引用了 `../../ui-library/tokens.css`，需复制一份 `tokens.css` 到原型目录内，并修正路径为 `./ui-library/tokens.css`
-5. 提交并推送：`git add . && git commit -m "add prototype: <module-name>" && git push origin gh-pages`
-6. 等待 1-2 分钟自动部署
-7. 向用户返回访问地址：
-   ```
-   https://wanggeng826-bot.github.io/erp-product-manager-workflow/prototype/<module-name>/
-   ```
+2. 确认本机已安装 GitHub CLI，并用公司 GitHub 身份完成 `gh auth login`。
+3. 确认环境变量 `PROTOTYPE_HOSTING_REPO` 指向团队统一原型托管仓库。
+4. 运行 `npm run prototype:publish -- --source prototype/<module-name> --title <原型名> --business-system <系统名>`。
+5. 向用户返回脚本输出的访问地址。
+6. 如果发布失败，明确说明缺少哪项配置或权限，并停止。
 
 **注意**：
-- `gh-pages` 分支只用于托管静态页面，不要在上面做开发
-- 如果 `ui-library/tokens.css` 有更新，需要同步复制到各原型目录
-- 所有原型必须能通过上述 URL 直接访问，不能只提供本地文件路径
+- 不要把发布失败降级成“只生成 zip 包”。
+- 不要用 Figma 链接替代 HTML 原型在线地址。
+- 新同事从 GitHub 下载项目后，需要先完成 `gh auth login` 并获得 `PROTOTYPE_HOSTING_REPO` 对应托管仓库的写权限。
 
 ## 8. 原型命名建议
 
@@ -218,6 +244,8 @@
 - 当前是否存在正式 PRD；若没有，是否已先产出 PRD
 - 当前页面数量、页面关系、模块结构，是否都有明确需求依据
 - 当前页面来源映射是否完整，页面上的每个可见元素是否能回指到 PRD 或确认需求
+- PRD §10 是否有 UI 设计契约和原型实现约束；若没有，是否已在草稿中显式标注保守假设
+- 页面上每个控件是否能回指到组件映射和 UI 设计契约
 - 页面标题、说明文案、摘要卡片，是否来自已确认需求，而不是模型自行补充
 - 页面中的导航项、页签、快捷操作，是否都能在 PRD 或已确认需求中找到来源
 - 正式页面内是否混入演示控件、调试面板、角色切换器、状态切换器
@@ -227,7 +255,8 @@
 - 是否符合中文 B 端 ERP 后台风格，而不是欧美 SaaS 或营销看板风格
 - 是否有 foundation token 一致性：颜色、字体、间距、圆角、边框、阴影、状态语义
 - 是否有组件复用一致性：同类筛选、表格、抽屉、弹窗、按钮、标签、反馈不应各自为政
-- **是否已发布到 GitHub Pages 并提供在线访问地址**
+- 是否存在裸 `<button>`、可见原生 `<select>`、只写 `tag--*` 不写 `.tag`、硬编码颜色或绕过 token 的控件
+- **如果用户要求发布，是否已发布到团队统一托管平台并提供在线访问地址**
 - **在线地址是否能正常打开，资源（CSS/JS/图片）是否加载正常**
 
 如任一项不满足，应先修正再交付。

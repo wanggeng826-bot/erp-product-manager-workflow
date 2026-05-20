@@ -15,15 +15,40 @@
 - `prototype/<module-name>/`
 - `prototype/product-import-prototype-v1/`
 
-## OSS 静态站点发布
+## Seabost 统一原型托管
 
-用脚本把本地 HTML 文件或原型目录上传到 OSS：
+默认只生成本地 HTML 可交互原型。用户说 `分享原型`，或明确要求发布/在线地址时，才发布到公司统一域名。
+
+如果要把本地原型发布到公司统一域名，使用：
 
 ```bash
-OSS_BUCKET=erp-prototypes OSS_DOMAIN=https://prototype.example.com \
-  scripts/deploy-prototype-oss.sh prototype/oms-system prototypes/oms-system
+PROTOTYPE_HOSTING_REPO=seabost/seabost-prototype-hosting \
+PROTOTYPE_BASE_URL=https://prototype.seabost.com \
+npm run prototype:publish
+```
+
+也可以跳过交互直接指定目录：
+
+```bash
+PROTOTYPE_HOSTING_REPO=seabost/seabost-prototype-hosting \
+PROTOTYPE_BASE_URL=https://prototype.seabost.com \
+npm run prototype:publish -- --source prototype/oms-system --title OMS原型 --business-system ERP
+```
+
+遇到 GitHub Pages 404 时先检查路径是否真的已发布：
+
+```bash
+npm run prototype:doctor -- --url <404-url>
+```
+
+删除自己发布的原型：
+
+```bash
+PROTOTYPE_HOSTING_REPO=seabost/seabost-prototype-hosting \
+PROTOTYPE_BASE_URL=https://prototype.seabost.com \
+npm run prototype:delete
 ```
 
 更多说明见：
 
-- `ops/oss-static-site/README.md`
+- `docs/prototype-hosting.md`

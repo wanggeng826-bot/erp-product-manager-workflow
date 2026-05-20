@@ -18,6 +18,12 @@ It is the main workflow entry for:
 - 基于 PRD 的 HTML 原型规划
 - 已有原型的小范围内容调整
 
+Project vocabulary:
+- `原型 / 原型图 / 交互原型 / 生成原型` means an HTML interactive prototype in `../../prototype/<name>/` by default.
+- Figma is an optional downstream design-draft output only when the user explicitly asks for Figma, UI design drafts, or gives a Figma URL.
+- Sharing means publishing the HTML prototype to the configured static hosting platform, not creating a Figma link.
+- Normal prototype generation does not publish. It returns a local HTML path unless the user says `分享原型` or explicitly asks for an online link.
+
 ## Domain Context
 
 Unless the user explicitly states otherwise, default to:
@@ -74,6 +80,7 @@ Use this mapping:
 | `Delivery Mode: prd` | Use `./references/new-requirement-expert.md` or `./references/competitor-analysis-expert.md` based on the confirmed input type |
 | `Delivery Mode: prototype-draft` | Read `./references/prototype-generation-guide.md` and Step 5; generate draft only |
 | `Delivery Mode: prototype-final` | Read `./references/prototype-generation-guide.md` and Step 5; allow final-quality path |
+| `Delivery Mode: prototype-publish` | Publish the existing HTML prototype with `npm run prototype:publish -- --source prototype/<name> --title <title> --business-system <system>`; do not regenerate UI or call Figma |
 | `Delivery Mode: discussion` | Clarify, align, and stop before artifact generation |
 
 If the router decision is missing or contradictory, stop and ask for the router decision first instead of creating a second classification layer.
@@ -147,7 +154,9 @@ After the user supplements information, output:
 7. **验收标准（BDD 格式强制）**：Given 前置条件 / When 触发动作 / Then 预期结果
 8. 里程碑规划与资源预估
 9. 开放问题（未确认项及其对研发的阻塞程度）
-10. **原型生成输入包（必有，给 Codex / 后续原型生成用）**——见 `./references/prd-template.md` §10，按 7 块填：必读引用 / 页面清单 / 组件映射表 / 状态覆盖矩阵 / 风险操作清单 / 权限差异表 / Mock 数据样本。
+10. **原型生成输入包（必有，给 Codex / 后续原型生成用）**——见 `./references/prd-template.md` §10。必须填写：必读引用 / 页面清单 / 页面契约表 / 组件映射表 / 页面元素来源映射 / UI 设计契约 / 原型实现约束 / 状态覆盖矩阵 / 风险操作清单 / 权限差异表 / Mock 数据样本。
+
+**UI 设计契约强制要求**：凡 PRD 后续会生成原型，不允许只写"Ant Design 风格"、"专业 B 端风格"、"样式参考现有系统"。必须在第 10 节明确控件选择、状态语义、尺寸密度、token 规则、禁止实现方式。例如平台切换要明确使用 `Segmented`、`Radio.Group` 或 `Tag group`，并禁止裸 `button` / 浏览器默认样式 / 只写 `tag--*` 不写 `.tag`。
 
 **全局一致性锚点（每次输出末尾必有）**：术语表 / 目标与指标 / 范围边界 / 关键约束 / 已确认决策 Decision Log / 待确认问题 Open Questions。
 
@@ -172,10 +181,11 @@ PRD 已保存 → 用户表达：
 └─ 用户说"你直接生成原型" / "继续画原型" / 额度充足
     → 路径 B：Claude 自生原型
       - 读 `../../ui-library/README.md` + `../../ui-library/tokens.css`
-      - 按 §10 输入包逐项实现到 `../../prototype/<short-name>/`：
+      - 按 §10 输入包逐项实现到 `../../prototype/<short-name>/`，尤其先消费 `UI 设计契约` 和 `原型实现约束`：
         index.html / styles.css / script.js / prototype-spec.md
       - 默认只做草稿级自检：文件可打开、主要结构可读、无明显脚本报错
       - 明确告知用户：这次生成的是原型初稿，不自动走 UI 审查
+      - 默认只返回本地 HTML 路径；若用户说 `分享原型` 或明确要求在线地址，执行 `npm run prototype:publish -- --source prototype/<short-name> --title <原型名> --business-system <系统名>`
       - 等 PRD 和原型方案确认后，再唤起 `$ui-optimization-master` 做正式 UI 审查和质量门禁
 ```
 
@@ -184,10 +194,14 @@ PRD 已保存 → 用户表达：
 **两条路径都遵循的硬规则**：
 
 - **UI Rules:** Follow Ant Design thinking. Ensure clear hierarchy, zoning, complete states (loading/empty/error), and high-risk confirmation. Do not invent non-standard components.
+- **HTML Prototype Default Rule (必做):** 用户说“原型 / 原型图 / 生成原型”时，默认交付 HTML 可交互原型，不调用 Figma，不输出 Figma 链接作为原型交付。
 - **Figma Creation Gate (硬门禁):** HTML 原型确认前禁止创建 Figma UI 设计稿；用户未明确要求 Figma 时禁止调用 Figma create/write 类工具。
-- **Figma Reuse Rule (仅 Figma 阶段必做):** 进入 Figma 阶段后，Components/templates 必须从 `Ant Design ERP UI Library` (fileKey: `KaI3eGyylfiwrPlU3OR08C`) 取。按 `../../knowledge/figma-ant-design-ui-library.md` 的 MCP 调用流程抓库元信息；**不要凭空发明组件**。
+- **Figma Opt-in Rule:** 只有用户确认 HTML 原型无误后，又明确要求 `Figma`、`UI 设计稿`、`写入 Figma`、`生成 Figma` 或提供 Figma URL 时，才生成 Figma 设计稿。HTML 原型交付后可以提示“如需 Figma 设计稿可继续生成”，但不能自动执行。
+- **Figma Reuse Rule (仅 Figma 任务必做):** 当且仅当任务进入 Figma 输出时，Components/templates 必须从 `Ant Design ERP UI Library` (fileKey: `KaI3eGyylfiwrPlU3OR08C`) 取。按 `../../knowledge/figma-ant-design-ui-library.md` 的 MCP 调用流程抓库元信息；**不要凭空发明组件**。
 - **Pro v6 Priority Rule:** 任务对齐 Pro v6 / 最新版时，优先选用 `Button v6`、`ListPageTemplate v6`、`ErpShell v6`，页面方案显式标注主题模式（`Default` / `Dark` / `Glass`）；用户未指定时默认 `Default`。
 - **HTML Reuse Rule:** 路径 B 时直接 copy `../../ui-library/components/` 片段 + load `../../ui-library/tokens.css`。组件命名必须与 Figma 库一致。
+- **UI Contract Rule:** 原型生成必须先读取 PRD §10 的 `UI 设计契约` 与 `原型实现约束`。如果 PRD 缺失这些内容，草稿可按项目默认组件补齐并显式标注假设；`prototype-final` 必须先补齐契约，不得直接生成。
+- **No Raw Control Rule:** 正式 HTML 原型禁止可见原生 `<select>` 和未绑定组件基础类的裸控件。`Tag` 必须写 `.tag + .tag--*`，`Button` 必须写 `.btn` 或明确的 Ant Button 语义，枚举切换优先 `Segmented` / `Radio.Group` / 明确映射的 tag group。
 - **Prototype Task Sheet (必做):** 开始生成原型前，先锁定本次页面清单、每页主任务、明确要求、明确不做项、保守假设。没有任务单，不准开始画。
 - **Source Mapping:** 任何可见的导航、页签、卡片、摘要、按钮必须能映射回 PRD §8 页面清单 + §10 组件映射表。无来源 → 不准画。
 - **Prototype Fidelity Gate (必做):** 原型交付前必须自检：
@@ -198,6 +212,8 @@ PRD 已保存 → 用户表达：
   任一项失败，都先修正，不准直接交付。
 - **Draft-First Rule:** 首次生成原型默认是草稿交付，只做最小可读性和结构自检，不自动触发 UI 审查、Playwright、完整 review rubric 或长 planning 流程。
 - **Review Trigger Rule:** 只有用户明确说“做最终审查 / UI 审查 / 定稿 QA”，或 PRD 与原型方案已确认，才转交 `$ui-optimization-master` 进入正式 UI 审查。
+- **Local-First Rule:** 默认只生成本地 HTML 原型并返回路径，例如 `prototype/<short-name>/index.html`。
+- **Share Rule:** 用户说 `分享原型`、`发布原型 / 上线预览 / 给我在线地址` 时，发布 `../../prototype/<short-name>/` 到团队统一托管平台：`npm run prototype:publish -- --source prototype/<short-name> --title <原型名> --business-system <系统名>`。如果缺少 `gh auth login`、`PROTOTYPE_HOSTING_REPO`、托管仓库写权限或 Pages 配置，必须明确说明阻塞项并停下，不能用 zip 包或 Figma 链接替代发布结果。
 - **Execution Loop:** 初稿阶段走 `Foundation → Components → Page → Spec`；确认后再走 `Review → Revision`。
 
 ### Step 5.1: Prototype Task Sheet（原型任务单）

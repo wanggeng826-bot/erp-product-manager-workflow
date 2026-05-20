@@ -106,6 +106,9 @@ Flag these as high-priority issues:
 - Figma prototype creates common Ant components from scratch when same-name assets already exist in `Ant Design ERP UI Library` (fileKey: `KaI3eGyylfiwrPlU3OR08C`).
 - User requests Pro v6 / latest style, but output still uses legacy button semantics (`type` only) instead of `color + variant` mapping where applicable.
 - Navigation, tabs, cards, summaries, or buttons cannot map back to PRD or confirmed requirements.
+- Formal prototype lacks a UI design contract for control choice, state semantics, density, token usage, and forbidden implementations.
+- Visible controls cannot map back to the component map or UI design contract.
+- Formal HTML prototype exposes raw browser UI: visible native `<select>`, default-styled naked `<button>`, or `tag--*` status classes without the `.tag` base class.
 - Page invents modules not present in PRD.
 - Page has duplicate title areas, duplicate summary areas, or duplicate action areas.
 - Page puts global lookup, unassigned pools, or cross-organization operations as peer tabs under a selected local context, causing the left-tree selection and page content scope to conflict.
