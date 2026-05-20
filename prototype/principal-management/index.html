@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>主体管理 · 企查查同步原型</title>
+  <link rel="stylesheet" href="../../ui-library/tokens.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="erp-shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">云</div>
+      <div>
+        <div class="brand-title">基础配置系统</div>
+        <div class="brand-subtitle">Principal Data Center</div>
+      </div>
+    </div>
+    <nav class="side-menu">
+      <div class="menu-group">基础配置</div>
+      <button class="side-item"><span class="side-icon">首</span><span>首页</span></button>
+      <button class="side-item"><span class="side-icon">授</span><span>店铺授权</span></button>
+      <button class="side-item"><span class="side-icon">汇</span><span>汇率管理</span></button>
+      <button class="side-item"><span class="side-icon">平</span><span>平台管理</span></button>
+      <button class="side-item"><span class="side-icon">国</span><span>国家管理</span></button>
+      <button class="side-item active"><span class="side-icon">主</span><span>主体管理</span></button>
+      <button class="side-item"><span class="side-icon">导</span><span>导出列表</span></button>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <header class="page-header">
+      <button class="header-icon-btn">☰</button>
+      <div class="header-meta">
+        <button class="header-icon-btn">通知</button>
+        <span class="avatar">汪</span><span>欢迎您, 汪耕</span>
+      </div>
+    </header>
+
+    <section class="page-title-panel">
+      <div>
+        <h1>主体管理</h1>
+        <p>维护企业主体与企查查工商信息同步规则，支持工商变更办理中的字段保护与日志追溯</p>
+      </div>
+      <div class="page-title-actions">
+        <button class="btn">导出</button>
+        <button class="btn primary" data-open="createModal">新建主体</button>
+      </div>
+    </section>
+
+    <section class="content-panel query-panel">
+      <div class="query-grid">
+        <div class="field"><label>主体名称</label><input placeholder="请输入主体名称" /></div>
+        <div class="field"><label>注册/信用代码</label><input placeholder="统一社会信用代码 / 商业登记号码" /></div>
+        <div class="field"><label>法人姓名</label><input placeholder="请输入法人姓名" /></div>
+        <div class="field"><label>主体类型</label><select><option>全部</option><option>大陆企业</option><option>香港企业</option><option>海外企业</option><option>个人</option></select></div>
+        <div class="field"><label>企查查状态</label><select><option>全部</option><option>已匹配</option><option>未匹配</option><option>不适用</option><option>待确认支持</option></select></div>
+        <div class="field"><label>同步状态</label><select><option>全部</option><option>正常</option><option>工商变更办理中</option><option>保护已超期</option><option>同步失败</option></select></div>
+        <div class="query-actions">
+          <button class="btn primary">搜索</button>
+          <button class="btn">重置</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="action-bar">
+      <div class="action-left">
+        <button class="btn primary" data-open="createModal">新建主体</button>
+        <button class="btn">批量同步企查查</button>
+        <button class="btn">同步异常导出</button>
+      </div>
+      <span class="action-count">共 81 条</span>
+    </section>
+
+    <section class="content-panel list-panel">
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>主体名称</th>
+              <th>注册/信用代码</th>
+              <th>法人</th>
+              <th>主体类型</th>
+              <th>企查查状态</th>
+              <th>工商同步状态</th>
+              <th>保护截止</th>
+              <th>最后同步</th>
+              <th>关联店铺</th>
+              <th>状态</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>81</td>
+              <td><strong>深圳市鸿娇长益科技有限公司</strong></td>
+              <td>91440300MA5HP6A08B</td>
+              <td>杨奇韬</td>
+              <td>大陆企业</td>
+              <td><span class="tag tag-green">已匹配</span></td>
+              <td><span class="tag tag-green">正常</span></td>
+              <td>-</td>
+              <td>2026-05-19 10:20</td>
+              <td><button class="link-btn" data-open="storeDrawer">2</button></td>
+              <td><span class="switch on"></span> 启用</td>
+              <td class="cell-actions"><button data-open="detailDrawer">工商详情</button><button>同步</button><button data-open="logDrawer">日志</button></td>
+            </tr>
+            <tr class="warning-row">
+              <td>67</td>
+              <td><strong>香港諾威科創有限公司</strong></td>
+              <td>BR-72631891</td>
+              <td>田启智</td>
+              <td>香港企业</td>
+              <td><span class="tag tag-green">已匹配</span></td>
+              <td><span class="tag tag-orange">工商变更办理中</span></td>
+              <td>2026-06-30</td>
+              <td>2026-05-19 09:15</td>
+              <td><button class="link-btn" data-open="storeDrawer">1</button></td>
+              <td><span class="switch on"></span> 启用</td>
+              <td class="cell-actions"><button data-open="detailDrawer">工商详情</button><button data-open="protectModal">编辑保护</button><button data-open="logDrawer">日志</button></td>
+            </tr>
+            <tr class="danger-row">
+              <td>66</td>
+              <td><strong>香港星辉贸易有限公司</strong></td>
+              <td>BR-55091230</td>
+              <td>陈静</td>
+              <td>香港企业</td>
+              <td><span class="tag tag-green">已匹配</span></td>
+              <td><span class="tag tag-red">保护已超期</span></td>
+              <td>2026-05-10</td>
+              <td>2026-05-19 08:30</td>
+              <td><button class="link-btn" data-open="storeDrawer">3</button></td>
+              <td><span class="switch on"></span> 启用</td>
+              <td class="cell-actions"><button data-open="overdueDrawer">处理</button><button data-open="protectModal">编辑保护</button><button data-open="logDrawer">日志</button></td>
+            </tr>
+            <tr>
+              <td>80</td>
+              <td><strong>Pratchaya Phaipa</strong></td>
+              <td>-</td>
+              <td>-</td>
+              <td>个人</td>
+              <td><span class="tag tag-gray">不适用</span></td>
+              <td><span class="tag tag-gray">不调用</span></td>
+              <td>-</td>
+              <td>-</td>
+              <td><button class="link-btn" data-open="storeDrawer">1</button></td>
+              <td><span class="switch on"></span> 启用</td>
+              <td class="cell-actions"><button>编辑</button><button data-open="logDrawer">日志</button></td>
+            </tr>
+            <tr>
+              <td>71</td>
+              <td><strong>PT HORIZON TECHNOLOGY INDONESIA</strong></td>
+              <td>-</td>
+              <td>罗海彬</td>
+              <td>海外企业</td>
+              <td><span class="tag tag-orange">待确认支持</span></td>
+              <td><span class="tag tag-orange">未同步</span></td>
+              <td>-</td>
+              <td>-</td>
+              <td><button class="link-btn" data-open="storeDrawer">1</button></td>
+              <td><span class="switch on"></span> 启用</td>
+              <td class="cell-actions"><button>标记范围</button><button data-open="logDrawer">日志</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-footer">
+        <span>共 <strong>81</strong> 条</span>
+        <div class="pagination"><button class="page-btn active">1</button><button class="page-btn">2</button><button class="page-btn">3</button><span class="page-size">20 条/页</span></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="drawer-overlay" id="detailDrawer" hidden>
+  <aside class="drawer large">
+    <div class="drawer-header">
+      <div>
+        <h3>工商详情</h3>
+        <p>主体：香港諾威科創有限公司（ID: 67）</p>
+      </div>
+      <button class="drawer-close" data-close>✕</button>
+    </div>
+    <div class="drawer-body">
+      <div class="alert warning">该主体存在“工商变更办理中”保护记录。企查查仍会同步并保存快照，但受保护字段暂不覆盖。</div>
+      <div class="tabs">
+        <button class="active">工商信息</button><button>工商变更</button><button>同步日志</button><button>关联店铺</button>
+      </div>
+      <div class="info-grid">
+        <div><span>企业名称</span><strong>香港諾威科創有限公司</strong></div>
+        <div><span>QccCode</span><strong>QCC-HK-72631891</strong></div>
+        <div><span>企业编号</span><strong>72631891</strong></div>
+        <div><span>商业登记号码</span><strong>BR-72631891</strong></div>
+        <div><span>法定代表人</span><strong>田启智</strong></div>
+        <div><span>登记状态</span><strong>仍注册</strong></div>
+        <div class="span-2"><span>注册地址</span><strong>香港九龙观塘创业街 36 号</strong></div>
+        <div class="span-2"><span>经营范围</span><strong>跨境贸易、电子商务及供应链服务</strong></div>
+      </div>
+      <h4>企查查 ChangeRecords</h4>
+      <table class="mini-table">
+        <thead><tr><th>变更日期</th><th>变更事项</th><th>变更前</th><th>变更后</th></tr></thead>
+        <tbody>
+          <tr><td>2026-05-10</td><td>法定代表人</td><td>田启智</td><td>王某某</td></tr>
+          <tr><td>2026-05-10</td><td>注册地址</td><td>旧地址</td><td>香港九龙观塘创业街 36 号</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="drawer-footer">
+      <button class="btn">查看原始快照</button>
+      <button class="btn primary" data-open="protectModal">编辑保护</button>
+    </div>
+  </aside>
+</div>
+
+<div class="drawer-overlay" id="storeDrawer" hidden>
+  <aside class="drawer">
+    <div class="drawer-header">
+      <div><h3>关联店铺列表</h3><p>主体：深圳市鸿娇长益科技有限公司（ID: 81）</p></div>
+      <button class="drawer-close" data-close>✕</button>
+    </div>
+    <div class="drawer-body">
+      <div class="alert info">以下店铺正在使用该主体经营或收款。如需解绑，请前往店铺列表编辑对应店铺。</div>
+      <table class="mini-table">
+        <thead><tr><th>店铺名称</th><th>平台</th><th>店铺状态</th><th>绑定时间</th><th>绑定人</th></tr></thead>
+        <tbody>
+          <tr><td>SMT102</td><td>AliExpress</td><td><span class="tag tag-gray">停用</span></td><td>2026-05-06 14:45</td><td>杨瑾</td></tr>
+          <tr><td>SMT100</td><td>AliExpress</td><td><span class="tag tag-green">启用</span></td><td>2026-05-05 11:52</td><td>张淑玲</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </aside>
+</div>
+
+<div class="drawer-overlay" id="logDrawer" hidden>
+  <aside class="drawer large">
+    <div class="drawer-header">
+      <div><h3>同步与操作日志</h3><p>覆盖前后值、跳过原因、保护编辑都进入日志</p></div>
+      <button class="drawer-close" data-close>✕</button>
+    </div>
+    <div class="drawer-body">
+      <table class="mini-table">
+        <thead><tr><th>时间</th><th>触发方式</th><th>字段</th><th>覆盖前</th><th>企查查返回/覆盖后</th><th>处理结果</th><th>操作人</th></tr></thead>
+        <tbody>
+          <tr><td>2026-07-01 09:00</td><td>定时同步</td><td>法定代表人</td><td>田启智</td><td>王某某</td><td><span class="tag tag-orange">跳过覆盖：保护已超期</span></td><td>系统</td></tr>
+          <tr><td>2026-06-15 10:02</td><td>手动同步</td><td>注册地址</td><td>旧地址</td><td>香港九龙观塘创业街 36 号</td><td><span class="tag tag-green">已自动覆盖</span></td><td>汪耕</td></tr>
+          <tr><td>2026-05-18 14:20</td><td>人工编辑</td><td>保护截止日期</td><td>2026-06-15</td><td>2026-06-30</td><td><span class="tag tag-blue">已更新保护</span></td><td>杨瑾</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </aside>
+</div>
+
+<div class="drawer-overlay" id="overdueDrawer" hidden>
+  <aside class="drawer">
+    <div class="drawer-header">
+      <div><h3>保护已超期处理</h3><p>香港星辉贸易有限公司（ID: 66）</p></div>
+      <button class="drawer-close" data-close>✕</button>
+    </div>
+    <div class="drawer-body">
+      <div class="alert danger">保护截止日期已超过。企查查返回值仍未与 ERP 目标值一致，请编辑保护、撤回变更或人工处理。</div>
+      <div class="decision-list">
+        <button data-open="protectModal">延长保护截止日期</button>
+        <button>标记工商变更失败</button>
+        <button>撤回 ERP 修改并按企查查覆盖</button>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<div class="modal-overlay" id="protectModal" hidden>
+  <div class="modal wide-modal">
+    <div class="modal-header">
+      <h3>工商变更办理中保护设置</h3>
+      <button class="modal-close" data-close>✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="alert info">用于保护已提交工商局但企查查暂未更新的字段。保护期内同步照常执行并保存快照，受保护字段暂不覆盖。</div>
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label required">变更原因</label><select><option>工商变更办理中</option><option>资料驳回后重新提交</option><option>工商局审核延迟</option></select></div>
+        <div class="form-group"><label class="form-label required">工商提交日期</label><input type="date" value="2026-05-18" /></div>
+        <div class="form-group"><label class="form-label required">预计完成日期 / 保护截止日期</label><input type="date" value="2026-06-30" /></div>
+        <div class="form-group"><label class="form-label required">办理状态</label><select><option>办理中</option><option>已完成</option><option>已撤回</option><option>审核失败</option></select></div>
+        <div class="form-group span-2"><label class="form-label required">保护字段</label><div class="checkbox-row"><label><input type="checkbox" checked /> 企业名称</label><label><input type="checkbox" checked /> 法定代表人</label><label><input type="checkbox" checked /> 注册/信用代码</label><label><input type="checkbox" /> 注册地址</label></div></div>
+        <div class="form-group span-2"><label class="form-label">备注</label><textarea>工商局要求补充资料，预计审核周期延长。</textarea></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" data-close>取消</button>
+      <button class="btn primary" data-close>保存保护设置</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="createModal" hidden>
+  <div class="modal">
+    <div class="modal-header">
+      <h3>新建主体</h3>
+      <button class="modal-close" data-close>✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid single">
+        <div class="form-group"><label class="form-label required">主体类型</label><select><option>大陆企业</option><option>香港企业</option><option>海外企业</option><option>个人</option></select></div>
+        <div class="form-group"><label class="form-label required">主体/公司名称</label><input placeholder="请输入主体/公司名称" /></div>
+        <div class="form-group"><label class="form-label">注册/信用代码</label><input placeholder="大陆填统一社会信用代码，香港填商业登记号码" /></div>
+        <div class="form-group"><label class="form-label required">法人姓名</label><input placeholder="请输入法人姓名" /></div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn" data-close>取消</button><button class="btn primary" data-close>保存并匹配企查查</button></div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
