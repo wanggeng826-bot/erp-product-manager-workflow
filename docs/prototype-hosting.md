@@ -1,6 +1,6 @@
-# Seabost 原型托管流程
+# 原型托管流程
 
-目标：员工在本地用本项目生成 PRD 和 HTML 原型后，只有在需要分享时，把原型发布到 Seabost 统一域名，开发通过链接访问。
+目标：员工在本地用本项目生成 PRD 和 HTML 原型后，只有在需要分享时，把原型发布到统一托管仓库，开发通过链接访问。
 
 默认生成原型只产出本地 HTML 文件。需要在线链接时，对 Codex 说：
 
@@ -13,30 +13,30 @@
 排查 404：
 
 ```bash
-npm run prototype:doctor -- --url https://wanggeng826-bot.github.io/erp-product-manager-workflow/prototype/inventory-query/
+npm run prototype:doctor -- --url https://wanggeng826-bot.github.io/seabost-prototype-hosting/prototypes/ERP/inventory-query-20260520-120000/
 ```
 
 发布原型：
 
 ```bash
-PROTOTYPE_HOSTING_REPO=seabost/seabost-prototype-hosting \
-PROTOTYPE_BASE_URL=https://prototype.seabost.com \
+PROTOTYPE_HOSTING_REPO=wanggeng826-bot/seabost-prototype-hosting \
+PROTOTYPE_BASE_URL=https://wanggeng826-bot.github.io/seabost-prototype-hosting \
 npm run prototype:publish
 ```
 
 也可以跳过交互，直接指定本地原型目录：
 
 ```bash
-PROTOTYPE_HOSTING_REPO=seabost/seabost-prototype-hosting \
-PROTOTYPE_BASE_URL=https://prototype.seabost.com \
+PROTOTYPE_HOSTING_REPO=wanggeng826-bot/seabost-prototype-hosting \
+PROTOTYPE_BASE_URL=https://wanggeng826-bot.github.io/seabost-prototype-hosting \
 npm run prototype:publish -- --source prototype/inventory-query --title 库存查询 --business-system ERP
 ```
 
 删除自己发布的原型：
 
 ```bash
-PROTOTYPE_HOSTING_REPO=seabost/seabost-prototype-hosting \
-PROTOTYPE_BASE_URL=https://prototype.seabost.com \
+PROTOTYPE_HOSTING_REPO=wanggeng826-bot/seabost-prototype-hosting \
+PROTOTYPE_BASE_URL=https://wanggeng826-bot.github.io/seabost-prototype-hosting \
 npm run prototype:delete
 ```
 
@@ -46,8 +46,8 @@ npm run prototype:delete
 
 1. 本机已安装 GitHub CLI：`gh`。
 2. 本机已通过公司 GitHub 身份登录：`gh auth login`。
-3. 公司已准备一个专门的 GitHub Pages 仓库。
-4. GitHub Pages 仓库绑定统一域名：`https://prototype.seabost.com`。
+3. 已配置专门的 GitHub Pages 托管仓库：`wanggeng826-bot/seabost-prototype-hosting`。
+4. GitHub Pages 已发布：`https://wanggeng826-bot.github.io/seabost-prototype-hosting/`。
 
 脚本会使用当前已授权的 GitHub 身份，不要求员工使用个人 GitHub Pages。
 
@@ -104,14 +104,16 @@ manifest.owner == 当前 GitHub 用户
 - 仓库名：`seabost-prototype-hosting`
 - Pages 分支：`main`
 - Pages 目录：仓库根目录
-- 绑定域名：`prototype.seabost.com`
+- 默认地址：`https://wanggeng826-bot.github.io/seabost-prototype-hosting/`
 - 主目录：`prototypes/`
+
+如后续具备 `seabost.com` 的 DNS 控制权，可以再把自定义域名升级成 `prototype.seabost.com`。当前这不是默认主线。
 
 可选环境变量：
 
 ```bash
-PROTOTYPE_HOSTING_REPO=seabost/seabost-prototype-hosting
+PROTOTYPE_HOSTING_REPO=wanggeng826-bot/seabost-prototype-hosting
 PROTOTYPE_HOSTING_BRANCH=main
-PROTOTYPE_BASE_URL=https://prototype.seabost.com
+PROTOTYPE_BASE_URL=https://wanggeng826-bot.github.io/seabost-prototype-hosting
 PROTOTYPE_PUBLISH_ROOT=prototypes
 ```

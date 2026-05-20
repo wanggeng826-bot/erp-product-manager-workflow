@@ -7,8 +7,6 @@ description: Product Manager AI workflow for cross-border ecommerce ERP requirem
 
 Use this skill for product manager AI workflow work, especially cross-border ecommerce internal ERP product work.
 
-This skill is a domain executor. Before substantial PM / PRD / prototype work, first run `../../skills/workflow-strategy-router/SKILL.md` and obey its routing decision.
-
 It is the main workflow entry for:
 - 新需求澄清
 - 方案设计
@@ -53,37 +51,32 @@ When designing master-data or ownership modules such as store, person, business 
 
 Do not put global lookup or unassigned-object handling as a peer tab inside a selected-object context. A page scoped by a left tree or current business unit should keep its main table scoped to that context; global search and unassigned pools should be auxiliary entries such as drawers, task panels, or dedicated operations.
 
+## 内联路由
+
+收到任务后先判定任务档位（不需要输出路由决策包，直接执行）：
+
+- 快速档：已有原型微调、PRD 文案修改、单文件改动 -> 只读目标文件，不重开需求澄清
+- 标准档：单个模块需求、一份 PRD、一个原型草稿 -> 走完整执行流程
+- 重度档：多轮需求发现、多页面原型、正式 UI 审查 -> 走完整流程 + 维护 planning 文件
+
 ## Execution Flow
 
 Follow these numbered steps strictly to avoid jumping ahead or missing requirements.
 
-### Step 0: Router Gate
-
-Before discovery, PRD writing, prototype generation, or formal review handoff:
-
-1. Run the project router at `../../skills/workflow-strategy-router/SKILL.md`.
-2. Output the router decision pack first.
-3. Obey the router's `Task Tier`, `Delivery Mode`, `Allowed References`, `Blocked Actions`, and `Validation Mode`.
-4. If router says `light`, stay narrow and do not reopen broad PM context.
-5. If router says `prototype-draft`, generate draft only and block formal UI review.
-6. If router says `prototype-final` or `ui-review`, formal quality gates may be used.
-
 ### Step 1: Execution Track Selection
 
-This skill does not reclassify task weight. It only selects the execution track that matches the router decision.
+This skill selects the execution track directly from the task itself.
 
 Use this mapping:
 
-| Router decision | This skill should do |
+| Task shape | This skill should do |
 |---|---|
-| `Task Tier: light` + existing prototype/doc tweak | Stay on Fast Path; read only target files, local spec, and current diff |
-| `Delivery Mode: prd` | Use `./references/new-requirement-expert.md` or `./references/competitor-analysis-expert.md` based on the confirmed input type |
-| `Delivery Mode: prototype-draft` | Read `./references/prototype-generation-guide.md` and Step 5; generate draft only |
-| `Delivery Mode: prototype-final` | Read `./references/prototype-generation-guide.md` and Step 5; allow final-quality path |
-| `Delivery Mode: prototype-publish` | Publish the existing HTML prototype with `npm run prototype:publish -- --source prototype/<name> --title <title> --business-system <system>`; do not regenerate UI or call Figma |
-| `Delivery Mode: discussion` | Clarify, align, and stop before artifact generation |
-
-If the router decision is missing or contradictory, stop and ask for the router decision first instead of creating a second classification layer.
+| 快速档 + existing prototype/doc tweak | Stay on Fast Path; read only target files, local spec, and current diff |
+| 新需求 / 需求澄清 / PRD | Use `./references/new-requirement-expert.md` or `./references/competitor-analysis-expert.md` based on the confirmed input type |
+| 原型初稿 / `prototype-draft` | Read `./references/prototype-generation-guide.md` and Step 5; generate draft only |
+| 原型定稿 / `prototype-final` | Read `./references/prototype-generation-guide.md` and Step 5; allow final-quality path |
+| `分享原型` / 发布在线链接 | Publish the existing HTML prototype with `npm run prototype:publish -- --source prototype/<name> --title <title> --business-system <system>`; do not regenerate UI or call Figma |
+| 纯讨论 / 方案对齐 | Clarify, align, and stop before artifact generation |
 
 **UI 框架 Override（重要）**：两份 sub-agent 提示词原版引用了 Element Plus，但**本项目内 UI 一律以 Ant Design 为准**。提示词里凡涉及"组件库 / UI 框架"的指令，请按 `../../knowledge/figma-ant-design-ui-library.md` 和 `../../ui-library/` 执行。这是项目层 override，不需要修改提示词原文。
 
@@ -99,12 +92,11 @@ Load references using **strict relative paths** only when needed:
 - **HTML 镜像库（按需）:** 需要直接给出 HTML 原型代码时，读 `../../ui-library/README.md`，从 `../../ui-library/components/` 复制片段，foundation token 用 `../../ui-library/tokens.css`，不要重写 CSS 变量、不要硬编码颜色。
 - **Long-context/multi-step tasks（重任务专用）:** 只有复杂需求、PRD、长原型任务、正式 UI 评审、跨多轮长对话时，才读 `../shared/context-memory-workflow.md` 并维护 `../../task_plan.md`、`../../findings.md`、`../../progress.md`。轻任务和已有原型微调禁止开启长 planning。
 - **Code/HTML/JS edits:** Read `../karpathy-guidelines/SKILL.md` first.
-- **UI rules & constraints（按需）:** 只有在页面结构设计、UI 方案、PRD 页面定义、正式原型交付时，才读 `./references/chinese-b-end-erp-visual-baseline.md`、`./references/ui-interaction-spec.md`、`./references/erp-reference-patterns.md`。
+- **UI rules & constraints（按需）:** 只有在页面结构设计、UI 方案、PRD 页面定义、正式原型交付时，才读 `../../shared-references/chinese-b-end-erp-visual-baseline.md`、`../../shared-references/ui-interaction-spec.md`、`../../shared-references/erp-reference-patterns.md`。
 - **AI UI production workflow（仅定稿期）:** 只有在高完成度原型交付、Figma handoff、正式 UI 优化、UI 审查 / 定稿 QA 阶段，才读 `../ui-optimization-master/references/ai-ui-production-workflow.md`、`../ui-optimization-master/references/erp-ui-pattern-library.md`、`../ui-optimization-master/references/erp-design-system-checklist.md`。
 - **Competitor analysis sub-agent（带竞品资料时必读）:** Read `./references/competitor-analysis-expert.md`. 这是项目里"竞品拆解 + 产品决策 + PRD 一致性审校"的完整 5 阶段角色提示词。
 - **New requirement sub-agent（纯需求时必读）:** Read `./references/new-requirement-expert.md`. 这是项目里"跨境电商 ERP 新需求接入"的完整提示词，含 9 大输出表格 + Ant Design UI 硬性约束。
 - **PRD writing（必读三件套）:** Read `./references/prd-template.md`（合并版 9+1 节骨架），`../../knowledge/prd-style-anchor.md`（freddy 的 PRD 口味），`../../knowledge/prd-example-order-batch-cancel.md`（一份完整示范 PRD，照这个口味写）。
-- **Claude ↔ Codex handoff:** PRD 写完保存到 `../../intake/prd/<short-name>.md`，然后按 Step 5 的"双路径"判定继续做还是停下。详细规则见项目根 `../../HANDOFF_PROTOCOL.md`。
 - **Existing PRD to prototype:** Read `./references/prototype-generation-guide.md` and `./references/prototype-template.md`.
 
 ### Step 2: Information Gathering & Alignment (The Gate)
@@ -164,34 +156,21 @@ After the user supplements information, output:
 
 ### Step 5: Prototype Generation — HTML First
 
-PRD 写完保存到 `../../intake/prd/<short-name>.md` 后，进入原型生成。**本项目强制 HTML First：先生成 HTML 可交互原型给用户确认；用户确认无误并明确发出“生成 UI 设计稿 / 生成 Figma 设计稿 / 去 Figma 创建”的指令后，才允许创建 Figma UI 设计稿。**
+PRD 写完保存到 `../../intake/prd/<short-name>.md` 后，直接进入原型生成。**本项目强制 HTML First：先生成 HTML 可交互原型给用户确认；用户确认无误并明确发出“生成 UI 设计稿 / 生成 Figma 设计稿 / 去 Figma 创建”的指令后，才允许创建 Figma UI 设计稿。**
 
 除上述确认链路外，不得创建新的 Figma UI 设计稿，不得因为用户说“原型图 / 画原型 / 生成原型”就自动调用 Figma 创建文件。此阶段的“原型”默认指 HTML 可交互原型。
 
-HTML 原型仍按两条路径分流：
+执行方式：
 
-```
-PRD 已保存 → 用户表达：
-├─ 用户没说 / 说"交给 Codex" / Claude 这边额度紧张
-│   → 路径 A：交接给 Codex
-│     - Claude 停下，告知 PRD 路径
-│     - 用户切到 Codex，让 Codex 读 intake/prd/<name>.md §10 输入包
-│     - 详细规则见 `../../HANDOFF_PROTOCOL.md`
-│
-└─ 用户说"你直接生成原型" / "继续画原型" / 额度充足
-    → 路径 B：Claude 自生原型
-      - 读 `../../ui-library/README.md` + `../../ui-library/tokens.css`
-      - 按 §10 输入包逐项实现到 `../../prototype/<short-name>/`，尤其先消费 `UI 设计契约` 和 `原型实现约束`：
-        index.html / styles.css / script.js / prototype-spec.md
-      - 默认只做草稿级自检：文件可打开、主要结构可读、无明显脚本报错
-      - 明确告知用户：这次生成的是原型初稿，不自动走 UI 审查
-      - 默认只返回本地 HTML 路径；若用户说 `分享原型` 或明确要求在线地址，执行 `npm run prototype:publish -- --source prototype/<short-name> --title <原型名> --business-system <系统名>`
-      - 等 PRD 和原型方案确认后，再唤起 `$ui-optimization-master` 做正式 UI 审查和质量门禁
-```
+- 读 `../../ui-library/README.md` + `../../ui-library/tokens.css`
+- 按 §10 输入包逐项实现到 `../../prototype/<short-name>/`，尤其先消费 `UI 设计契约` 和 `原型实现约束`：
+  `index.html / styles.css / script.js / prototype-spec.md`
+- 默认只做草稿级自检：文件可打开、主要结构可读、无明显脚本报错
+- 明确告知用户：这次生成的是原型初稿，不自动走 UI 审查
+- 默认只返回本地 HTML 路径；若用户说 `分享原型` 或明确要求在线地址，执行 `npm run prototype:publish -- --source prototype/<short-name> --title <原型名> --business-system <系统名>`
+- 等 PRD 和原型方案确认后，再唤起 `$ui-optimization-master` 做正式 UI 审查和质量门禁
 
-**判定优先级**：用户显式说"画原型 / 出原型 / 你来做" → 路径 B，产出 HTML；否则默认路径 A。只有用户在 HTML 原型确认后明确要求 Figma/UI 设计稿，才进入 Figma 创建设计稿流程。
-
-**两条路径都遵循的硬规则**：
+**生成原型时遵循的硬规则**：
 
 - **UI Rules:** Follow Ant Design thinking. Ensure clear hierarchy, zoning, complete states (loading/empty/error), and high-risk confirmation. Do not invent non-standard components.
 - **HTML Prototype Default Rule (必做):** 用户说“原型 / 原型图 / 生成原型”时，默认交付 HTML 可交互原型，不调用 Figma，不输出 Figma 链接作为原型交付。
@@ -199,7 +178,7 @@ PRD 已保存 → 用户表达：
 - **Figma Opt-in Rule:** 只有用户确认 HTML 原型无误后，又明确要求 `Figma`、`UI 设计稿`、`写入 Figma`、`生成 Figma` 或提供 Figma URL 时，才生成 Figma 设计稿。HTML 原型交付后可以提示“如需 Figma 设计稿可继续生成”，但不能自动执行。
 - **Figma Reuse Rule (仅 Figma 任务必做):** 当且仅当任务进入 Figma 输出时，Components/templates 必须从 `Ant Design ERP UI Library` (fileKey: `KaI3eGyylfiwrPlU3OR08C`) 取。按 `../../knowledge/figma-ant-design-ui-library.md` 的 MCP 调用流程抓库元信息；**不要凭空发明组件**。
 - **Pro v6 Priority Rule:** 任务对齐 Pro v6 / 最新版时，优先选用 `Button v6`、`ListPageTemplate v6`、`ErpShell v6`，页面方案显式标注主题模式（`Default` / `Dark` / `Glass`）；用户未指定时默认 `Default`。
-- **HTML Reuse Rule:** 路径 B 时直接 copy `../../ui-library/components/` 片段 + load `../../ui-library/tokens.css`。组件命名必须与 Figma 库一致。
+- **HTML Reuse Rule:** 生成 HTML 原型时直接 copy `../../ui-library/components/` 片段 + load `../../ui-library/tokens.css`。组件命名必须与 Figma 库一致。
 - **UI Contract Rule:** 原型生成必须先读取 PRD §10 的 `UI 设计契约` 与 `原型实现约束`。如果 PRD 缺失这些内容，草稿可按项目默认组件补齐并显式标注假设；`prototype-final` 必须先补齐契约，不得直接生成。
 - **No Raw Control Rule:** 正式 HTML 原型禁止可见原生 `<select>` 和未绑定组件基础类的裸控件。`Tag` 必须写 `.tag + .tag--*`，`Button` 必须写 `.btn` 或明确的 Ant Button 语义，枚举切换优先 `Segmented` / `Radio.Group` / 明确映射的 tag group。
 - **Prototype Task Sheet (必做):** 开始生成原型前，先锁定本次页面清单、每页主任务、明确要求、明确不做项、保守假设。没有任务单，不准开始画。

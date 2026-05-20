@@ -16,15 +16,14 @@
 
 ## 2. 固定文件与目录
 
-生成原型前按 router 决定读取范围：
+生成原型前按任务档位决定读取范围：
 
-- `skills/workflow-strategy-router/SKILL.md`（必先读）
 - `references/prototype-template.md`
-- `references/chinese-b-end-erp-visual-baseline.md`
-- `references/ui-interaction-spec.md`
-- `references/erp-reference-patterns.md`
+- `shared-references/chinese-b-end-erp-visual-baseline.md`
+- `shared-references/ui-interaction-spec.md`
+- `shared-references/erp-reference-patterns.md`
 
-只有 router 判定为 `prototype-final` 或 `ui-review` 时，才额外读取：
+只有任务进入 `prototype-final` 或 `ui-review` 时，才额外读取：
 
 - `skills/ui-optimization-master/references/ai-ui-production-workflow.md`
 - `skills/ui-optimization-master/references/erp-ui-pattern-library.md`
@@ -39,7 +38,7 @@
 
 每次新对话中，默认按以下顺序执行：
 
-1. 先运行 router，锁定 `prototype-draft` 或 `prototype-final`
+1. 先判定当前是 `prototype-draft` 还是 `prototype-final`
 2. 读取最小必需规范和 PRD 文件
 3. 先确认页面清单、主任务、交付边界，并生成原型任务单
 4. 生成页面来源映射
@@ -65,7 +64,7 @@
 - 未经页面来源映射确认，不得加入新的导航项、页签、摘要卡、快捷操作或模块标题。
 - 未经 UI 设计契约确认，不得自行决定枚举控件、平台切换、状态标签、按钮层级、表单控件和颜色语义。
 - 默认首次输出是原型初稿，不要自动进入正式 UI 审查。
-- 正式交付版必须由 router 明确判定为 `prototype-final`。
+- 正式交付版必须明确进入 `prototype-final`。
 - 初稿阶段可以快速交付，但不能牺牲来源映射和用户要求忠实度。
 - Figma 设计稿是 HTML 原型后的可选后续动作，不是原型生成默认动作。
 - 默认只生成本地 HTML 原型；用户说 `分享原型`，或明确要求在线地址时，才发布到托管平台。
@@ -73,11 +72,10 @@
 ## 4. 新对话的标准提示词
 
 ```text
-请先读取当前项目中的 router 和最小 UI 设计规范文件：
-0. skills/workflow-strategy-router/SKILL.md
-1. references/chinese-b-end-erp-visual-baseline.md
-2. references/ui-interaction-spec.md
-3. references/erp-reference-patterns.md
+请先读取当前项目中的最小 UI 设计规范文件：
+1. shared-references/chinese-b-end-erp-visual-baseline.md
+2. shared-references/ui-interaction-spec.md
+3. shared-references/erp-reference-patterns.md
 
 再读取这份 PRD：
 /你的PRD文件路径

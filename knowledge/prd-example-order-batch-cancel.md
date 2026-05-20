@@ -264,8 +264,8 @@ specs:
   - knowledge/figma-ant-design-ui-library.md
   - knowledge/product-design-preferences.md
   - knowledge/prd-style-anchor.md
-  - skills/erp-product-manager/references/ui-interaction-spec.md
-  - skills/erp-product-manager/references/erp-reference-patterns.md
+  - shared-references/ui-interaction-spec.md
+  - shared-references/erp-reference-patterns.md
   - skills/ui-optimization-master/references/erp-ui-pattern-library.md
 ```
 

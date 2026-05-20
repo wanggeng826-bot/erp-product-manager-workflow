@@ -32,7 +32,7 @@
 - `codex-usage-preferences.md`
   Codex 重度使用时的分支溯源、checkpoint、上下文治理和提醒偏好。
 - `codex-checkpoints.md`
-  通过 `$codex-checkpoint-guardian` 生成的重要存档记录、验证结果和回滚方式。
+  重要存档记录、验证结果和回滚方式。
 - `prd-style-anchor.md`
   **写 PRD 时的口味锚点** —— 句法 / 表达 / 长度偏好 + 反例。任何写 PRD 的任务都先读它。
 - `prd-example-order-batch-cancel.md`

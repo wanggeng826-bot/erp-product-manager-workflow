@@ -5,26 +5,7 @@
 这个仓库适合两类人：
 
 - 产品经理：用它把需求从想法推进到 PRD、原型和知识库沉淀。
-- 刚上手 vibe coding / Codex / GitHub 的同学：用 `$codex-checkpoint-guardian` 和 `$codex-workflow-guardian` 学会存档、回滚、分支、上下文治理和可追溯协作。
-
-## 新手先记两个词
-
-在开始让 AI 改文件前，先说：
-
-```text
-守护一下
-```
-
-当你觉得当前成果还不错，或者准备大改前，马上说：
-
-```text
-存档
-```
-
-`守护一下` 会检查当前分支、未提交改动和污染风险。`存档` 会把当前可用成果保存成 checkpoint。
-
-即使你没有 GitHub，也可以用本地 Git commit 或本地快照保存。
-如果你有 GitHub，checkpoint 还可以 push 到云端，方便找回、共享和 PR 审查。
+- 团队协作者：clone 仓库后，直接使用 repo 内 `AGENTS.md + skills/` 跑 PRD、HTML 原型和知识库沉淀，不需要先手工把 Skill 安装到全局目录。
 
 ## 你会怎么用
 
@@ -33,7 +14,7 @@
 3. 如果你已经有 PRD，再进入原型规划或原型生成。
 4. 如果你要优化已有页面或原型，走 UI 优化流程。
 5. 如果涉及代码、HTML、CSS、JS 改动，额外遵守编程规范 Skill。
-6. 如果涉及文件修改、Git、分支、checkpoint、长对话或发布，先走 checkpoint / workflow guardian 预检。
+6. 复杂任务、长对话、跨多文件原型或正式 UI 审查，按项目 planning 规则维护 `task_plan.md / findings.md / progress.md`。
 
 ## 给新同学的协作规则
 
@@ -60,8 +41,6 @@
 - 新需求、竞品分析、产品方案、PRD、原型生成 -> `$erp-product-manager`
 - UI 评审、原型优化、Ant Design 合规检查 -> `$ui-optimization-master`
 - 代码生成、代码编辑、代码走查 -> `$karpathy-guidelines`
-- 本地存档、Git checkpoint、GitHub 云端备份、回滚记录 -> `$codex-checkpoint-guardian`
-- 分支溯源、上下文治理、任务交接、产品经理工作流风险提醒 -> `$codex-workflow-guardian`
 
 ### 2. 新需求流程
 
@@ -114,10 +93,6 @@
   UI 优化大师 Skill 源文件。
 - `skills/karpathy-guidelines/`
   编程规范 Skill 源文件。
-- `skills/codex-workflow-guardian/`
-  Codex 分支溯源、checkpoint、上下文治理、Stop Gate 和使用提醒 Skill 源文件。
-- `skills/codex-checkpoint-guardian/`
-  通用 vibe coding 存档、Git checkpoint、本地快照、GitHub 云端备份和回滚记录 Skill 源文件。
 - `.codex/`
   planning-with-files hooks 和 workspace Skill，用于自动恢复和维护任务记忆。
 - `skills/shared/context-memory-workflow.md`
@@ -133,17 +108,11 @@
 - `prototype/`
   主线原型临时输出目录。
 
-## Skill 安装位置
+## Skills 使用方式
 
-本项目已安装 Skill 到：
+团队成员 clone 本仓库后，默认直接使用 repo 内的 `AGENTS.md + skills/`。
 
-- `/Users/freddy/.codex/skills/erp-product-manager`
-- `/Users/freddy/.codex/skills/ui-optimization-master`
-- `/Users/freddy/.codex/skills/karpathy-guidelines`
-- `/Users/freddy/.codex/skills/codex-checkpoint-guardian`
-- `/Users/freddy/.codex/skills/codex-workflow-guardian`
-
-详细规则见各自 `SKILL.md`。
+全局 `~/.codex/skills` 安装只适合你要跨多个仓库复用某个 Skill 时使用，不是本项目上手前提。
 
 ## 最后一句
 

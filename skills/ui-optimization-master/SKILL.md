@@ -7,11 +7,9 @@ description: UI optimization and review workflow for Chinese B-end ERP pages, An
 
 Use this skill to review, diagnose, and improve Chinese B-end ERP UI designs, especially Ant Design based pages and HTML interactive prototypes.
 
-This skill is a domain executor. Before formal UI review or prototype cleanup, first run `../../skills/workflow-strategy-router/SKILL.md` and obey its routing decision.
-
 This skill improves existing UI output. It does not replace product discovery or PRD generation. If there is no confirmed PRD or page requirement, first ask the user to provide one or confirm the page scope.
 
-Do not upgrade a draft prototype into a formal review task unless the router or the user explicitly switches the delivery mode to `prototype-final` or `ui-review`.
+Do not upgrade a draft prototype into a formal review task unless the user explicitly switches the work into `prototype-final`, final QA, or `ui-review`.
 
 When the user asks for high-completion UI execution, direct prototype improvement, or "落地", use the project AI UI production loop:
 
@@ -47,14 +45,14 @@ When working inside this project, read references by task tier instead of front-
 - **Fast Path: existing HTML / screenshot small tweak**
   - Read only the target files or screenshot plus the directly related spec.
   - Apply `skills/karpathy-guidelines/SKILL.md` for file edits.
-  - Add `references/chinese-b-end-erp-visual-baseline.md` only if style judgment is needed.
+  - Add `../../shared-references/chinese-b-end-erp-visual-baseline.md` only if style judgment is needed.
   - Do not automatically read planning files, Figma authority docs, component registry, AI UI workflow, or formal review rubrics.
 
 - **Standard Path: scoped UI optimization**
   - Read the target files plus the minimum needed references from:
-    - `references/chinese-b-end-erp-visual-baseline.md`
-    - `references/ui-interaction-spec.md`
-    - `references/erp-reference-patterns.md`
+    - `../../shared-references/chinese-b-end-erp-visual-baseline.md`
+    - `../../shared-references/ui-interaction-spec.md`
+    - `../../shared-references/erp-reference-patterns.md`
   - Read `knowledge/README.md` only when long-term user taste or company context affects the recommendation.
   - Read `../../ui-library/README.md`, `../../ui-library/tokens.css`, and reusable snippets only when the task involves direct HTML prototype implementation or component reuse.
 

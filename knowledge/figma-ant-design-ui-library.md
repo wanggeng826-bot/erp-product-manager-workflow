@@ -129,7 +129,7 @@
 | 本 Figma 文件 | ✅ 单一权威源 |
 | `ui-library/tokens.css` | Foundation tokens 的代码镜像 |
 | `ui-library/components/*.html` + `*.md` | ERP Patterns 的 HTML 镜像，给原型快速复制粘贴用 |
-| `skills/erp-product-manager/references/erp-reference-patterns.md` | 业务侧规则的文字版（如店铺选择器层级、操作日志字段） |
+| `shared-references/erp-reference-patterns.md` | 业务侧规则的文字版（如店铺选择器层级、操作日志字段） |
 | `skills/ui-optimization-master/references/erp-ui-pattern-library.md` | 组件角色 / 行为规范的文字版 |
 
 不一致时**永远以 Figma 库为准**，然后回过头修正镜像文件。

@@ -189,8 +189,7 @@ Scenario 1: 客服勾选 50 单批量取消
 
 ## 10. 原型生成输入包（给 Codex / Claude 自生原型用）
 
-> 本节是原型生成的**唯一输入**。无论 Claude 自生还是交给 Codex，都只读这一节。
-> 协议详细见 `HANDOFF_PROTOCOL.md`。
+> 本节是原型生成的**唯一输入**。后续 HTML 原型只读这一节。
 
 ### 10.0 原型任务单（必填）
 
@@ -222,8 +221,8 @@ specs:
   - knowledge/figma-ant-design-ui-library.md
   - knowledge/product-design-preferences.md
   - knowledge/prd-style-anchor.md
-  - skills/erp-product-manager/references/ui-interaction-spec.md
-  - skills/erp-product-manager/references/erp-reference-patterns.md
+  - shared-references/ui-interaction-spec.md
+  - shared-references/erp-reference-patterns.md
   - skills/ui-optimization-master/references/erp-ui-pattern-library.md
 ```
 
