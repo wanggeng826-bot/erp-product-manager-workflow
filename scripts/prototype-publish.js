@@ -140,11 +140,11 @@ function printUsage() {
   npm run prototype:publish -- --source prototype/<name> --title <title> --business-system <system>
 
 Required environment:
-  PROTOTYPE_HOSTING_REPO  Example: seabost/seabost-prototype-hosting
+  PROTOTYPE_HOSTING_REPO  Example: wanggeng826-bot/seabost-prototype-hosting
 
 Optional environment:
   PROTOTYPE_HOSTING_BRANCH  Default: main
-  PROTOTYPE_BASE_URL        Default: https://prototype.seabost.com
+  PROTOTYPE_BASE_URL        Default: https://wanggeng826-bot.github.io/seabost-prototype-hosting
   PROTOTYPE_PUBLISH_ROOT    Default: prototypes
 
 Notes:

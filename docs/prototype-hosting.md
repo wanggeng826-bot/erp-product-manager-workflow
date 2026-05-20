@@ -42,6 +42,12 @@ npm run prototype:delete
 
 其中 `PROTOTYPE_HOSTING_REPO` 替换为实际的公司 GitHub Pages 托管仓库。
 
+推荐先做只读检查：
+
+```bash
+npm run prototype:doctor -- --source prototype/<name>
+```
+
 ## 前置条件
 
 1. 本机已安装 GitHub CLI：`gh`。

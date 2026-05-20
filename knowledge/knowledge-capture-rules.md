@@ -26,6 +26,9 @@
 ## 知识更新节奏
 
 - 当前任务过程写入 `task_plan.md`、`findings.md`、`progress.md`。
+- PRD 或 HTML 原型确认后，必须主动提议一次 knowledge 草稿沉淀。
+- knowledge 草稿必须先给用户确认，再发布到 GitHub。
+- 发布固定走 knowledge-only 分支和 PR，不能把 `prototype/**`、`cases/**` 或 workflow 文件混进去。
 - 任务结束时，从短期文件中挑选稳定信息，蒸馏进 `knowledge/`。
 - 每次重大工作流调整后，检查是否需要更新知识库索引。
 

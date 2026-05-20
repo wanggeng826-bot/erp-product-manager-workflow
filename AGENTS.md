@@ -23,6 +23,6 @@
 - 口令 `分享原型` 才发布在线链接；除此以外，生成原型默认只产出本地 HTML 文件并返回本地路径
 - 用户说“分享原型 / 发布原型 / 上线预览 / 给我在线地址”时，发布 HTML 原型到团队统一托管平台，优先使用 `npm run prototype:publish -- --source prototype/<name> --title <原型名> --business-system <系统名>`；缺少 GitHub CLI 授权、`PROTOTYPE_HOSTING_REPO`、托管仓库写权限或 Pages 配置时必须明确指出缺什么，不能改成只打包 zip 或生成 Figma
 - 轻任务禁止开启 root planning files；重任务才允许 `.codex/planning-active`
-- 任何工作流主线升级，只要改动 `AGENTS.md`、`skills/**`、`shared-references/**`、`.codex/hooks/**`、`docs/prototype-hosting.md`、`docs/team-onboarding.md`、`README.md`、`START_HERE.md`、`prototype/README.md`、`scripts/prototype-*.js`，都必须在同一变更里同步更新 `CHANGELOG.md`
+- 任何工作流主线升级，只要改动 `AGENTS.md`、`skills/**`、`shared-references/**`、`.codex/hooks/**`、`docs/prototype-hosting.md`、`docs/team-onboarding.md`、`README.md`、`START_HERE.md`、`prototype/README.md`、`scripts/prototype-*.js`、`scripts/knowledge-*.js`、`scripts/team-*.js`、`scripts/prototype-hosting-utils.js`，都必须在同一变更里同步更新 `CHANGELOG.md`
 
 如需更细的执行规则，统一以对应 Skill 的 `SKILL.md` 和 `references/` 为准。

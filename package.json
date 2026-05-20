@@ -2,7 +2,11 @@
   "scripts": {
     "prototype:publish": "node scripts/prototype-publish.js",
     "prototype:delete": "node scripts/prototype-delete.js",
-    "prototype:doctor": "node scripts/prototype-doctor.js"
+    "prototype:doctor": "node scripts/prototype-doctor.js",
+    "knowledge:doctor": "node scripts/knowledge-doctor.js",
+    "knowledge:publish": "node scripts/knowledge-publish.js",
+    "team:doctor": "node scripts/team-doctor.js",
+    "team:setup": "node scripts/team-setup.js"
   },
   "dependencies": {
     "playwright": "^1.59.1"

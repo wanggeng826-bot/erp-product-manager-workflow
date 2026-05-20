@@ -7,6 +7,22 @@
 - 产品经理：用它把需求从想法推进到 PRD、原型和知识库沉淀。
 - 团队协作者：clone 仓库后，直接使用 repo 内 `AGENTS.md + skills/` 跑 PRD、HTML 原型和知识库沉淀，不需要先手工把 Skill 安装到全局目录。
 
+## 一次性配置
+
+第一次使用前，先跑：
+
+```bash
+npm run team:setup
+npm run team:doctor
+```
+
+这会检查：
+
+- `gh auth`
+- 原型托管环境变量
+- 托管仓库访问权限
+- knowledge 协作链路
+
 ## 你会怎么用
 
 1. 新建对话后，先说清楚这次要做什么。
@@ -62,6 +78,7 @@
 - Figma UI 设计稿只在用户明确要求时生成；HTML 原型交付后可以作为后续可选项提示。
 - 默认只生成本地 HTML 原型文件；用户说 `分享原型`，或明确要求发布/在线地址时，才执行 `npm run prototype:publish -- --source prototype/<name> --title <原型名> --business-system <系统名>`，发布到团队统一托管平台并返回在线地址。
 - 如果本机缺少 GitHub CLI 授权、`PROTOTYPE_HOSTING_REPO`、托管仓库写权限或 Pages 配置，Codex 必须明确说明配置缺口，不能用 zip 包或 Figma 链接替代发布。
+- PRD 或 HTML 原型确认后，Codex 必须主动提议沉淀 knowledge 草稿；用户确认后执行 `npm run knowledge:publish -- --title "docs(knowledge): update <module>"`，以 knowledge-only 分支和 PR 更新 `main`。
 
 ### 4. UI 优化流程
 

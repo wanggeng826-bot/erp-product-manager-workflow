@@ -9,6 +9,13 @@
 
 - [团队成员上手说明](docs/team-onboarding.md)
 
+第一次建议先跑：
+
+```bash
+npm run team:setup
+npm run team:doctor
+```
+
 ## 你现在怎么开始
 
 1. 新需求、竞品分析、PRD、原型生成走 `$erp-product-manager`。
@@ -20,6 +27,7 @@
 7. 在开始 PRD 或原型前，先确认页面来源映射，避免把无来源的导航、页签、摘要或测试控件带进正式产出。
 8. 这里说的原型默认是 HTML 可交互原型，输出到 `prototype/<name>/index.html`；Figma 设计稿只有你明确要求时才生成。
 9. 默认只生成本地 HTML；需要发给别人时说 `分享原型`，再让 Codex 执行 `npm run prototype:publish -- --source prototype/<name> --title <原型名> --business-system <系统名>`。
-10. 只有复杂需求、长对话、多页面原型、正式 UI 审查，才维护 planning 文件。
+10. PRD 或原型确认后，要补一次 knowledge 草稿；确认无误后执行 `npm run knowledge:publish -- --title "docs(knowledge): update <module>"`。
+11. 只有复杂需求、长对话、多页面原型、正式 UI 审查，才维护 planning 文件。
 
 本项目默认依赖 repo 内 `AGENTS.md + skills/`，不是依赖你本机全局 Skill 目录。

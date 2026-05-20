@@ -7,6 +7,7 @@
 1. 用 Codex 输出 PRD
 2. 生成 HTML 可交互原型
 3. 需要分享时，发布原型并拿到在线链接
+4. 把稳定规则沉淀到 knowledge 并发 PR
 
 ## 一次性配置
 
@@ -57,13 +58,10 @@ source ~/.zshrc
 ### 6. 自检
 
 ```bash
-gh auth status
-echo $PROTOTYPE_HOSTING_REPO
-echo $PROTOTYPE_BASE_URL
-npm run prototype:publish -- --help
+npm run team:doctor
 ```
 
-如果这 4 条都正常，说明你已经具备原型分享能力。
+如果这条正常，说明你已经具备原型分享和 knowledge 协作能力。
 
 ## 日常怎么用
 
@@ -106,12 +104,34 @@ npm run prototype:publish -- --help
 
 Codex 这时才会把本地 HTML 发布到托管仓库，并返回在线链接。
 
+### 4. 沉淀 knowledge
+
+PRD 或原型确认后，Codex 会主动问：
+
+```text
+是否把这次稳定规则沉淀为 knowledge 草稿？
+```
+
+你确认草稿无误后，执行：
+
+```bash
+npm run knowledge:publish -- --title "docs(knowledge): update <module>"
+```
+
+这条命令会自动：
+
+1. 新建 knowledge-only 分支
+2. 提交 `knowledge/**`
+3. push 到 GitHub
+4. 创建一个指向 `main` 的 PR
+
 ## 你要记住的 4 条规则
 
 1. `生成原型` 只等于本地 HTML，不等于自动发布。
 2. `分享原型` 才会生成在线链接。
 3. Figma 设计稿不是默认产物，只有明确要求才生成。
-4. 复杂需求、多页面原型、正式 UI 审查才维护 planning 文件。
+4. PRD / 原型确认后，要补 knowledge 草稿并发 PR 到 `main`。
+5. 复杂需求、多页面原型、正式 UI 审查才维护 planning 文件。
 
 ## 常见失败原因
 

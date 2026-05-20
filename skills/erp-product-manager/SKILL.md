@@ -215,6 +215,31 @@ If the task sheet cannot be completed from confirmed input, stop and ask for mis
 - Default new tasks must **not** read `../../cases/**` unless the user explicitly asks to reference a historical case.
 - Root planning files `../../task_plan.md`, `../../findings.md`, and `../../progress.md` are only for the single active heavy task. Archive and reset them after completion; do not accumulate unrelated tasks there.
 
+### Step 6.1: Knowledge Harvest Gate（必做）
+
+当以下任一交付被用户确认后，必须主动发起一次知识沉淀提议：
+
+- PRD 已确认
+- HTML 原型已确认
+- 用户明确确认了一条可长期复用的业务规则、术语、设计偏好或公司背景
+
+固定提问：
+
+> 是否把这次稳定规则沉淀为 knowledge 草稿？
+
+执行规则：
+
+- 没有用户确认前，不得直接发布 knowledge PR
+- 草稿来源只允许来自：已确认 PRD、已确认 HTML 原型、已确认用户决策、已确认案例结论
+- 草稿优先落到：
+  - `../../knowledge/modules/<module>.md`
+  - `../../knowledge/glossary.md`
+  - `../../knowledge/company-context.md`
+  - `../../knowledge/product-design-preferences.md`
+- 用户确认草稿无误后，必须提醒或执行：
+  - `npm run knowledge:publish -- --title "docs(knowledge): update <module>"`
+- knowledge 发布必须保持 knowledge-only：不得把 prototype、workflow、cases 或其他文件混进同一个 PR
+
 ## Examples
 
 **Example 1: User provides a vague new requirement**

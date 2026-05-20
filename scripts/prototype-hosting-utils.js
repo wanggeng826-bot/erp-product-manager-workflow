@@ -16,14 +16,14 @@ function requireConfig() {
   const repo = process.env.PROTOTYPE_HOSTING_REPO;
   if (!repo || !/^[^/\s]+\/[^/\s]+$/.test(repo)) {
     throw new Error(
-      "Missing PROTOTYPE_HOSTING_REPO. Example: PROTOTYPE_HOSTING_REPO=seabost/seabost-prototype-hosting"
+      "Missing PROTOTYPE_HOSTING_REPO. Example: PROTOTYPE_HOSTING_REPO=wanggeng826-bot/seabost-prototype-hosting"
     );
   }
 
   return {
     repo,
     branch: process.env.PROTOTYPE_HOSTING_BRANCH || "main",
-    baseUrl: process.env.PROTOTYPE_BASE_URL || "https://prototype.seabost.com",
+    baseUrl: process.env.PROTOTYPE_BASE_URL || "https://wanggeng826-bot.github.io/seabost-prototype-hosting",
     publishRoot: stripSlashes(process.env.PROTOTYPE_PUBLISH_ROOT || "prototypes"),
   };
 }
@@ -54,7 +54,7 @@ function requireGhUser() {
 
 function hostingCacheDir(repo) {
   const safeName = repo.replace(/[^\w.-]+/g, "-");
-  return path.join(os.tmpdir(), "seabost-prototype-hosting", safeName);
+  return path.join(os.tmpdir(), "prototype-hosting-cache", safeName);
 }
 
 function ensureHostingRepo(config) {
