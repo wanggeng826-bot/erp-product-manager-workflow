@@ -353,7 +353,7 @@
 
 <!-- ============ 店铺详情抽屉 ============ -->
 <div class="drawer-overlay" id="drawerDetail" hidden>
-  <div class="drawer" style="width:880px;">
+  <div class="drawer detail-fullscreen">
     <div class="drawer-header">
       <h3>店铺详情</h3>
       <button class="drawer-close" id="btnCloseDetail">✕</button>
@@ -384,7 +384,7 @@
         <div class="card">
           <div class="card-title">基础识别信息</div>
           <div class="desc-grid">
-            <div class="desc-item"><span class="desc-label">电商平台</span><span class="desc-value">Shopee</span></div>
+            <div class="desc-item"><span class="desc-label">电商平台</span><span class="desc-value" id="basicPlatform">—</span></div>
             <div class="desc-item"><span class="desc-label">云易盒店铺别名</span><span class="desc-value" id="basicAlias">—</span></div>
             <div class="desc-item"><span class="desc-label">后台店铺ID</span><span class="desc-value" id="basicShopId">—</span></div>
             <div class="desc-item"><span class="desc-label">后台店铺名称</span><span class="desc-value" id="basicShopName">—</span></div>
@@ -392,10 +392,10 @@
             <div class="desc-item"><span class="desc-label">店铺邮箱</span><span class="desc-value" id="basicEmail">—</span></div>
             <div class="desc-item"><span class="desc-label">站点</span><span class="desc-value" id="basicSite">—</span></div>
             <div class="desc-item"><span class="desc-label">店铺类型</span><span class="desc-value" id="basicType">—</span></div>
-            <div class="desc-item"><span class="desc-label">是否主账号授权</span><span class="desc-value" id="basicMainAcct">—</span></div>
-            <div class="desc-item"><span class="desc-label">是否SIP</span><span class="desc-value" id="basicSip">—</span></div>
-            <div class="desc-item"><span class="desc-label">广告户 ID</span><span class="desc-value" id="basicAdAccountId">—</span></div>
-            <div class="desc-item"><span class="desc-label">BC ID</span><span class="desc-value" id="basicBcId">—</span></div>
+            <div class="desc-item platform-detail-shopee"><span class="desc-label">是否主账号授权</span><span class="desc-value" id="basicMainAcct">—</span></div>
+            <div class="desc-item platform-detail-shopee"><span class="desc-label">是否SIP</span><span class="desc-value" id="basicSip">—</span></div>
+            <div class="desc-item platform-detail-tiktok"><span class="desc-label">广告户 ID</span><span class="desc-value" id="basicAdAccountId">—</span></div>
+            <div class="desc-item platform-detail-tiktok"><span class="desc-label">BC ID</span><span class="desc-value" id="basicBcId">—</span></div>
           </div>
         </div>
         <div class="card">
@@ -454,7 +454,6 @@
             <div class="desc-item"><span class="desc-label">客服人员</span><span class="desc-value" id="bizCs">—</span></div>
             <div class="desc-item"><span class="desc-label">事业部</span><span class="desc-value" id="bizBu">—</span></div>
             <div class="desc-item desc-wide"><span class="desc-label">备注</span><span class="desc-value" id="bizRemarks">—</span></div>
-            <div class="desc-item desc-wide"><span class="desc-label">权限范围</span><span class="desc-value" id="bizPermissions">—</span></div>
           </div>
         </div>
         <div class="card">
@@ -483,8 +482,6 @@
             <div class="desc-item"><span class="desc-label">剩余天数</span><span class="desc-value" id="authRemain">—</span></div>
             <div class="desc-item"><span class="desc-label">店铺类型</span><span class="desc-value" id="authStoreType">—</span></div>
             <div class="desc-item"><span class="desc-label">主账号信息</span><span class="desc-value" id="authMainAccount">—</span></div>
-            <div class="desc-item"><span class="desc-label">回调 code</span><span class="desc-value" id="authCallbackCode">—</span></div>
-            <div class="desc-item"><span class="desc-label">Token 状态</span><span class="desc-value" id="authTokenStatus">—</span></div>
           </div>
           <div style="margin-top:12px;">
             <button class="btn primary" id="btnReAuth">重新授权</button>
@@ -494,8 +491,8 @@
         <div class="card">
           <div class="card-title">平台授权</div>
           <div class="auth-grid">
-            <div class="auth-card"><strong>广告授权</strong><span id="adAuthStatus" class="tag tag-gray">—</span><button class="btn btn-sm" id="btnAdAuth" type="button">授权</button><button class="btn btn-sm" id="btnAdSyncSetting" type="button">设置更新时段</button></div>
-            <div class="auth-card"><strong>联盟授权</strong><span id="affiliateAuthStatus" class="tag tag-gray">—</span><button class="btn btn-sm" type="button">授权</button></div>
+            <div class="auth-card" id="authCardAd"><strong>广告授权</strong><span id="adAuthStatus" class="tag tag-gray">—</span><button class="btn btn-sm" id="btnAdAuth" type="button">授权</button><button class="btn btn-sm" id="btnAdSyncSetting" type="button">设置更新时段</button></div>
+            <div class="auth-card" id="authCardAffiliate"><strong>联盟授权</strong><span id="affiliateAuthStatus" class="tag tag-gray">—</span><button class="btn btn-sm" type="button">授权</button></div>
           </div>
         </div>
         <div class="card" id="mainAccountCard" hidden>
@@ -535,8 +532,8 @@
         <div class="form-group"><label class="form-label required">云易盒店铺别名</label><input class="form-input" id="editAlias" /></div>
         <div class="form-group"><label class="form-label">店铺主体</label><input class="form-input" id="editBody" /></div>
         <div class="form-group"><label class="form-label">店铺邮箱</label><input class="form-input" id="editStoreEmail" /></div>
-        <div class="form-group"><label class="form-label">广告户 ID</label><input class="form-input" id="editAdAccountId" placeholder="TikTok 店铺填写" /></div>
-        <div class="form-group"><label class="form-label">BC ID</label><input class="form-input" id="editBcId" placeholder="TikTok 店铺填写" /></div>
+        <div class="form-group platform-edit-tiktok"><label class="form-label">广告户 ID</label><input class="form-input" id="editAdAccountId" placeholder="TikTok 店铺填写" /></div>
+        <div class="form-group platform-edit-tiktok"><label class="form-label">BC ID</label><input class="form-input" id="editBcId" placeholder="TikTok 店铺填写" /></div>
         <div class="form-group"><label class="form-label">后台店铺ID</label><input class="form-input" id="editShopId" /></div>
         <div class="form-group"><label class="form-label">后台店铺名称</label><input class="form-input" id="editShopName" /></div>
         <div class="form-group"><label class="form-label">站点</label><div class="form-readonly" id="editSite">—</div></div>
@@ -544,10 +541,20 @@
       </div>
       <div class="form-section-title">账号环境与注册信息</div>
       <div class="form-grid">
-        <div class="form-group"><label class="form-label">浏览器名称</label><input class="form-input" id="editBrowserName" /></div>
+        <div class="form-group">
+          <label class="form-label">浏览器名称</label>
+          <input type="hidden" id="editBrowserName" />
+          <div class="enum-select" id="browserEnumSelect">
+            <button class="enum-trigger" id="browserEnumTrigger" type="button">请选择浏览器名称</button>
+            <div class="enum-dropdown" id="browserEnumDropdown" hidden>
+              <div id="browserEnumOptions"></div>
+              <button class="enum-add" id="btnAddBrowserEnum" type="button">+ 添加浏览器名称</button>
+            </div>
+          </div>
+        </div>
         <div class="form-group"><label class="form-label">浏览器店铺名称</label><input class="form-input" id="editBrowserStore" /></div>
-        <div class="form-group"><label class="form-label">账号注册类型</label><input class="form-input" id="editAccountType" /></div>
-        <div class="form-group"><label class="form-label">注册类型</label><input class="form-input" id="editRegistrationType" /></div>
+        <div class="form-group"><label class="form-label">账号注册类型</label><select class="ant-select" id="editAccountType"><option>自注册</option><option>购买</option></select></div>
+        <div class="form-group"><label class="form-label">注册类型</label><select class="ant-select" id="editRegistrationType"><option>企业</option><option>个人</option></select></div>
         <div class="form-group form-wide"><label class="form-label">注册公司/注册人</label><input class="form-input" id="editRegistrationCompany" /></div>
         <div class="form-group"><label class="form-label">注册日期</label><input class="form-input" id="editRegistrationDate" placeholder="YYYY-MM-DD" /></div>
       </div>

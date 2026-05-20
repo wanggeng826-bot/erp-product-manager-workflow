@@ -10,6 +10,7 @@
   var editOrigin = 'table';
   var pendingShopeeAssets = [];
   var pendingShopeeSourceStore = null;
+  var browserNameOptions = ['紫鸟', '战斧'];
 
   function $(id) {
     return document.getElementById(id);
@@ -51,6 +52,25 @@
     return '<span class="tag ' + (cls || '') + '">' + (text || '—') + '</span>';
   }
 
+  function authPill(label, status) {
+    var cls = 'auth-pill';
+    if (status === '已授权') cls += ' success';
+    else if (status === '即将过期') cls += ' warning';
+    else if (status === '已过期' || status === '未授权') cls += ' error';
+    return '<span class="' + cls + '">' + label + '：' + (status || '未授权') + '</span>';
+  }
+
+  function authSummaryHtml(store) {
+    var items = [authPill('店铺', store.authStatus)];
+    if (store.platform === 'Shopee') {
+      items.push(authPill('广告', store.adAuthStatus));
+      items.push(authPill('联盟', store.affiliateAuthStatus));
+    } else if (store.platform === 'TikTok Shop' || store.platform === 'Amazon') {
+      items.push(authPill('广告', store.adAuthStatus));
+    }
+    return '<div class="auth-summary">' + items.join('') + '</div>';
+  }
+
   function normalizeStore(store) {
     if (!store.storeEmail) store.storeEmail = store.platform === 'TikTok Shop' ? 'tiktok-store@yiyihe.com' : '';
     if (!store.paymentAccounts) {
@@ -68,8 +88,6 @@
     if (!store.adAccountId) store.adAccountId = '';
     if (!store.bcId) store.bcId = '';
     if (!('adSyncSetting' in store)) store.adSyncSetting = null;
-    if (!store.authCallbackCode) store.authCallbackCode = store.authStatus === '已授权' ? 'code_******' : '—';
-    if (!store.tokenStatus) store.tokenStatus = store.authStatus === '已授权' ? 'access_token / refresh_token 已写入' : '未写入';
     if (!store.childStores && store.relatedStores && store.relatedStores.length) {
       store.childStores = store.relatedStores.map(function(name, index) {
         return { alias: name, site: index === 0 ? '马来西亚' : '泰国', authStatus: '成功' };
@@ -135,7 +153,6 @@
     var tbody = $('storeTableBody');
     var rows = '';
     filteredStores.forEach(function(s) {
-      var authTag = tagForAuth(s.authStatus);
       var statusTag = s.status === '启用' ? 'tag-green' : 'tag-gray';
       var checked = selectedIds.has(s.id) ? 'checked' : '';
       var authActionText = canShowAuthAction(s) ? '授权' : '重授权';
@@ -171,7 +188,7 @@
       rows += '<td class="col-bc-id platform-col platform-tiktok">' + (s.platform === 'TikTok Shop' ? (s.bcId || '—') : '—') + '</td>';
       rows += '<td class="col-bu">' + (s.bu || '—') + '</td>';
       rows += '<td class="col-status">' + tagHtml(s.status, statusTag) + '</td>';
-      rows += '<td class="col-auth">' + tagHtml(authTag.text, authTag.tag) + '</td>';
+      rows += '<td class="col-auth">' + authSummaryHtml(s) + '</td>';
       rows += '<td class="col-auth-time">' + (s.authTime || '—') + '</td>';
       rows += '<td class="col-expire">' + (s.authExpire || '—') + '</td>';
       rows += '<td class="col-sync">' + (s.syncOrderTime || '—') + '</td>';
@@ -303,6 +320,69 @@
     });
   }
 
+  function setBrowserEnumValue(nextValue) {
+    if (nextValue && browserNameOptions.indexOf(nextValue) === -1) browserNameOptions.push(nextValue);
+    $('editBrowserName').value = nextValue || '';
+    $('browserEnumTrigger').textContent = nextValue || '请选择浏览器名称';
+    renderBrowserEnumOptions();
+  }
+
+  function renderBrowserEnumOptions() {
+    var current = $('editBrowserName').value;
+    $('browserEnumOptions').innerHTML = browserNameOptions.map(function(name) {
+      return '<div class="enum-option ' + (name === current ? 'selected' : '') + '" data-value="' + escapeHtml(name) + '">' +
+        '<span>' + escapeHtml(name) + '</span>' +
+        '<button class="enum-delete" data-delete="' + escapeHtml(name) + '" type="button">删除</button>' +
+      '</div>';
+    }).join('');
+  }
+
+  function bindBrowserEnumSelect() {
+    $('browserEnumTrigger').addEventListener('click', function(e) {
+      e.stopPropagation();
+      $('browserEnumDropdown').hidden = !$('browserEnumDropdown').hidden;
+      renderBrowserEnumOptions();
+    });
+    $('browserEnumOptions').addEventListener('click', function(e) {
+      var deleteBtn = e.target.closest('[data-delete]');
+      if (deleteBtn) {
+        e.stopPropagation();
+        var deleteValue = deleteBtn.dataset.delete;
+        if (!confirm('确定删除浏览器名称「' + deleteValue + '」吗？\n\n删除后该选项将从下拉列表中移除。')) return;
+        browserNameOptions = browserNameOptions.filter(function(name){ return name !== deleteValue; });
+        if ($('editBrowserName').value === deleteValue) setBrowserEnumValue('');
+        else renderBrowserEnumOptions();
+        toast('浏览器名称枚举已删除');
+        return;
+      }
+      var option = e.target.closest('.enum-option');
+      if (!option) return;
+      setBrowserEnumValue(option.dataset.value);
+      $('browserEnumDropdown').hidden = true;
+    });
+    $('btnAddBrowserEnum').addEventListener('click', function(e) {
+      e.stopPropagation();
+      var nextValue = prompt('请输入新的浏览器名称');
+      if (nextValue === null) return;
+      nextValue = nextValue.trim();
+      if (!nextValue) {
+        toast('浏览器名称不能为空', 'error');
+        return;
+      }
+      if (browserNameOptions.indexOf(nextValue) >= 0) {
+        toast('该浏览器名称已存在', 'error');
+        return;
+      }
+      browserNameOptions.push(nextValue);
+      setBrowserEnumValue(nextValue);
+      $('browserEnumDropdown').hidden = true;
+      toast('浏览器名称枚举已添加');
+    });
+    document.addEventListener('click', function() {
+      if ($('browserEnumDropdown')) $('browserEnumDropdown').hidden = true;
+    });
+  }
+
   function bindSelection() {
     $('selectAll').addEventListener('change', function() {
       if (this.checked) {
@@ -333,7 +413,8 @@
       if (!store) return;
       if (btn.dataset.op === '详情') openDetail(store);
       if (btn.dataset.op === '编辑') {
-        openEditBasic(store, 'table');
+        openDetail(store);
+        openEditBasic(store, 'detail');
       }
       if (btn.dataset.op === '授权') openReAuth(store);
       if (btn.dataset.op === '子店铺') openChildStores(store);
@@ -546,8 +627,6 @@
     mainStore.authTime = formatNow();
     mainStore.authExpire = nextYear();
     mainStore.syncOrderTime = formatNow();
-    mainStore.authCallbackCode = 'code_' + Math.floor(100000 + Math.random() * 900000);
-    mainStore.tokenStatus = 'access_token / refresh_token 已写入';
     mainStore.relationRole = 'main';
     mainStore.childStores = childAssets.map(function(asset) {
       return { alias: asset.alias, site: asset.site, authStatus: '成功' };
@@ -636,8 +715,6 @@
       paymentChangeRecords: [],
       permissions: Array.from(document.querySelectorAll('.permission-check:checked')).map(function(el){ return el.value; }),
       adSyncSetting: null,
-      authCallbackCode: 'code_' + Math.floor(100000 + Math.random() * 900000),
-      tokenStatus: 'access_token / refresh_token 已写入',
       ops: ['详情', '编辑', '授权', '更多']
     };
   }
@@ -697,6 +774,7 @@
     authTag.className = 'tag ' + authInfo.tag;
 
     $('basicAlias').textContent = store.alias || '—';
+    $('basicPlatform').textContent = store.platform || '—';
     $('basicShopId').textContent = store.platformShopId || '—';
     $('basicShopName').textContent = store.platformShopName || '—';
     $('basicBody').textContent = store.body || '—';
@@ -707,6 +785,8 @@
     $('basicSip').textContent = store.isSip ? '是' : '否';
     $('basicAdAccountId').textContent = store.platform === 'TikTok Shop' ? (store.adAccountId || '—') : '—';
     $('basicBcId').textContent = store.platform === 'TikTok Shop' ? (store.bcId || '—') : '—';
+    document.querySelectorAll('.platform-detail-shopee').forEach(function(el){ el.hidden = store.platform !== 'Shopee'; });
+    document.querySelectorAll('.platform-detail-tiktok').forEach(function(el){ el.hidden = store.platform !== 'TikTok Shop'; });
     $('basicBrowserName').textContent = store.browserName || '—';
     $('basicBrowserStore').textContent = store.browserStoreName || '—';
     $('basicAccountType').textContent = store.accountType || '—';
@@ -728,7 +808,6 @@
     $('depositRefundTime').textContent = store.depositRefundTime || '—';
     $('depositRefundTransactionId').textContent = store.depositRefundTransactionId || '—';
     $('bizRemarks').textContent = store.remarks || '—';
-    $('bizPermissions').textContent = (store.permissions || []).join('、') || '—';
     renderRecords('bodyChangeRecords', store.bodyChangeRecords, '暂无店铺主体变更记录');
     renderRecords('paymentChangeRecords', store.paymentChangeRecords, '暂无收款信息变更记录');
     renderSensitive(store);
@@ -740,14 +819,14 @@
     $('authExpire').textContent = store.authExpire || '—';
     $('authStoreType').textContent = store.storeType || '—';
     $('authMainAccount').textContent = store.mainAccountId || '—';
-    $('authCallbackCode').textContent = store.authCallbackCode || '—';
-    $('authTokenStatus').textContent = store.tokenStatus || '—';
     $('authRemain').textContent = remainDays(store.authExpire);
     $('adAuthStatus').textContent = store.adAuthStatus || '未授权';
     $('adAuthStatus').className = 'tag ' + tagForAuth(store.adAuthStatus).tag;
     $('affiliateAuthStatus').textContent = store.affiliateAuthStatus || '未授权';
     $('affiliateAuthStatus').className = 'tag ' + tagForAuth(store.affiliateAuthStatus).tag;
-    $('btnAdSyncSetting').hidden = store.adAuthStatus !== '已授权';
+    $('authCardAd').hidden = !(store.platform === 'Shopee' || store.platform === 'TikTok Shop' || store.platform === 'Amazon');
+    $('authCardAffiliate').hidden = store.platform !== 'Shopee';
+    $('btnAdSyncSetting').hidden = store.platform !== 'TikTok Shop' || store.adAuthStatus !== '已授权';
 
     renderRelatedStores(store);
     activateDetailTab('basic');
@@ -865,7 +944,6 @@
     normalizeStore(store);
     currentStore = store;
     editOrigin = origin || ($('drawerDetail').hidden ? 'table' : 'detail');
-    if (editOrigin === 'table') $('drawerDetail').hidden = true;
     $('drawerEditBasic').hidden = false;
     $('editPlatform').textContent = store.platform || '—';
     $('editAlias').value = store.alias || '';
@@ -877,10 +955,13 @@
     $('editShopName').value = store.platformShopName || '';
     $('editSite').textContent = store.site || '—';
     $('editStoreType').value = store.storeType || '';
-    $('editBrowserName').value = store.browserName || '';
+    document.querySelectorAll('.platform-edit-tiktok').forEach(function(el){ el.hidden = store.platform !== 'TikTok Shop'; });
+    setBrowserEnumValue(store.browserName || '');
     $('editBrowserStore').value = store.browserStoreName || '';
-    $('editAccountType').value = store.accountType || '';
-    $('editRegistrationType').value = store.registrationType || '';
+    $('editAccountType').value = ['自注册', '购买'].indexOf(store.accountType) >= 0 ? store.accountType : '自注册';
+    $('editRegistrationType').value = ['企业', '个人'].indexOf(store.registrationType) >= 0 ? store.registrationType : '企业';
+    syncSelect('editAccountType');
+    syncSelect('editRegistrationType');
     $('editRegistrationCompany').value = store.registrationCompany || '';
     $('editRegistrationDate').value = store.registrationDate || '';
   }
@@ -1143,6 +1224,7 @@
     bindFilters();
     bindSelection();
     bindRowActions();
+    bindBrowserEnumSelect();
     bindCreateStore();
     bindDetail();
     bindReAuth();
