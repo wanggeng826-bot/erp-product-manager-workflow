@@ -11,6 +11,7 @@
   var pendingShopeeAssets = [];
   var pendingShopeeSourceStore = null;
   var browserNameOptions = ['紫鸟', '战斧'];
+  var paymentPlatformOptions = ['PingPong', 'WorldFirst', '连连支付'];
 
   function $(id) {
     return document.getElementById(id);
@@ -88,6 +89,9 @@
     if (!store.adAccountId) store.adAccountId = '';
     if (!store.bcId) store.bcId = '';
     if (!('adSyncSetting' in store)) store.adSyncSetting = null;
+    (store.paymentAccounts || []).forEach(function(account) {
+      if (account.platform && paymentPlatformOptions.indexOf(account.platform) === -1) paymentPlatformOptions.push(account.platform);
+    });
     if (!store.childStores && store.relatedStores && store.relatedStores.length) {
       store.childStores = store.relatedStores.map(function(name, index) {
         return { alias: name, site: index === 0 ? '马来西亚' : '泰国', authStatus: '成功' };
@@ -380,7 +384,81 @@
     });
     document.addEventListener('click', function() {
       if ($('browserEnumDropdown')) $('browserEnumDropdown').hidden = true;
+      document.querySelectorAll('.payment-platform-dropdown').forEach(function(dropdown) {
+        dropdown.hidden = true;
+      });
     });
+  }
+
+  function setPaymentPlatformValue(row, nextValue) {
+    if (nextValue && paymentPlatformOptions.indexOf(nextValue) === -1) paymentPlatformOptions.push(nextValue);
+    row.querySelector('.payment-platform').value = nextValue || '';
+    row.querySelector('.payment-platform-trigger').textContent = nextValue || '请选择收款平台';
+    renderPaymentPlatformOptions(row);
+  }
+
+  function renderPaymentPlatformOptions(row) {
+    var current = row.querySelector('.payment-platform').value;
+    row.querySelector('.payment-platform-options').innerHTML = paymentPlatformOptions.map(function(name) {
+      return '<div class="enum-option ' + (name === current ? 'selected' : '') + '" data-value="' + escapeHtml(name) + '">' +
+        '<span>' + escapeHtml(name) + '</span>' +
+        '<button class="enum-delete" data-delete="' + escapeHtml(name) + '" type="button">删除</button>' +
+      '</div>';
+    }).join('');
+  }
+
+  function bindPaymentPlatformEnum(row) {
+    var trigger = row.querySelector('.payment-platform-trigger');
+    var dropdown = row.querySelector('.payment-platform-dropdown');
+    var options = row.querySelector('.payment-platform-options');
+    trigger.addEventListener('click', function(e) {
+      e.stopPropagation();
+      document.querySelectorAll('.payment-platform-dropdown').forEach(function(item) {
+        if (item !== dropdown) item.hidden = true;
+      });
+      dropdown.hidden = !dropdown.hidden;
+      renderPaymentPlatformOptions(row);
+    });
+    dropdown.addEventListener('click', function(e) {
+      e.stopPropagation();
+    });
+    options.addEventListener('click', function(e) {
+      var deleteBtn = e.target.closest('[data-delete]');
+      if (deleteBtn) {
+        var deleteValue = deleteBtn.dataset.delete;
+        if (!confirm('确定删除收款平台「' + deleteValue + '」吗？\n\n删除后该选项将从下拉列表中移除。')) return;
+        paymentPlatformOptions = paymentPlatformOptions.filter(function(name){ return name !== deleteValue; });
+        document.querySelectorAll('.payment-edit-row').forEach(function(item) {
+          if (item.querySelector('.payment-platform').value === deleteValue) setPaymentPlatformValue(item, '');
+          else renderPaymentPlatformOptions(item);
+        });
+        toast('收款平台枚举已删除');
+        return;
+      }
+      var option = e.target.closest('.enum-option');
+      if (!option) return;
+      setPaymentPlatformValue(row, option.dataset.value);
+      dropdown.hidden = true;
+    });
+    row.querySelector('.payment-platform-add').addEventListener('click', function(e) {
+      e.stopPropagation();
+      var nextValue = prompt('请输入新的收款平台');
+      if (nextValue === null) return;
+      nextValue = nextValue.trim();
+      if (!nextValue) {
+        toast('收款平台不能为空', 'error');
+        return;
+      }
+      if (paymentPlatformOptions.indexOf(nextValue) >= 0) {
+        toast('该收款平台已存在', 'error');
+        return;
+      }
+      paymentPlatformOptions.push(nextValue);
+      setPaymentPlatformValue(row, nextValue);
+      dropdown.hidden = true;
+      toast('收款平台枚举已添加');
+    });
+    setPaymentPlatformValue(row, row.querySelector('.payment-platform').value);
   }
 
   function bindSelection() {
@@ -1108,15 +1186,23 @@
     var row = document.createElement('div');
     row.className = 'payment-edit-row';
     row.innerHTML =
-      '<input class="form-input payment-platform" placeholder="收款平台" value="' + escapeHtml(account.platform || '') + '" />' +
+      '<div class="enum-select payment-platform-select">' +
+        '<input class="payment-platform" type="hidden" value="' + escapeHtml(account.platform || '') + '" />' +
+        '<button class="enum-trigger payment-platform-trigger" type="button">请选择收款平台</button>' +
+        '<div class="enum-dropdown payment-platform-dropdown" hidden>' +
+          '<div class="payment-platform-options"></div>' +
+          '<button class="enum-add payment-platform-add" type="button">+ 添加收款平台</button>' +
+        '</div>' +
+      '</div>' +
       '<input class="form-input payment-account" placeholder="收款账号" value="' + escapeHtml(account.accountRaw || '') + '" />' +
       '<input class="form-input payment-account-id" placeholder="账号ID" value="' + escapeHtml(account.accountId || '') + '" />' +
-      '<button class="btn btn-icon" type="button">×</button>';
-    row.querySelector('button').addEventListener('click', function() {
+      '<button class="btn btn-icon payment-row-delete" type="button">×</button>';
+    row.querySelector('.payment-row-delete').addEventListener('click', function() {
       row.remove();
       if (!$('paymentEditList').children.length) addPaymentEditRow({ platform: '', accountRaw: '', accountId: '', currency: 'USD' });
     });
     $('paymentEditList').appendChild(row);
+    bindPaymentPlatformEnum(row);
   }
 
   function collectPaymentEditRows() {
@@ -1217,6 +1303,15 @@
     });
   }
 
+  function bindDrawerBlankClose() {
+    document.querySelectorAll('.drawer-overlay').forEach(function(overlay) {
+      overlay.addEventListener('click', function(e) {
+        if (e.target !== overlay) return;
+        overlay.hidden = true;
+      });
+    });
+  }
+
   function init() {
     enhanceSelects();
     renderTable();
@@ -1231,6 +1326,7 @@
     bindEditBasic();
     bindEditBiz();
     bindAdSync();
+    bindDrawerBlankClose();
   }
 
   init();

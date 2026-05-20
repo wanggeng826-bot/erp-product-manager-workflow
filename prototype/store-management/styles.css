@@ -311,6 +311,8 @@ th.col-alias{z-index:4;background:#fafafa!important}
 .payment-item strong{font-weight:600}
 .payment-edit-list{display:grid;gap:10px;margin-bottom:10px}
 .payment-edit-row{display:grid;grid-template-columns:120px 1fr 120px 32px;gap:8px;align-items:center}
+.payment-platform-select{min-width:0}
+.payment-platform-select .enum-trigger{height:34px}
 .payment-edit-row .btn-icon{width:32px;height:32px;justify-content:center;padding:0}
 .change-records{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .change-records h4{font-size:13px;font-weight:600;margin-bottom:8px;color:var(--muted)}
