@@ -1,0 +1,40 @@
+name: Workflow Changelog
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  require-changelog:
+    name: Require changelog for workflow changes
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check changed paths
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const {owner, repo} = context.repo;
+            const pull_number = context.payload.pull_request.number;
+            const files = await github.paginate(github.rest.pulls.listFiles, {
+              owner,
+              repo,
+              pull_number,
+              per_page: 100
+            });
+
+            const names = files.map(file => file.filename);
+            const workflowPattern = /^(AGENTS\.md|README\.md|START_HERE\.md|prototype\/README\.md|docs\/prototype-hosting\.md|docs\/team-onboarding\.md|skills\/|shared-references\/|\.codex\/hooks\/|scripts\/prototype-.*\.js)/;
+            const touchedWorkflowCore = names.some(name => workflowPattern.test(name));
+            const touchedChangelog = names.includes('CHANGELOG.md');
+
+            if (touchedWorkflowCore && !touchedChangelog) {
+              core.setFailed(
+                [
+                  'Workflow core files changed but CHANGELOG.md was not updated.',
+                  'Please add a matching changelog entry in the same PR.',
+                  'Changed workflow files:',
+                  ...names.filter(name => workflowPattern.test(name)).map(name => `- ${name}`)
+                ].join('\n')
+              );
+            }
