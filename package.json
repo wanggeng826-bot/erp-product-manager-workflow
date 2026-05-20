@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "check:prototype": "node scripts/check-prototype-quality.js"
+  },
   "dependencies": {
     "playwright": "^1.59.1"
   }
