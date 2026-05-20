@@ -156,6 +156,8 @@ Block:
 
 Use for first-pass prototype generation.
 
+In this project, first-pass prototype generation means HTML interactive prototype only. Do not create Figma UI design files in `prototype-draft`.
+
 Require:
 
 - prototype task sheet
@@ -178,6 +180,10 @@ Require publish handling:
 Must tell the user:
 
 `本次为原型初稿，只做忠实交付和最小自检，不进入正式 UI 审查。`
+
+Also obey HTML First:
+
+`本阶段只生成 HTML 可交互原型；你确认 HTML 无误并明确要求生成 Figma/UI 设计稿后，才会创建 Figma。`
 
 ### prototype-final
 
@@ -226,6 +232,8 @@ Block:
 - publishing to unrelated GitHub repositories unless the user explicitly chooses that hosting route
 
 If publish fails, report the exact missing prerequisite and stop.
+
+Figma UI design creation is still blocked unless the user has already confirmed the HTML prototype and explicitly requests Figma/UI 设计稿 creation.
 
 ### ui-review
 

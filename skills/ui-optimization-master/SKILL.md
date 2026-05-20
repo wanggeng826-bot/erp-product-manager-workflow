@@ -68,7 +68,8 @@ When working inside this project, read references by task tier instead of front-
 
 - **Figma usage boundary**
   - Prefer the low-token registry + HTML mirror before Figma MCP.
-  - Only call Figma MCP when writing/updating Figma canvas nodes, validating library version changes, fixing a missing registry nodeId, or when the user explicitly asks to inspect the current Figma file.
+  - For new UI design files, Figma is allowed only after the HTML prototype has been delivered, the user has confirmed it, and the user explicitly asks to generate a UI/Figma 设计稿.
+  - Only call Figma MCP when writing/updating Figma canvas nodes after that gate, validating library version changes, fixing a missing registry nodeId, or when the user explicitly asks to inspect the current Figma file.
 
 ## Core Review Principles
 
