@@ -47,6 +47,10 @@
 
 第一次用 GitHub 的同学，可以先读 [CONTRIBUTING.md](CONTRIBUTING.md)。
 
+如果你是团队成员，准备直接用 Codex 完成 PRD、HTML 原型和分享原型，先读：
+
+- [团队成员上手说明](docs/team-onboarding.md)
+
 ## 实际工作流
 
 ### 1. 任务分流

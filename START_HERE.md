@@ -5,6 +5,10 @@
 复杂 PM / UI 重任务按 `skills/shared/context-memory-workflow.md` 执行。
 长期偏好、公司背景和自研 ERP 信息由 `knowledge/` 维护。
 
+如果你是第一次上手，先读：
+
+- [团队成员上手说明](docs/team-onboarding.md)
+
 ## 你现在怎么开始
 
 1. 准备让 AI 改文件前，先说 `守护一下`，走 `$codex-checkpoint-guardian`。
