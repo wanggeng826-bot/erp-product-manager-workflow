@@ -1,6 +1,0 @@
-interface:
-  display_name: "Checkpoint Guardian"
-  short_description: "Local and GitHub checkpoint safety for vibe coding"
-  default_prompt: "Use $codex-checkpoint-guardian to run 守护一下 before file edits, create 存档 checkpoints, and keep rollback records complete."
-policy:
-  allow_implicit_invocation: true
