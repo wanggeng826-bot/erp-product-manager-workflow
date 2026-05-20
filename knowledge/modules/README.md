@@ -87,6 +87,23 @@
 
 > 一句话：**每次需求结束前，留一次工具调用沉淀知识库**。不沉淀 = 这次会话白做。
 
+## GitHub 发布方式
+
+本项目的 knowledge 更新，不直接推 `main`。
+
+固定流程：
+
+1. Codex 先代写 knowledge 草稿
+2. 用户确认草稿无误
+3. 执行：
+
+```bash
+npm run knowledge:publish -- --title "docs(knowledge): update <module>"
+```
+
+4. 自动创建 knowledge-only 分支和 PR
+5. 合并 PR 更新 `main`
+
 ## 与现有文件的关系
 
 | 文件 | 关系 |

@@ -24,7 +24,7 @@ jobs:
             });
 
             const names = files.map(file => file.filename);
-            const workflowPattern = /^(AGENTS\.md|README\.md|START_HERE\.md|prototype\/README\.md|docs\/prototype-hosting\.md|docs\/team-onboarding\.md|skills\/|shared-references\/|\.codex\/hooks\/|scripts\/prototype-.*\.js)/;
+            const workflowPattern = /^(AGENTS\.md|README\.md|START_HERE\.md|prototype\/README\.md|docs\/prototype-hosting\.md|docs\/team-onboarding\.md|skills\/|shared-references\/|\.codex\/hooks\/|scripts\/prototype-.*\.js|scripts\/knowledge-.*\.js|scripts\/team-.*\.js|scripts\/prototype-hosting-utils\.js)/;
             const touchedWorkflowCore = names.some(name => workflowPattern.test(name));
             const touchedChangelog = names.includes('CHANGELOG.md');
 
