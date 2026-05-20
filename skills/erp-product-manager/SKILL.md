@@ -87,7 +87,7 @@ If the router decision is missing or contradictory, stop and ask for the router 
 Load references using **strict relative paths** only when needed:
 - **Fast Path（已有原型微调）:** 仅读取目标目录下直接相关文件，例如 `../../prototype/<name>/index.html`、`styles.css`、`script.js`、`prototype-spec.md`，以及必要的 `git diff`。除非用户要求结构重做、补来源映射，或明确切到正式评审，否则不要读取 `../../knowledge/README.md`、长 planning 文件、Figma 总说明、AI UI production workflow、review rubric。
 - **New requirement / competitor analysis:** 先读当前路由对应的单一 expert reference；只有在业务背景、术语或长期偏好会影响结论时，才补读 `../../knowledge/README.md` 和必要知识文件。
-- **Figma UI Library（按需）:** 只有任务真的涉及 UI 设计、组件选型、原型生成时，才读 `../../knowledge/figma-ant-design-ui-library.md`。如果只是已有 HTML 小改，优先直接看目标原型和 `../../ui-library/`，不要先开 Figma 总说明。
+- **Figma UI Library（只读按需）:** 只有任务真的涉及 UI 设计、组件选型、原型生成时，才读 `../../knowledge/figma-ant-design-ui-library.md` 作为组件命名和映射参考；读取 Figma 组件库说明不等于创建 Figma UI 设计稿。如果只是已有 HTML 小改，优先直接看目标原型和 `../../ui-library/`，不要先开 Figma 总说明。
 - **Pro v6 最新迭代基线（按需必读）:** 用户提到 `latest`、`新版`、`preview.pro.ant.design`、`ant-design-pro v6` 时，才读 `../../knowledge/ant-design-pro-v6-baseline.md`。
 - **HTML 镜像库（按需）:** 需要直接给出 HTML 原型代码时，读 `../../ui-library/README.md`，从 `../../ui-library/components/` 复制片段，foundation token 用 `../../ui-library/tokens.css`，不要重写 CSS 变量、不要硬编码颜色。
 - **Long-context/multi-step tasks（重任务专用）:** 只有复杂需求、PRD、长原型任务、正式 UI 评审、跨多轮长对话时，才读 `../shared/context-memory-workflow.md` 并维护 `../../task_plan.md`、`../../findings.md`、`../../progress.md`。轻任务和已有原型微调禁止开启长 planning。
@@ -153,9 +153,13 @@ After the user supplements information, output:
 
 *Rule:* Final PRD body uses Markdown tables; language is professional; cover forward/reverse flow, permissions, exceptions, historical data; reflect ERP-level auditability. **PRD 保存到 `../../intake/prd/<short-name>.md`**（命名 `<业务域>-<动作>` kebab-case）。
 
-### Step 5: Prototype Generation — 双路径分流
+### Step 5: Prototype Generation — HTML First
 
-PRD 写完保存到 `../../intake/prd/<short-name>.md` 后，进入原型生成。**两条路径，按用户意图分流**：
+PRD 写完保存到 `../../intake/prd/<short-name>.md` 后，进入原型生成。**本项目强制 HTML First：先生成 HTML 可交互原型给用户确认；用户确认无误并明确发出“生成 UI 设计稿 / 生成 Figma 设计稿 / 去 Figma 创建”的指令后，才允许创建 Figma UI 设计稿。**
+
+除上述确认链路外，不得创建新的 Figma UI 设计稿，不得因为用户说“原型图 / 画原型 / 生成原型”就自动调用 Figma 创建文件。此阶段的“原型”默认指 HTML 可交互原型。
+
+HTML 原型仍按两条路径分流：
 
 ```
 PRD 已保存 → 用户表达：
@@ -175,12 +179,13 @@ PRD 已保存 → 用户表达：
       - 等 PRD 和原型方案确认后，再唤起 `$ui-optimization-master` 做正式 UI 审查和质量门禁
 ```
 
-**判定优先级**：用户显式说"画原型 / 出原型 / 你来做" → 路径 B；否则默认路径 A。
+**判定优先级**：用户显式说"画原型 / 出原型 / 你来做" → 路径 B，产出 HTML；否则默认路径 A。只有用户在 HTML 原型确认后明确要求 Figma/UI 设计稿，才进入 Figma 创建设计稿流程。
 
 **两条路径都遵循的硬规则**：
 
 - **UI Rules:** Follow Ant Design thinking. Ensure clear hierarchy, zoning, complete states (loading/empty/error), and high-risk confirmation. Do not invent non-standard components.
-- **Figma Reuse Rule (必做):** Components/templates 必须从 `Ant Design ERP UI Library` (fileKey: `KaI3eGyylfiwrPlU3OR08C`) 取。按 `../../knowledge/figma-ant-design-ui-library.md` 的 MCP 调用流程抓库元信息；**不要凭空发明组件**。
+- **Figma Creation Gate (硬门禁):** HTML 原型确认前禁止创建 Figma UI 设计稿；用户未明确要求 Figma 时禁止调用 Figma create/write 类工具。
+- **Figma Reuse Rule (仅 Figma 阶段必做):** 进入 Figma 阶段后，Components/templates 必须从 `Ant Design ERP UI Library` (fileKey: `KaI3eGyylfiwrPlU3OR08C`) 取。按 `../../knowledge/figma-ant-design-ui-library.md` 的 MCP 调用流程抓库元信息；**不要凭空发明组件**。
 - **Pro v6 Priority Rule:** 任务对齐 Pro v6 / 最新版时，优先选用 `Button v6`、`ListPageTemplate v6`、`ErpShell v6`，页面方案显式标注主题模式（`Default` / `Dark` / `Glass`）；用户未指定时默认 `Default`。
 - **HTML Reuse Rule:** 路径 B 时直接 copy `../../ui-library/components/` 片段 + load `../../ui-library/tokens.css`。组件命名必须与 Figma 库一致。
 - **Prototype Task Sheet (必做):** 开始生成原型前，先锁定本次页面清单、每页主任务、明确要求、明确不做项、保守假设。没有任务单，不准开始画。

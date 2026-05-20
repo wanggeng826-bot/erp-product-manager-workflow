@@ -207,6 +207,7 @@ Scenario 1: 客服勾选 50 单批量取消
 
 ```yaml
 figma:
+  usage: read_only_component_reference # 只用于组件库/模板映射，不代表创建 Figma UI 设计稿
   fileKey: KaI3eGyylfiwrPlU3OR08C
   page_to_use: ""              # 例："04 Templates"
   preferred_template: ""        # 例：ListPageTemplate
